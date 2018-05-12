@@ -8,9 +8,9 @@ class Index extends Controller
 {
     public function index(Request $request)
     {
-        $htmls = $this->fetch();
-        $temp = 'grthr';
-        // 将数据返回给用户
+        $name = 'index';
+        $this->assign(['name' => $name]);
+        $htmls = $this->fetch('index');
         return $htmls;
     }
 }

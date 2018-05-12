@@ -19,7 +19,7 @@ class Student extends Controller
         $this->assign(['page' => $page, 'stu' => $stu]);
 
         // 取回打包后的数据
-        $htmls = $this->fetch();
+        $htmls = $this->fetch('index');
 
         // 将数据返回给用户
         return $htmls;
