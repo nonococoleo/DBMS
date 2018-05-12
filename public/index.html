@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>example5-14-4</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script>
+        function RadioClicked(number) {
+            clearCheckboxes()
+            switch (number) {
+                case 1:
+                    setCheckbox(3)
+                    break
+                case 2:
+                    setCheckbox(1)
+                    setCheckbox(5)
+                    break
+                case 3:
+                    setCheckbox(2)
+                    break
+                case 4:
+                    setCheckbox(2)
+                    setCheckbox(3)
+                    setCheckbox(4)
+                    break
+                case 5:
+                    setCheckbox(1)
+                    setCheckbox(2)
+                    setCheckbox(3)
+                    setCheckbox(4)
+                    setCheckbox(5)
+                    break
+            }
+            calculateCost()
+        }
+
+        function CheckboxClicked(number) {
+            if (form1.elements[number - 1 + 5].checked) {
+                form1.elements[number - 1 + 5].checked = false
+            } else {
+                form1.elements[number - 1 + 5].checked = true
+            }
+        }
+
+        function clearCheckboxes() {
+            for (var i = 0; i <= 4; i++) {
+                form1.elements[i + 5].checked = false
+            }
+        }
+
+        function setCheckbox(number) {
+            form1.elements[number - 1 + 5].checked = true
+        }
+
+        function calculateCost() {
+            var cost = 0
+            var money = [100, 200, 300, 400, 500]
+            for (var i = 0; i <= 4; i++) {
+                if (form1.elements[i + 5].checked) {
+                    cost = cost + money[i]
+                }
+            }
+            form1.textbox.value = "全部费用：" + cost + "元"
+        }
+    </script>
+</head>
+<body bgcolor=#ffcccc>
+<h2 align=center>请选择你的培训项目！</h2>
+<br>
+<center>
+    <form name=form1>
+        <table border=1 bgcolor=cyan width=70%>
+            <tr>
+                <td width=50%>
+                    <input type=radio name=group onclick="RadioClicked(1)">计算机网络<br>
+                    <input type=radio name=group onclick="RadioClicked(2)">程序设计<br>
+                    <input type=radio name=group onclick="RadioClicked(3)">数据库<br>
+                    <input type=radio name=group onclick="RadioClicked(4)">Web应用程序开发<br>
+                    <input type=radio name=group onclick="RadioClicked(5)">高级程序员
+                <td width=50%>
+                    <input type=checkbox onclick="CheckboxClicked(1)">C/C++（100元）<br>
+                    <input type=checkbox onclick="CheckboxClicked(2)">数据库原理及应用（200元）<br>
+                    <input type=checkbox onclick="CheckboxClicked(3)">计算机网络基础（300元）<br>
+                    <input type=checkbox onclick="CheckboxClicked(4)">Web技术（400元）<br>
+                    <input type=checkbox onclick="CheckboxClicked(5)">Visual Basic（500元）
+        </table>
+        <br><br>
+        <input type=text name=textbox size=20>
+    </form>
+</center>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<p>这是学生的index控制器</p>
+<div>
+    {volist name="stu" id="stu"}
+
+    <p>{$stu}</p>
+
+    {/volist}
+    {$page}
+</div>
+</body>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</html>
