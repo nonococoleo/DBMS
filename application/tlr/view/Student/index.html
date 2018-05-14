@@ -5,25 +5,201 @@
     <title>Title</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-<p>这是学生的index控制器</p>
-<div>
-    {volist name="stu" id="stu"}
+<p>学生信息</p>
+<div id="app" class="container">
+  <div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td>#</td>
+          <td>编号</td>
+          <td>姓名</td>
+          <td>性别</td>
+          <td>年级</td>
+          <td>学校</td>
+          <!-- <td>家庭地址</td>
+          <td>家庭电话</td>
+          <td>联系电话</td>
+          <td>账户余额</td>
+          <td>备注</td> -->
+          <td>操作</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(student,index) in students">
+          <td>{{index+1}}</td>
+          <td>{{student.sid}}</td>
+          <td>{{student.sname}}</td>
+          <td>{{student.sex}}</td>
+          <td>{{student.grade}}</td>
+          <td>{{student.school}}</td>
+          <!-- <td>{{student.home}}</td>
+          <td>{{student.tel}}</td>
+          <td>{{student.phone}}</td>
+          <td>{{student.blance}}</td>
+          <td>{{student.memo}}</td> -->
+          <td>
+            <button class="btn btn-sm btn-success" @click="open(index)">详细信息</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="text-align:center;">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" @click="page(nowPage-1)">
+          <span class="page-link">&laquo;</span>
+        </li> 
+        <li :class="(nowPage==i)?'page-item active':'page-item'" v-for="i in totolPage" @click="page(i)">
+          <span class="page-link">{{i}}</span>
+        </li>
+        <li class="page-item" @click="page(nowPage+1)">
+          <span class="page-link">&raquo;</span>
+        </li>
+      </ul>
+    </nav>
+  </div>
 
-    <p>{$stu}</p>
+  <div>
+    <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" >Modal title</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                
+                  姓名: 
+                  <input type="text" v-model="studentDetailInShow.sname" class="form-control">
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                
+                  性别: 
+                  <input type="text" v-model="studentDetailInShow.sex" class="form-control">
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                
+                  年级:  
+                  <input type="text" v-model="studentDetailInShow.grade" class="form-control">
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                
+                  学校: 
+                  <input type="text" v-model="studentDetailInShow.school" class="form-control">
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                
+                  家庭住址:
+                  <input type="text" v-model="studentDetailInShow.home" class="form-control">
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                
+                  家庭电话:  
+                  <input type="text" v-model="studentDetailInShow.tel" class="form-control">
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                
+                  联系电话:  
+                  <input type="text" v-model="studentDetailInShow.phone" class="form-control">
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6">  
+                  余额:  
+                  <input type="text" v-model="studentDetailInShow.grade" class="form-control">
+              </div>
+            </div>
+            <div>
+                  备注:  
+                  <textarea v-model="studentDetailInShow.grade" class="form-control">
+                  </textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" @click="saveStudent(studentDetailInShow)">保存修改</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
 
-    {/volist}
-    {$page}
+
+
+
 </div>
 </body>
-<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+<script type="text/javascript">
+var app = new Vue({
+  el: '#app',
+  data: {
+    students: [],
+    studentDetailInShow: {},
+    nowPage:1,
+    totolPage: 10,
+  },
+  mounted () {
+    this.getStudents(1)
+  },
+  methods: {
+    getStudents (page) {
+      let tvm = this
+      $.ajax({
+        type: "GET",
+        url: "{:URL('tlr/student/students','','')}?page="+page,
+        data: {},
+        dataType: "json",
+        success: function(data) {
+          if(data.success) {
+            tvm.students = data.students
+            tvm.totolPage = data.totolPage
+          } else {
+            console.log("some troubles")
+          }
+        }
+      });
+    },
+    page (newPage) {
+      if (newPage < 1) {
+        newPage = 1
+      } else if (newPage > this.totolPage) {
+        newPage = this.totolPage
+      }
+      this.getStudents(newPage)
+    },
+    open (index) {
+      this.studentDetailInShow = this.students[index]
+      $('#myModal').modal();
+    },
+    saveStudent (studentDetailInShow) {
+      // $.ajax({
+      //   type: "POST",
+      //   url: "{:URL('tlr/student/update','','')}",
+      //   data: studentDetailInShow,
+      //   dataType: "json",
+      //   success: function(data) {
+      //     if(data.success) {
+      //       alert("操作成功")
+      //     } else {
+      //       console.log("some troubles")
+      //     }
+      //   }
+      // });
+    }
+  }
+})
+</script>
 </html>

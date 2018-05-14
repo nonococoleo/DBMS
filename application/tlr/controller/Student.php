@@ -8,20 +8,24 @@ use think\Request;
 
 class Student extends Controller
 {
-    public function index(Request $request)
-    {
-        $student = new StudentModel;
-        $id = $request->param('id');
-        $query = ["id" => $id];
-        $stu = $student->where('sid', '>', "$id")->paginate(1, false, ['type' => 'bootstrap', 'query' => $query]);
 
-        $page = $stu->render();
-        $this->assign(['page' => $page, 'stu' => $stu]);
+    public function index(Request $request) {
+        return $this->fetch('index');
+    }
 
-        // 取回打包后的数据
-        $htmls = $this->fetch('index');
+    public function students(Request $request) {
+        if (!isset($_GET)) {
+            $this->error("404 not found");
+            exit();
+        }
+        $page = (isset($_GET['page']))? $_GET['page'] : 1;
+        $studentModel = new StudentModel;
+        $students = $studentModel->page($page,10)->select();
+        $totolPage = ceil(db('student')->count()/10);
+        echo json_encode(array("students" => $students,"totolPage"=>$totolPage, "success" => true));
+    }
 
-        // 将数据返回给用户
-        return $htmls;
+    public function new_student(Request $request) {
+        echo "111";
     }
 }
