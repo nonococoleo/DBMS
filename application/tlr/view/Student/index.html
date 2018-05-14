@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>学生信息</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
@@ -15,8 +15,16 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-<p>学生信息</p>
 <div id="app" class="container">
+  <div class="row">
+    <div class="col-sm-10 col-md-10 col-lg-10">
+      <h3>学生信息</h3>
+    </div>
+    <div align="">
+      <button class="btn btn btn-primary" @click="newStudent()">添加学生</button>
+    </div>
+  </div>
+
   <div>
     <table class="table table-striped">
       <thead>
@@ -46,7 +54,7 @@
           <!-- <td>{{student.home}}</td>
           <td>{{student.tel}}</td>
           <td>{{student.phone}}</td>
-          <td>{{student.blance}}</td>
+          <td>{{student.balance}}</td>
           <td>{{student.memo}}</td> -->
           <td>
             <button class="btn btn-sm btn-success" @click="open(index)">详细信息</button>
@@ -76,7 +84,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title" >Modal title</h4>
+            <h4 class="modal-title" >{{(add)?'添加用户':'修改用户'}}</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           </div>
           <div class="modal-body">
@@ -88,9 +96,11 @@
                   <input type="text" v-model="studentDetailInShow.sname" class="form-control">
               </div>
               <div class="col-sm-6 col-md-6 col-lg-6">
-                
-                  性别: 
-                  <input type="text" v-model="studentDetailInShow.sex" class="form-control">
+                  性别:
+                  <select class="form-control" v-model="studentDetailInShow.sex">
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                  </select>
               </div>
               <div class="col-sm-6 col-md-6 col-lg-6">
                 
@@ -119,18 +129,19 @@
               </div>
               <div class="col-sm-6 col-md-6 col-lg-6">  
                   余额:  
-                  <input type="text" v-model="studentDetailInShow.grade" class="form-control">
+                  <input type="text" v-model="studentDetailInShow.balance" disabled class="form-control">
               </div>
             </div>
             <div>
                   备注:  
-                  <textarea v-model="studentDetailInShow.grade" class="form-control">
+                  <textarea v-model="studentDetailInShow.memo" class="form-control">
                   </textarea>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" @click="saveStudent(studentDetailInShow)">保存修改</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button v-if="add" class="btn btn-primary" @click="addStudent(studentDetailInShow)">添加学生</button>
+            <button v-if="!add" type="button" class="btn btn-primary" @click="saveStudent(studentDetailInShow)">保存修改</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -149,7 +160,8 @@ var app = new Vue({
     students: [],
     studentDetailInShow: {},
     nowPage:1,
-    totolPage: 10,
+    totolPage: 1,
+    add: false,
   },
   mounted () {
     this.getStudents(1)
@@ -182,22 +194,59 @@ var app = new Vue({
     },
     open (index) {
       this.studentDetailInShow = this.students[index]
+      this.add = false
+      $('#myModal').modal();
+    },
+    newStudent () {
+      this.studentDetailInShow = {}
+      this.add = true
       $('#myModal').modal();
     },
     saveStudent (studentDetailInShow) {
-      // $.ajax({
-      //   type: "POST",
-      //   url: "{:URL('tlr/student/update','','')}",
-      //   data: studentDetailInShow,
-      //   dataType: "json",
-      //   success: function(data) {
-      //     if(data.success) {
-      //       alert("操作成功")
-      //     } else {
-      //       console.log("some troubles")
-      //     }
-      //   }
-      // });
+      if(studentDetailInShow.sname == null || studentDetailInShow.sname.length<1) {
+        alert ("用户名不能为空")
+        return;
+      }
+      if(studentDetailInShow.phone == null || studentDetailInShow.phone.length<1) {
+        alert ("用户名不能为空")
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: "{:URL('tlr/student/update','','')}",
+        data: studentDetailInShow,
+        dataType: "json",
+        success: function(data) {
+          if(data.success) {
+            alert("操作成功")
+          } else {
+            alert(data.msg)
+          }
+        }
+      });
+    },
+    addStudent (studentDetailInShow) {
+      if(studentDetailInShow.sname == null || studentDetailInShow.sname.length<1) {
+        alert ("用户名不能为空")
+        return;
+      }
+      if(studentDetailInShow.phone == null || studentDetailInShow.phone.length<1) {
+        alert ("用户名不能为空")
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: "{:URL('tlr/student/add','','')}",
+        data: studentDetailInShow,
+        dataType: "json",
+        success: function(data) {
+          if(data.success) {
+            alert("操作成功")
+          } else {
+            alert(data.msg)
+          }
+        }
+      });
     }
   }
 })
