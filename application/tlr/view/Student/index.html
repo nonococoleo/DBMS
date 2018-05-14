@@ -17,11 +17,18 @@
 <body>
 <div id="app" class="container">
   <div class="row">
-    <div class="col-sm-10 col-md-10 col-lg-10">
+    <div class="col-sm-6 col-md-6 col-lg-6">
       <h3>学生信息</h3>
     </div>
-    <div align="">
-      <button class="btn btn btn-primary" @click="newStudent()">添加学生</button>
+    <div>
+      <div class="input-group">
+        <input type="text" class="form-control" v-model="searchSname"/>
+        <button @click="search(searchSname)" class="btn btn btn-danger">搜索</button>
+      </div>
+    </div>
+    <div>
+      &nbsp;
+      <button class="btn btn btn-success" @click="newStudent()">添加学生</button>
     </div>
   </div>
 
@@ -162,6 +169,7 @@ var app = new Vue({
     nowPage:1,
     totolPage: 1,
     add: false,
+    searchSname: '',
   },
   mounted () {
     this.getStudents(1)
@@ -242,6 +250,27 @@ var app = new Vue({
         success: function(data) {
           if(data.success) {
             alert("操作成功")
+          } else {
+            alert(data.msg)
+          }
+        }
+      });
+    },
+    search (searchSname) {
+      let tvm = this
+      if(searchSname == null || searchSname<1) {
+        alert ("用户名为空无法搜索")
+        return;
+      }
+      $.ajax({
+        type: "GET",
+        url: "{:URL('tlr/student/search','','')}?sname=" + searchSname,
+        data: {},
+        dataType: "json",
+        success: function(data) {
+          if(data.success) {
+            tvm.students = data.students
+            tvm.totolPage = 1   
           } else {
             alert(data.msg)
           }
