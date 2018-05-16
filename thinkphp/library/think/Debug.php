@@ -195,7 +195,6 @@ class Debug
         }
 
         if ($response instanceof Redirect) {
-            //TODO 记录
         } else {
             $output = $trace->output($response, Log::getLog());
             if (is_string($output)) {
