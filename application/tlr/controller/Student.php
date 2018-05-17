@@ -24,8 +24,8 @@ class Student extends Controller
         $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
         $student = new StudentModel;
         $students = $student->page($page, 10)->select();
-        $totolPage = ceil(db('student')->count() / 10);
-        echo json_encode(array("students" => $students, "totolPage" => $totolPage, "success" => true));
+        $totalPage = ceil(db('student')->count() / 10);
+        echo json_encode(array("students" => $students, "totalPage" => $totalPage, "success" => true));
     }
 
     public function update(Request $request)
