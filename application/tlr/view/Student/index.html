@@ -21,10 +21,10 @@
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>学生信息</h3>
         </div>
-        <!--TODO 重新布局-->
         <div class="col-sm-4 col-md-4 col-lg-4">
             <div class="input-group" style="margin-top: 6px">
               <input type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2" v-model="searchSname">
+                <!--TODO 搜索学校-->
               <span class="input-group-addon" id="basic-addon2" @click="search(searchSname)">搜索</span>
             </div>
         </div>
@@ -35,7 +35,6 @@
     </div>
 
     <div>
-        <!--TODO 把#号去掉，详细信息按钮明确，按钮变小（直接改为链接也可）-->
         <table class="table table-striped table-hover table-condensed">
             <thead>
             <tr>
@@ -68,7 +67,6 @@
                     <button class="btn btn-xs btn-success" @click="open(index)">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
-
                 </td>
             </tr>
             </tbody>
