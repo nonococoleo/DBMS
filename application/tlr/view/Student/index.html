@@ -81,7 +81,7 @@
                 <li class="page-item" @click="page(nowPage-1)">
                     <span class="page-link">&laquo;</span>
                 </li>
-                <li :class="(nowPage==i)?'page-item active':'page-item'" v-for="i in totolPage" @click="page(i)">
+                <li :class="(nowPage==i)?'page-item active':'page-item'" v-for="i in totalPage" @click="page(i)">
                     <span class="page-link">{{i}}</span>
                 </li>
                 <li class="page-item" @click="page(nowPage+1)">
@@ -175,7 +175,7 @@
             students: [],
             studentDetailInShow: {},
             nowPage: 1,
-            totolPage: 1,
+            totalPage: 1,
             add: false,
             searchSname: '',
         },
@@ -193,7 +193,7 @@
                     success: function (data) {
                         if (data.success) {
                             tvm.students = data.students;
-                            tvm.totolPage = data.totolPage
+                            tvm.totalPage = data.totalPage
                         } else {
                             console.log("some troubles")
                         }
@@ -203,8 +203,8 @@
             page(newPage) {
                 if (newPage < 1) {
                     newPage = 1
-                } else if (newPage > this.totolPage) {
-                    newPage = this.totolPage
+                } else if (newPage > this.totalPage) {
+                    newPage = this.totalPage
                 }
                 this.getStudents(newPage)
             },
@@ -278,7 +278,7 @@
                     success: function (data) {
                         if (data.success) {
                             tvm.students = data.students;
-                            tvm.totolPage = 1
+                            tvm.totalPage = 1
                         } else {
                             alert(data.msg)
                         }
