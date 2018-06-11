@@ -80,6 +80,20 @@ class Student extends Controller
         }
     }
 
+    public function deleteone(Request $request)
+    {
+        if (!request()->isPost() || empty($_POST)) {
+            $this->error("404 not found");
+            exit();
+        }
+        $student = new StudentModel;
+        if ($students = $student->where('sid', $_POST['sid'])->delete()) {
+            echo json_encode(array("success" => true));
+        } else {
+            echo json_encode(array("msg" => "删除失败", "success" => false));
+        }
+    }
+
     public function search(Request $request)
     {
         if (!request()->isGet()) {
@@ -87,7 +101,7 @@ class Student extends Controller
             exit();
         }
         $student = new StudentModel;
-        if ($students = $student->where('sname', $_GET['sname'])->select()) {
+        if ($students = $student->where('sname','like',"%$_GET[sname]%")->select()) {
             echo json_encode(array("students" => $students, "success" => true));
         } else {
             echo json_encode(array("msg" => "查无此人", "success" => false));
