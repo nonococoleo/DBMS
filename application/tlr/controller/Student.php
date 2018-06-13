@@ -11,12 +11,12 @@ class Student extends Controller
 
     public function index(Request $request)
     {
-//        TODO 和students控制器的区别？合并？
         return $this->fetch('index');
     }
 
     public function students(Request $request)
     {
+//        TODO 接口隐藏？
         if (!request()->isGet()) {
             $this->error("404 not found");
             exit();

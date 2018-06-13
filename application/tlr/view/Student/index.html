@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hans">
 <head>
     <meta charset="UTF-8">
     <title>学生信息</title>
@@ -40,6 +40,7 @@
             <tr>
                 <td class="text-center">编号</td>
                 <td class="text-center">姓名</td>
+                <!--TODO 显示男女-->
                 <td class="text-center">性别</td>
                 <td class="text-center">年级</td>
                 <td class="text-center">学校</td>
@@ -118,27 +119,22 @@
                                 </select>
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-
                                 年级:
                                 <input type="text" v-model="studentDetailInShow.grade" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-
                                 学校:
                                 <input type="text" v-model="studentDetailInShow.school" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-
                                 家庭住址:
                                 <input type="text" v-model="studentDetailInShow.home" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-
                                 家庭电话:
                                 <input type="text" v-model="studentDetailInShow.tel" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-
                                 联系电话:
                                 <input type="text" v-model="studentDetailInShow.phone" class="form-control">
                             </div>
@@ -220,8 +216,8 @@
                 $('#myModal').modal();
             },
             deleteStudent(index) {
-                let tvm = this
-                var msg = '您确定要删除'+ tvm.students[index].sname +'的信息吗？ 删除后不可恢复！'
+                let tvm = this;
+                var msg = '您确定要删除' + tvm.students[index].sname + '的信息吗？ 删除后不可恢复！';
                 if (confirm(msg)==true){ 
                     $.ajax({
                         type: "POST",

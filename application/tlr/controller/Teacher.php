@@ -14,7 +14,7 @@ class Teacher extends Controller
         $teacher = $Teacher->paginate(10, false, ['type' => 'bootstrap']);
         $page = $teacher->render();
         // 向V层传数据
-        $data = ["teacher" => $teacher, "page" => $page];
+        $data = ["teacher" => $teacher, "page" => $page, "request" => $request];
         $this->assign($data);
         $htmls = $this->fetch('index');
         return $htmls;
@@ -24,16 +24,46 @@ class Teacher extends Controller
     {
         $Teacher = new TeacherModel();
         $name = $request->param('name');
-        $school = $request->param('school');
+//        $school = $request->param('school');
         $query = $request->param();
-        $teacher = $Teacher->where('tname', 'like', "%$name%")->where('school', 'like', "%$school%")->order('tid', 'asc')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        $teacher = $Teacher->where('tname', 'like', "%$name%")->order('tid', 'asc')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         $page = $teacher->render();
         // 向V层传数据
-        $data = ["teacher" => $teacher, "page" => $page];
+        $data = ["teacher" => $teacher, "page" => $page, "request" => $request];
         $this->assign($data);
 
         // 取回打包后的数据
         $htmls = $this->fetch("index");
         return $htmls;
+    }
+
+    public function mod(Request $request)
+    {
+        $Teacher = new TeacherModel();
+        foreach ($_POST as $key => $value)
+            if ($value == "")
+                $_POST[$key] = null;
+        $Teacher->allowField(['tname', 'school', 'phone', 'price', 'memo'])->save($_POST, ['tid' => $request->param("tid")]);
+        $this->redirect("./tlr/Teacher/index");
+        return null;
+    }
+
+    public function del(Request $request)
+    {
+        $Teacher = new TeacherModel();
+        $Teacher->destroy(['tid' => $request->param("tid")]);
+        $this->redirect("./tlr/Teacher/index");
+        return null;
+    }
+
+    public function add(Request $request)
+    {
+        $Teacher = new TeacherModel();
+        foreach ($_POST as $key => $value)
+            if ($value == "")
+                $_POST[$key] = null;
+        $Teacher->save($_POST);
+        $this->redirect("./tlr/Teacher/index");
+        return null;
     }
 }
