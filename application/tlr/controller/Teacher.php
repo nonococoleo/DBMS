@@ -14,7 +14,7 @@ class Teacher extends Controller
         $teacher = $Teacher->paginate(10, false, ['type' => 'bootstrap']);
         $page = $teacher->render();
         // 向V层传数据
-        $data = ["teacher" => $teacher, "page" => $page, "request" => $request];
+        $data = ["teacher" => $teacher, "page" => $page, "name" => null];
         $this->assign($data);
         $htmls = $this->fetch('index');
         return $htmls;
@@ -25,16 +25,21 @@ class Teacher extends Controller
         $Teacher = new TeacherModel();
         $name = $request->param('name');
 //        $school = $request->param('school');
-        $query = $request->param();
+        $query = ["name" => $name];
         $teacher = $Teacher->where('tname', 'like', "%$name%")->order('tid', 'asc')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
-        $page = $teacher->render();
-        // 向V层传数据
-        $data = ["teacher" => $teacher, "page" => $page, "request" => $request];
-        $this->assign($data);
+        if ($teacher->count() > 0) {
+            $page = $teacher->render();
+            // 向V层传数据
+            $data = array_merge(["teacher" => $teacher, "page" => $page], $query);
+            $this->assign($data);
 
-        // 取回打包后的数据
-        $htmls = $this->fetch("index");
-        return $htmls;
+            // 取回打包后的数据
+            $htmls = $this->fetch("index");
+            return $htmls;
+        } else {
+            $this->error("查无此人", $_SERVER["HTTP_REFERER"], null, 1);
+            return null;
+        }
     }
 
     public function mod(Request $request)
@@ -44,7 +49,8 @@ class Teacher extends Controller
             if ($value == "")
                 $_POST[$key] = null;
         $Teacher->allowField(['tname', 'school', 'phone', 'price', 'memo'])->save($_POST, ['tid' => $request->param("tid")]);
-        $this->redirect("./tlr/Teacher/index");
+        $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
+//        $this->redirect("./tlr/Teacher/index",["action"=>"修改"]);
         return null;
     }
 
@@ -52,7 +58,8 @@ class Teacher extends Controller
     {
         $Teacher = new TeacherModel();
         $Teacher->destroy(['tid' => $request->param("tid")]);
-        $this->redirect("./tlr/Teacher/index");
+        $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
+//        $this->redirect("./tlr/Teacher/index",["action"=>"删除"]);
         return null;
     }
 
@@ -63,7 +70,8 @@ class Teacher extends Controller
             if ($value == "")
                 $_POST[$key] = null;
         $Teacher->save($_POST);
-        $this->redirect("./tlr/Teacher/index");
+        $this->success("添加成功", "Teacher/index", null, 1);
+//        $this->redirect("Teacher/index",null,302,["action"=>"添加"]);
         return null;
     }
 }
