@@ -56,7 +56,7 @@
             <tr v-for="(student,index) in students">
                 <td class="text-center">{{student.sid}}</td>
                 <td class="text-center">{{student.sname}}</td>
-                <td class="text-center">{{student.sex}}</td>
+                <td class="text-center">{{(student.sex==1)?'男':'女'}}</td>
                 <td class="text-center">{{student.grade}}</td>
                 <td class="text-center">{{student.school}}</td>
                 <!-- <td>{{student.home}}</td>
@@ -107,7 +107,7 @@
 
                             <div class="col-sm-6 col-md-6 col-lg-6">
 
-                                姓名:
+                                姓名 * :
                                 <input type="text" v-model="studentDetailInShow.sname" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
@@ -134,7 +134,7 @@
                                 <input type="text" v-model="studentDetailInShow.tel" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                联系电话:
+                                联系电话 * :
                                 <input type="text" v-model="studentDetailInShow.phone" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
@@ -145,7 +145,7 @@
                         <div>
                             备注:
                             <textarea v-model="studentDetailInShow.memo" class="form-control">
-                  </textarea>
+                            </textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -239,7 +239,7 @@
                     return;
                 }
                 if (studentDetailInShow.phone == null || studentDetailInShow.phone.length < 1) {
-                    alert("用户名不能为空");
+                    alert("联系电话不能为空");
                     return;
                 }
                 $.ajax({

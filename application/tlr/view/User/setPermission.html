@@ -7,7 +7,7 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
-<p>这是首页的{$name}控制器</p>
+<p>权限管理</p>
 <a href="{:url('student/index')}">student</a>
 <a href="{:url('teacher/index')}">teacher</a>
 <a href="{:url('index/login')}">登录</a>
@@ -20,8 +20,25 @@
     <input type="text" class="form-control" id="phone inputError2">
     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
 </div>
-<h3>没有权限的地方用用户名:webmaster,密码:123登录就可以了</h3>
 
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>为{$role['name']}分配权限</h3>
+        </div>
+    </div>
+
+    <div>
+        <form action="{:url('user/setPermissionHandle')}" method="post">
+        {volist id="item" name="permissions"}
+        <input type="checkbox" name="permissions[]" value="{$item->id}" <?php if($item->have==1) echo 'checked';?> />{$item->name}
+        {/volist}
+        <input type="hidden" name="role_id" value="{$role['id']}">
+        <br>
+        <input type="submit" name="" value="保存修改" class="btn btn-primary">
+        </form>
+    </div>
+</div>
 </body>
 <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"

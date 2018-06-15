@@ -5,17 +5,29 @@ namespace app\tlr\controller;
 use app\tlr\model\StudentModel;
 use think\Controller;
 use think\Request;
+use gmars\rbac\Rbac;
 
 class Student extends Controller
 {
-
+    // 学生页面
     public function index(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限");
+            exit();
+        }
         return $this->fetch('index');
     }
 
+    // 获取学生列表
     public function students(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限");
+            exit();
+        }
 //        TODO 接口隐藏？
         if (!request()->isGet()) {
             $this->error("404 not found");
@@ -28,8 +40,14 @@ class Student extends Controller
         echo json_encode(array("students" => $students, "totalPage" => $totalPage, "success" => true));
     }
 
+    // 修改学生信息
     public function update(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限");
+            exit();
+        }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found");
             exit();
@@ -54,8 +72,14 @@ class Student extends Controller
         }
     }
 
+    //新增学生
     public function add(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限");
+            exit();
+        }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found");
             exit();
@@ -80,8 +104,14 @@ class Student extends Controller
         }
     }
 
+    //删除学生
     public function deleteone(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限");
+            exit();
+        }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found");
             exit();
@@ -94,8 +124,14 @@ class Student extends Controller
         }
     }
 
+    //搜索学生
     public function search(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限");
+            exit();
+        }
         if (!request()->isGet()) {
             $this->error("404 not found");
             exit();

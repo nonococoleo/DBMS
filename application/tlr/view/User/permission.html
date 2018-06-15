@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<p>权限管理</p>
+<a href="{:url('student/index')}">student</a>
+<a href="{:url('teacher/index')}">teacher</a>
+<a href="{:url('index/login')}">登录</a>
+<a href="{:url('index/register')}">注册</a>
+<a href="{:url('user/index')}">用户管理</a>
+<a href="{:url('user/role')}">角色管理</a>
+<a href="{:url('user/permission')}">权限管理</a>
+<div class="form-group">
+    <label class="control-label" for="phone inputError2">Input with error</label>
+    <input type="text" class="form-control" id="phone inputError2">
+    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>权限列表</h3>
+        </div>
+    </div>
+
+    <div>
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+            <tr>
+                <td class="text-center">编号</td>
+                <td class="text-center">名称</td>
+                <td class="text-center">路径</td>
+                <td class="text-center">描述</td>
+                <td class="text-center">状态</td>
+                <td class="text-center">创建时间</td>
+                <td class="text-center">操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            {volist id="item" name="permissions"}
+            <tr>
+                <td class="text-center">{$item->id}</td>
+                <td class="text-center">{$item->name}</td>
+                <td class="text-center">{$item->path}</td>
+                <td class="text-center">{$item->description}</td>
+                <td class="text-center">{$item->status}</td>
+                <td class="text-center">{$item->create_time}</td>
+                <td class="text-center">
+                    <button class="btn btn-xs btn-success">
+                        删除权限
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div>
+        <form action="{:url('user/addPermission')}" method="post">
+            <input type="text" class="form-control"  name="name" placeholder="权限名称">
+            <input type="text" class="form-control"  name="status" value="1" placeholder="状态">
+            <input type="text" class="form-control"  name="description" placeholder="描述">
+            <!-- <input type="text" name="sort_num" value="10"> -->
+            <input type="text" class="form-control"  name="path" placeholder="路径">
+            <input type="submit" name="" class="btn btn-success" value="添加权限">
+        </form>
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+</html>
