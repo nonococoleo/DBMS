@@ -444,6 +444,9 @@ class Rbac
     {
 
         $user_roles = cache("user_roles");
+        if (empty($user_roles)) {
+            throw new Exception('你还没有登录或在登录后没有获取权限缓存');
+        }
         if(in_array(1, $user_roles)) {
             return true; //网站管理员可以越过权限验证
         }
