@@ -14,6 +14,7 @@ namespace gmars\rbac;
 use gmars\nestedsets\NestedSets;
 use think\Db;
 use think\Exception;
+use think\Session;
 
 class Rbac
 {
@@ -382,6 +383,8 @@ class Rbac
      */
     public function cachePermission($id)
     {
+
+        session_start();
         if (empty($id)) {
             throw new Exception('参数错误');
         }
@@ -399,9 +402,7 @@ class Rbac
                 $newPermission[$v['path']] = $v;
             }
         }
-
-        cache("permission", $newPermission);
-        return true;
+        Session::set('permission', $newPermission);
     }
 
     /**
@@ -414,6 +415,7 @@ class Rbac
      */
     public function cacheRole($id)
     {
+
         if (empty($id)) {
             throw new Exception('参数错误');
         }
@@ -430,7 +432,7 @@ class Rbac
             }
         }
 
-        cache("user_roles", $new_user_roles);
+        Session::set('user_roles',$new_user_roles);
         return true;
     }
 
@@ -442,20 +444,18 @@ class Rbac
      */
     public function can($path)
     {
-
-        $user_roles = cache("user_roles");
-        if (empty($user_roles)) {
+        if (null == Session::get("user_roles")) {
             return false;
         }
+        $user_roles = Session::get("user_roles");
         if(in_array(1, $user_roles)) {
             return true; //网站管理员可以越过权限验证
         }
 
-        $permissionList = cache("permission");
-        if (empty($permissionList)) {
+        if (null == Session::get("permission")) {
             throw new Exception('你还没有登录或在登录后没有获取权限缓存');
         }
-
+        $permissionList = Session::get("permission");
         if (isset($permissionList[$path]) && !empty($permissionList[$path])) {
             return true;
         }

@@ -58,7 +58,8 @@
             <!--<button type="submit" class="btn btn-default">Submit</button>-->
             <!--</form>-->
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{:url('index/login')}">登录</a></li>
+                    <li><a href="{:url('index/login')}" style="display: <?php if(session('uid')) echo 'none';?>;">登录</a></li>
+                    <li><a href="{:url('index/logout')}" style="display: <?php if(!session('uid')) echo 'none';?>;">注销</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
