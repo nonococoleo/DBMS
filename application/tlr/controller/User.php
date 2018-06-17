@@ -6,6 +6,7 @@ use app\tlr\model\RoleModel;
 use app\tlr\model\UserRoleModel;
 use app\tlr\model\PermissionModel;
 use app\tlr\model\RolePermissionModel;
+use app\tlr\model\ControllerModel;
 use think\Controller;
 use think\Request;
 use gmars\rbac\Rbac;
@@ -77,7 +78,17 @@ class User extends Controller
         }
 		$Permission = new PermissionModel;
 		$permissions = $Permission->select();
-		$data = ["permissions" => $permissions];
+		$Controller = new ControllerModel;
+		$controllers = $Controller->select();
+		foreach ($controllers as $key => $value) {
+			$tmp =array();
+			foreach ($permissions as $k => $v) {
+				if($v['cid'] == $value['cid'])
+					array_push($tmp, $v);
+			}
+			$controllers[$key]['permissions'] = $tmp;
+		}
+		$data = ["controllers" => $controllers];
         $this->assign($data);
         return $this->fetch('permission');
 	}
@@ -119,7 +130,18 @@ class User extends Controller
 				}
 			}
 		}
-		$data = ["permissions" => $permissions, "role" => $_GET];
+		$Controller = new ControllerModel;
+		$controllers = $Controller->select();
+		foreach ($controllers as $key => $value) {
+			$tmp =array();
+			foreach ($permissions as $k => $v) {
+				if($v['cid'] == $value['cid'])
+					array_push($tmp, $v);
+			}
+			$controllers[$key]['permissions'] = $tmp;
+		}
+
+		$data = ["controllers" => $controllers, "role" => $_GET];
         $this->assign($data);
         return $this->fetch('setPermission');
 	}
@@ -127,13 +149,20 @@ class User extends Controller
 	// 为角色分配权限
 	public function setPermissionHandle(Request $request)
 	{
+		$rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限");
+            exit();
+        }
 		$RolePermission = new RolePermissionModel;
 		$rolePermissions = $RolePermission->where('role_id', $_POST['role_id'])->delete();
-		$rbacObj = new Rbac();
-		$rbacObj->assignRolePermission($_POST['role_id'], $_POST['permissions']);
+        if(isset($_POST['permissions'])){
+        	$rbacObj = new Rbac();
+			$rbacObj->assignRolePermission($_POST['role_id'], $_POST['permissions']);
+        }
 		$this->success("操作成功");
 	}
-
+	
 	// 为用户分配角色
 	public function setRole(Request $request)
 	{		
@@ -158,5 +187,18 @@ class User extends Controller
 		}
 
 		$this->success("操作成功");
+	}
+
+	// 添加控制器（权限控制的一个粒度）
+	public function addController(Request $request)
+	{
+		$Controller = new ControllerModel();
+		if($Controller->where('path', $_POST['path'])->find() == null){
+	        $Controller->save($_POST);
+	        $this->success("添加成功");
+		}
+	    else{
+	    	$this->error("控制器已存在，请勿重复添加");
+	    }
 	}
 }
