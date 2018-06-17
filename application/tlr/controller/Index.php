@@ -23,11 +23,6 @@ class Index extends Controller
     	return $this->fetch('login');
     }
 
-    public function register(Request $reques)
-    {
-    	return $this->fetch('register');
-    }
-
     public function loginHandle(Request $request)
     {
         $User = new UserModel();

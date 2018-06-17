@@ -22,7 +22,8 @@ class User extends Controller
             exit();
         }
 		$User = new UserModel;
-		$users = $User->select();
+		$users = $User->paginate(10, false, ['type' => 'bootstrap']);
+		$page = $users->render();
 		$Role = new RoleModel;
 		$roles = $Role->select();
 		$UserRole = new UserRoleModel;
@@ -35,7 +36,7 @@ class User extends Controller
 			}
 			$users[$key]['userRoles'] = $t;
 		}
-		$data = ["users" => $users, "roles" => $roles];
+		$data = ["users" => $users, "page" => $page, "roles" => $roles];
         $this->assign($data);
         return $this->fetch('user');
 	}
@@ -162,7 +163,7 @@ class User extends Controller
         }
 		$this->success("操作成功");
 	}
-	
+
 	// 为用户分配角色
 	public function setRole(Request $request)
 	{		
