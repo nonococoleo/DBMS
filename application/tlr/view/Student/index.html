@@ -79,7 +79,7 @@
         </div>
         <div style="margin-top: 6px">
             &nbsp;
-            <button class="btn btn btn-success" @click="newStudent()">添加学生</button>
+            <button class="btn btn-success" @click="newStudent()">添加学生</button>
         </div>
     </div>
     <div>
@@ -116,13 +116,13 @@
     <div style="text-align:center;">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <li class="page-item" @click="page(nowPage-1)">
+                <li :class="(nowPage==1)?'page-item disabled':'page-item'" @click="page(nowPage-1)">
                     <span class="page-link">&laquo;</span>
                 </li>
                 <li :class="(nowPage==i)?'page-item active':'page-item'" v-for="i in totalPage" @click="page(i)">
                     <span class="page-link">{{i}}</span>
                 </li>
-                <li class="page-item" @click="page(nowPage+1)">
+                <li :class="(nowPage==totalPage)?'page-item disabled':'page-item'" @click="page(nowPage+1)">
                     <span class="page-link">&raquo;</span>
                 </li>
             </ul>
@@ -195,8 +195,6 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
     </div>
-
-
 </div>
 </body>
 <script type="text/javascript">
@@ -217,14 +215,15 @@
             getStudents(page) {
                 let tvm = this;
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: "{:URL('tlr/student/students','','')}?page=" + page,
-                    data: {},
+                    data: {"page": page},
                     dataType: "json",
                     success: function (data) {
                         if (data.success) {
                             tvm.students = data.students;
-                            tvm.totalPage = data.totalPage
+                            tvm.totalPage = data.totalPage;
+                            tvm.nowPage = page;
                         } else {
                             console.log("some troubles")
                         }

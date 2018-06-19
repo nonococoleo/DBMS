@@ -2,7 +2,7 @@
 <html lang="zh-Hans">
 <head>
     <meta charset="UTF-8">
-    <title>教师信息</title>
+    <title>报名信息</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
@@ -67,5 +67,218 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+<div class="col-lg-6">
+    <button class="btn btn-success center-block" @click="newStudent()">添加学生</button>
+</div>
+<div class="col-lg-6">
+    <div class="input-group">
+        <input type="text" id="name" name="name" class="form-control" placeholder="请输入学生姓名"
+               aria-describedby="basic-addon2" value="">
+        <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
+    </div>
+</div>
+
+<!-- 用户信息的modal -->
+<div>
+    <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="display: inline;">{{(add)?'添加学生':'修改学生信息'}}</h4>
+                    <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            姓名 * :
+                            <input type="text" v-model="studentDetailInShow.sname" class="form-control">
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            性别:
+                            <select class="form-control" v-model="studentDetailInShow.sex">
+                                <option value="1">男</option>
+                                <option value="2">女</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            年级:
+                            <input type="text" v-model="studentDetailInShow.grade" class="form-control">
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            学校:
+                            <input type="text" v-model="studentDetailInShow.school" class="form-control">
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            家庭住址:
+                            <input type="text" v-model="studentDetailInShow.home" class="form-control">
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            家庭电话:
+                            <input type="text" v-model="studentDetailInShow.tel" class="form-control">
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            联系电话 * :
+                            <input type="text" v-model="studentDetailInShow.phone" class="form-control">
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            余额:
+                            <input type="text" v-model="studentDetailInShow.balance" disabled class="form-control">
+                        </div>
+                    </div>
+                    <div>
+                        备注:
+                        <textarea v-model="studentDetailInShow.memo" class="form-control">
+                            </textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button v-if="add" class="btn btn-primary" @click="addStudent(studentDetailInShow)">添加学生
+                    </button>
+                    <button v-if="!add" type="button" class="btn btn-primary"
+                            @click="saveStudent(studentDetailInShow)">保存修改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
 </body>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#app',
+        data: {
+            students: [],
+            studentDetailInShow: {},
+            nowPage: 1,
+            totalPage: 1,
+            add: false,
+            searchSname: '',
+        },
+        mounted() {
+            this.getStudents(1)
+        },
+        methods: {
+            getStudents(page) {
+                let tvm = this;
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/student/students','','')}",
+                    data: {"page": page},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            tvm.students = data.students;
+                            tvm.totalPage = data.totalPage;
+                            tvm.nowPage = page;
+                        } else {
+                            console.log("some troubles")
+                        }
+                    }
+                });
+            },
+            page(newPage) {
+                if (newPage < 1) {
+                    newPage = 1
+                } else if (newPage > this.totalPage) {
+                    newPage = this.totalPage
+                }
+                this.getStudents(newPage)
+            },
+            open(index) {
+                this.studentDetailInShow = this.students[index];
+                this.add = false;
+                $('#myModal').modal();
+            },
+            newStudent() {
+                this.studentDetailInShow = {};
+                this.add = true;
+                $('#myModal').modal();
+            },
+            deleteStudent(index) {
+                let tvm = this;
+                var msg = '您确定要删除' + tvm.students[index].sname + '的信息吗？ 删除后不可恢复！';
+                if (confirm(msg) == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{:URL('tlr/student/deleteone','','')}",
+                        data: {sid: tvm.students[index].sid},
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                tvm.students.splice(index, 1)
+                            } else {
+                                alert(data.msg)
+                            }
+                        }
+                    });
+                }
+            },
+            saveStudent(studentDetailInShow) {
+                if (studentDetailInShow.sname == null || studentDetailInShow.sname.length < 1) {
+                    alert("用户名不能为空");
+                    return;
+                }
+                if (studentDetailInShow.phone == null || studentDetailInShow.phone.length < 1) {
+                    alert("联系电话不能为空");
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/student/update','','')}",
+                    data: studentDetailInShow,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            alert("操作成功")
+                        } else {
+                            alert(data.msg)
+                        }
+                    }
+                });
+            },
+            addStudent(studentDetailInShow) {
+                if (studentDetailInShow.sname == null || studentDetailInShow.sname.length < 1) {
+                    alert("用户名不能为空");
+                    return;
+                }
+                if (studentDetailInShow.phone == null || studentDetailInShow.phone.length < 1) {
+                    alert("用户名不能为空");
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/student/add','','')}",
+                    data: studentDetailInShow,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            alert("操作成功")
+                        } else {
+                            alert(data.msg)
+                        }
+                    }
+                });
+            },
+            search(searchSname) {
+                let tvm = this;
+                $.ajax({
+                    type: "GET",
+                    url: "{:URL('tlr/student/search','','')}?sname=" + searchSname,
+                    data: {},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            tvm.students = data.students;
+                            tvm.totalPage = 1
+                        } else {
+                            alert(data.msg)
+                        }
+                    }
+                });
+            }
+        }
+    })
+</script>
 </html>
