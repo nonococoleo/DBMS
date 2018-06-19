@@ -32,7 +32,7 @@
                 <li><a href="{:url('index')}">首页<span class="sr-only">(current)</span></a></li>
                 <li><a href="{:url('student/index')}">student</a></li>
                 <li><a href="{:url('teacher/index')}">teacher</a></li>
-                <li><a href="{:url('user/index')}">用户管理</a></li>
+                <li><a href="{:url('user/index')}">员工管理</a></li>
                 <li><a href="{:url('user/role')}">角色管理</a></li>
                 <li class="active"><a href="{:url('user/permission')}">权限管理</a></li>
             </ul>
@@ -106,13 +106,14 @@
                         </tbody>
                     </table>
                   </div>
-                  <button class="btn btn-success" style="width: 100%"  onclick="addPermission('{$controller->path}')">添加权限</button>
+                  <button class="btn btn-success" style="width: 100%"  onclick="addPermission('{$controller->path}','{$controller->cid}')">添加权限</button>
                 </div>
           </div>
           {/volist}
         </div>
         
     </div>
+    <button style="width: 100%" class="btn btn-success" onclick="$('#myModal1').modal()"><span class="glyphicon glyphicon-plus"></span></button>
 </div>
 
 
@@ -163,6 +164,7 @@
                         <!-- <input type="text" name="sort_num" value="10"> -->
                         路径:
                         <input type="text" class="form-control" id="permissionPath"  name="path" placeholder="路径">
+                        <input type="hidden" id="cid"  name="cid">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -177,9 +179,10 @@
 
 </body>
 <script type="text/javascript">
-    function addPermission(controllerPath) {
+    function addPermission(controllerPath,cid) {
         $('#myModal2').modal();
         $("#permissionPath").val(controllerPath);
+        $("#cid").val(cid);
     }
 </script>
 </html>

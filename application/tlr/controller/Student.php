@@ -30,7 +30,7 @@ class Student extends Controller
         }
 //        TODO 接口隐藏？
         if (!request()->isGet()) {
-            $this->error("404 not found");
+            abort('404');
             exit();
         }
         $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
@@ -49,7 +49,7 @@ class Student extends Controller
             exit();
         }
         if (!request()->isPost() || empty($_POST)) {
-            $this->error("404 not found");
+            abort('404');
             exit();
         }
 
@@ -81,7 +81,7 @@ class Student extends Controller
             exit();
         }
         if (!request()->isPost() || empty($_POST)) {
-            $this->error("404 not found");
+            abort('404');
             exit();
         }
 
@@ -113,7 +113,7 @@ class Student extends Controller
             exit();
         }
         if (!request()->isPost() || empty($_POST)) {
-            $this->error("404 not found");
+            abort('404');
             exit();
         }
         $student = new StudentModel;
@@ -133,7 +133,7 @@ class Student extends Controller
             exit();
         }
         if (!request()->isGet()) {
-            $this->error("404 not found");
+            abort('404');
             exit();
         }
         $student = new StudentModel;
