@@ -5,9 +5,9 @@ namespace app\tlr\model;
 use think\Model;    //  导入think\Model类
 
 
-class EnrollModel extends Model
+class ClassModel extends Model
 {
-    protected $table = 'enroll';
+    protected $table = 'class';
 
     protected function getContentAttr($content)
     {

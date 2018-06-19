@@ -3,7 +3,6 @@
 namespace app\tlr\controller;
 
 use app\tlr\model\StudentModel;
-use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
 
@@ -95,7 +94,7 @@ class Student extends Controller
 
         $student = new StudentModel($_POST);
         if ($student->allowField(['sname', 'sex', 'grade', 'school', 'home', 'tel', 'phone', 'memo'])->save($_POST)) {
-            echo json_encode(array("success" => true));
+            echo json_encode(array("success" => true, "id" => $student->sid));
             exit();
         } else {
             echo json_encode(array("success" => false, 'msg' => "服务器繁忙，请稍后重试"));
