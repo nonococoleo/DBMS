@@ -3,9 +3,9 @@
 namespace app\tlr\controller;
 
 use app\tlr\model\StudentModel;
+use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
-use gmars\rbac\Rbac;
 
 class Student extends Controller
 {
@@ -25,12 +25,11 @@ class Student extends Controller
     {
         $rbacObj = new Rbac();
         if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
+            $this->error("没有权限", "Student/index", null, 1);
             exit();
         }
-//        TODO 接口隐藏？
-        if (!request()->isGet()) {
-            abort('404');
+        if (request()->isGet()) {
+            $this->error("404 not found", "Student/index", null, 1);
             exit();
         }
         $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
@@ -49,7 +48,7 @@ class Student extends Controller
             exit();
         }
         if (!request()->isPost() || empty($_POST)) {
-            abort('404');
+            $this->error("404 not found", "Student/index", null, 1);
             exit();
         }
 
@@ -81,7 +80,7 @@ class Student extends Controller
             exit();
         }
         if (!request()->isPost() || empty($_POST)) {
-            abort('404');
+            $this->error("404 not found", "Student/index", null, 1);
             exit();
         }
 
@@ -113,7 +112,7 @@ class Student extends Controller
             exit();
         }
         if (!request()->isPost() || empty($_POST)) {
-            abort('404');
+            $this->error("404 not found", "Student/index", null, 1);
             exit();
         }
         $student = new StudentModel;
@@ -132,8 +131,8 @@ class Student extends Controller
             $this->error("没有权限");
             exit();
         }
-        if (!request()->isGet()) {
-            abort('404');
+        if (request()->isGet()) {
+            $this->error("404 not found", "Student/index", null, 1);
             exit();
         }
         $student = new StudentModel;
