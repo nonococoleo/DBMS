@@ -318,9 +318,9 @@
             search(searchSname) {
                 let tvm = this;
                 $.ajax({
-                    type: "GET",
-                    url: "{:URL('tlr/student/search','','')}?sname=" + searchSname,
-                    data: {},
+                    type: "POST",
+                    url: "{:URL('tlr/student/search','','')}",
+                    data: {sname:searchSname},
                     dataType: "json",
                     success: function (data) {
                         if (data.success) {

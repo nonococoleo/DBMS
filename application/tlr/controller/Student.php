@@ -12,27 +12,27 @@ class Student extends Controller
     // 学生页面
     public function index(Request $request)
     {
-        $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
-            exit();
-        }
+        // $rbacObj = new Rbac();
+        // if(!$rbacObj->can($request->path())) {
+        //     $this->error("没有权限");
+        //     exit();
+        // }
         return $this->fetch('index');
     }
 
     // 获取学生列表
     public function students(Request $request)
     {
-        $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限", "Student/index", null, 1);
-            exit();
-        }
+        // $rbacObj = new Rbac();
+        // if(!$rbacObj->can($request->path())) {
+        //     $this->error("没有权限", "Student/index", null, 1);
+        //     exit();
+        // }
         if (request()->isGet()) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();
         }
-        $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
+        $page = (isset($_POST['page'])) ? $_POST['page'] : 1;
         $student = new StudentModel;
         $students = $student->page($page, 10)->select();
         $totalPage = ceil(db('student')->count() / 10);
@@ -42,11 +42,11 @@ class Student extends Controller
     // 修改学生信息
     public function update(Request $request)
     {
-        $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
-            exit();
-        }
+        // $rbacObj = new Rbac();
+        // if(!$rbacObj->can($request->path())) {
+        //     $this->error("没有权限", "Student/index", null, 1);
+        //     exit();
+        // }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();
@@ -74,11 +74,11 @@ class Student extends Controller
     //新增学生
     public function add(Request $request)
     {
-        $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
-            exit();
-        }
+        // $rbacObj = new Rbac();
+        // if(!$rbacObj->can($request->path())) {
+        //     $this->error("没有权限", "Student/index", null, 1);
+        //     exit();
+        // }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();
@@ -106,11 +106,11 @@ class Student extends Controller
     //删除学生
     public function deleteone(Request $request)
     {
-        $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
-            exit();
-        }
+        // $rbacObj = new Rbac();
+        // if(!$rbacObj->can($request->path())) {
+        //     $this->error("没有权限", "Student/index", null, 1);
+        //     exit();
+        // }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();
@@ -126,17 +126,17 @@ class Student extends Controller
     //搜索学生
     public function search(Request $request)
     {
-        $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
-            exit();
-        }
+        // $rbacObj = new Rbac();
+        // if(!$rbacObj->can($request->path())) {
+        //     $this->error("没有权限", "Student/index", null, 1);
+        //     exit();
+        // }
         if (request()->isGet()) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();
         }
         $student = new StudentModel;
-        if ($students = $student->where('sname','like',"%$_GET[sname]%")->select()) {
+        if ($students = $student->where('sname','like',"%$_POST[sname]%")->select()) {
             echo json_encode(array("students" => $students, "success" => true));
         } else {
             echo json_encode(array("msg" => "查无此人", "success" => false));

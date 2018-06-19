@@ -14,6 +14,7 @@
             crossorigin="anonymous"></script>
     <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
 <script>
@@ -26,259 +27,230 @@
             $('#logout').hide();
     };
 </script>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Brand</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li><a href="{:url('index/index')}">首页</a></li>
-                <li class="active"><a href="#">报名管理<span class="sr-only">(current)</span></a></li>
-                <li><a href="{:url('student/index')}">学生管理</a></li>
-                <li><a href="{:url('teacher/index')}">教师管理</a></li>
-                <li><a href="{:url('class/index')}">课程管理</a></li>
-                <li><a href="{:url('refund/index')}">退费管理</a></li>
-                <li><a href="{:url('invoice/index')}">发票管理</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">系统管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{:url('user/index')}">用户管理</a></li>
-                        <li><a href="{:url('user/role')}">角色管理</a></li>
-                        <li><a href="{:url('user/permission')}">权限管理</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li id="login"><a href="{:url('index/login')}">登录</a></li>
-                <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-<div class="col-lg-6">
-    <button class="btn btn-success center-block" @click="newStudent()">添加学生</button>
-</div>
-<div class="col-lg-6">
-    <div class="input-group">
-        <input type="text" id="name" name="name" class="form-control" placeholder="请输入学生姓名"
-               aria-describedby="basic-addon2" value="">
-        <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
-    </div>
-</div>
-
-<!-- 用户信息的modal -->
 <div>
-    <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" style="display: inline;">{{(add)?'添加学生':'修改学生信息'}}</h4>
-                    <button type="button" class="close" style="display: inline;" data-dismiss="modal"
-                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            姓名 * :
-                            <input type="text" v-model="studentDetailInShow.sname" class="form-control">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Brand</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="{:url('index/index')}">首页</a></li>
+                    <li class="active"><a href="#">报名管理<span class="sr-only">(current)</span></a></li>
+                    <li><a href="{:url('student/index')}">学生管理</a></li>
+                    <li><a href="{:url('teacher/index')}">教师管理</a></li>
+                    <li><a href="{:url('class/index')}">课程管理</a></li>
+                    <li><a href="{:url('refund/index')}">退费管理</a></li>
+                    <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">系统管理<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{:url('user/index')}">用户管理</a></li>
+                            <li><a href="{:url('user/role')}">角色管理</a></li>
+                            <li><a href="{:url('user/permission')}">权限管理</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="login"><a href="{:url('index/login')}">登录</a></li>
+                    <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div class="col-lg-6">
+        <button class="btn btn-success center-block" onclick="newStudent()">添加学生</button>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            <input type="text" id="name" name="name" class="form-control" placeholder="请输入学生姓名"
+                   aria-describedby="basic-addon2" value="">
+            <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="search()">搜索</span>
+        </div>
+    </div>
+
+    <!-- 用户信息的modal -->
+    <div>
+        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">添加学生</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                姓名 * :
+                                <input type="text" id="sname" class="form-control" required>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                性别:
+                                <select class="form-control" id="sex">
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                年级:
+                                <input type="text" id="grade" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                学校:
+                                <input type="text" id="school" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                家庭住址:
+                                <input type="text" id="home" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                家庭电话:
+                                <input type="text" id="tel" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                联系电话 * :
+                                <input type="text" id="phone" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                余额:
+                                <input type="text" id="balance" disabled class="form-control">
+                            </div>
                         </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            性别:
-                            <select class="form-control" v-model="studentDetailInShow.sex">
-                                <option value="1">男</option>
-                                <option value="2">女</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            年级:
-                            <input type="text" v-model="studentDetailInShow.grade" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            学校:
-                            <input type="text" v-model="studentDetailInShow.school" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            家庭住址:
-                            <input type="text" v-model="studentDetailInShow.home" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            家庭电话:
-                            <input type="text" v-model="studentDetailInShow.tel" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            联系电话 * :
-                            <input type="text" v-model="studentDetailInShow.phone" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            余额:
-                            <input type="text" v-model="studentDetailInShow.balance" disabled class="form-control">
+                        <div>
+                            备注:
+                            <textarea id="memo" class="form-control">
+                                </textarea>
                         </div>
                     </div>
-                    <div>
-                        备注:
-                        <textarea v-model="studentDetailInShow.memo" class="form-control">
-                            </textarea>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button class="btn btn-primary" onclick="addStudent()">添加学生
+                        </button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button v-if="add" class="btn btn-primary" @click="addStudent(studentDetailInShow)">添加学生
-                    </button>
-                    <button v-if="!add" type="button" class="btn btn-primary"
-                            @click="saveStudent(studentDetailInShow)">保存修改
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">搜索结果</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <td class="text-center">编号</td>
+                            <td class="text-center">姓名</td>
+                            <td class="text-center">性别</td>
+                            <td class="text-center">年级</td>
+                            <td class="text-center">学校</td>
+                            <td class="text-center">操作</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 用js做循环我目前只想到这种方式 -->
+                        <tr v-for="(student,index) in students">
+                            <td class="text-center">{{student.sid}}</td>
+                            <td class="text-center">{{student.sname}}</td>
+                            <td class="text-center">{{(student.sex==1)?'男':'女'}}</td>
+                            <td class="text-center">{{student.grade}}</td>
+                            <td class="text-center">{{student.school}}</td>
+                            <td class="text-center">
+                                <button class="btn btn-xs btn-success" @click="enroll(student)">报名</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
 </div>
 </body>
 <script type="text/javascript">
     var app = new Vue({
-        el: '#app',
+        el: '#myModal2',
         data: {
-            students: [],
-            studentDetailInShow: {},
-            nowPage: 1,
-            totalPage: 1,
-            add: false,
-            searchSname: '',
-        },
-        mounted() {
-            this.getStudents(1)
+            students: []
         },
         methods: {
-            getStudents(page) {
-                let tvm = this;
-                $.ajax({
-                    type: "POST",
-                    url: "{:URL('tlr/student/students','','')}",
-                    data: {"page": page},
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.success) {
-                            tvm.students = data.students;
-                            tvm.totalPage = data.totalPage;
-                            tvm.nowPage = page;
-                        } else {
-                            console.log("some troubles")
-                        }
-                    }
-                });
-            },
-            page(newPage) {
-                if (newPage < 1) {
-                    newPage = 1
-                } else if (newPage > this.totalPage) {
-                    newPage = this.totalPage
-                }
-                this.getStudents(newPage)
-            },
-            open(index) {
-                this.studentDetailInShow = this.students[index];
-                this.add = false;
-                $('#myModal').modal();
-            },
-            newStudent() {
-                this.studentDetailInShow = {};
-                this.add = true;
-                $('#myModal').modal();
-            },
-            deleteStudent(index) {
-                let tvm = this;
-                var msg = '您确定要删除' + tvm.students[index].sname + '的信息吗？ 删除后不可恢复！';
-                if (confirm(msg) == true) {
-                    $.ajax({
-                        type: "POST",
-                        url: "{:URL('tlr/student/deleteone','','')}",
-                        data: {sid: tvm.students[index].sid},
-                        dataType: "json",
-                        success: function (data) {
-                            if (data.success) {
-                                tvm.students.splice(index, 1)
-                            } else {
-                                alert(data.msg)
-                            }
-                        }
-                    });
-                }
-            },
-            saveStudent(studentDetailInShow) {
-                if (studentDetailInShow.sname == null || studentDetailInShow.sname.length < 1) {
-                    alert("用户名不能为空");
-                    return;
-                }
-                if (studentDetailInShow.phone == null || studentDetailInShow.phone.length < 1) {
-                    alert("联系电话不能为空");
-                    return;
-                }
-                $.ajax({
-                    type: "POST",
-                    url: "{:URL('tlr/student/update','','')}",
-                    data: studentDetailInShow,
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.success) {
-                            alert("操作成功")
-                        } else {
-                            alert(data.msg)
-                        }
-                    }
-                });
-            },
-            addStudent(studentDetailInShow) {
-                if (studentDetailInShow.sname == null || studentDetailInShow.sname.length < 1) {
-                    alert("用户名不能为空");
-                    return;
-                }
-                if (studentDetailInShow.phone == null || studentDetailInShow.phone.length < 1) {
-                    alert("用户名不能为空");
-                    return;
-                }
-                $.ajax({
-                    type: "POST",
-                    url: "{:URL('tlr/student/add','','')}",
-                    data: studentDetailInShow,
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.success) {
-                            alert("操作成功")
-                        } else {
-                            alert(data.msg)
-                        }
-                    }
-                });
-            },
-            search(searchSname) {
-                let tvm = this;
-                $.ajax({
-                    type: "GET",
-                    url: "{:URL('tlr/student/search','','')}?sname=" + searchSname,
-                    data: {},
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.success) {
-                            tvm.students = data.students;
-                            tvm.totalPage = 1
-                        } else {
-                            alert(data.msg)
-                        }
-                    }
-                });
+            enroll(student) {
+                alert(student.sid);
+                alert(student.sname);
+                alert("接下来就交给你啦");
             }
         }
-    })
+    });
+    function newStudent() {
+        $('#myModal').modal();
+    }
+    function addStudent() {
+        let studentDetailInShow = {
+            sname: $('#sname').val(),
+            sex: $('#sex').val(),
+            grade: $('#grade').val(),
+            school: $('#school').val(),
+            home: $('#home').val(),
+            tel: $('#tel').val(),
+            phone: $('#phone').val(),
+            // balance: $('#balance').val(),
+            memo: $('#memo').val()
+        }
+        $.ajax({
+            type: "POST",
+            url: "{:URL('tlr/student/add','','')}",
+            data: studentDetailInShow,
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    alert("操作成功");
+                    $('#myModal').modal('hide');
+                    $('#myModal2').modal();
+                    Vue.set(app, "students", [studentDetailInShow]);
+                } else {
+                    alert(data.msg)
+                }
+            }
+        });
+    }
+    function search() {
+        let name = $('#name').val();
+        $.ajax({
+            type: "POST",
+            url: "{:URL('tlr/student/search','','')}",
+            data: {sname:name},
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#myModal2').modal();
+                    Vue.set(app, "students", data.students);
+                } else {
+                    alert(data.msg)
+                }
+            }
+        });
+    }
+    
 </script>
 </html>
