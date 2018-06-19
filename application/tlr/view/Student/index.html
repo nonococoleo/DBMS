@@ -42,7 +42,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{:url('index/index')}">首页<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('index/index')}">首页</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
                 <li class="active"><a href="#">学生管理<span class="sr-only">(current)</span></a></li>
                 <li><a href="{:url('teacher/index')}">教师管理</a></li>
@@ -74,7 +74,6 @@
         <div class="col-sm-4 col-md-4 col-lg-4">
             <div class="input-group" style="margin-top: 6px">
               <input type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2" v-model="searchSname">
-                <!--TODO 搜索学校-->
               <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" @click="search(searchSname)">搜索</span>
             </div>
         </div>
@@ -83,22 +82,15 @@
             <button class="btn btn btn-success" @click="newStudent()">添加学生</button>
         </div>
     </div>
-
     <div>
         <table class="table table-striped table-hover table-condensed">
             <thead>
             <tr>
                 <td class="text-center">编号</td>
                 <td class="text-center">姓名</td>
-                <!--TODO 显示男女-->
                 <td class="text-center">性别</td>
                 <td class="text-center">年级</td>
                 <td class="text-center">学校</td>
-                <!-- <td>家庭地址</td>
-                <td>家庭电话</td>
-                <td>联系电话</td>
-                <td>账户余额</td>
-                <td>备注</td> -->
                 <td class="text-center">操作</td>
             </tr>
             </thead>
@@ -109,11 +101,6 @@
                 <td class="text-center">{{(student.sex==1)?'男':'女'}}</td>
                 <td class="text-center">{{student.grade}}</td>
                 <td class="text-center">{{student.school}}</td>
-                <!-- <td>{{student.home}}</td>
-                <td>{{student.tel}}</td>
-                <td>{{student.phone}}</td>
-                <td>{{student.balance}}</td>
-                <td>{{student.memo}}</td> -->
                 <td class="text-center">
                     <button class="btn btn-xs btn-success" @click="open(index)" title="编辑">
                         <span class="glyphicon glyphicon-edit"></span>
@@ -149,14 +136,12 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" style="display: inline;">{{(add)?'添加学生':'修改学生信息'}}</h4>
-                        <button type="button" class="close" style="display: inline;" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-
                             <div class="col-sm-6 col-md-6 col-lg-6">
-
                                 姓名 * :
                                 <input type="text" v-model="studentDetailInShow.sname" class="form-control">
                             </div>

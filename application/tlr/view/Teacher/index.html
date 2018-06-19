@@ -43,7 +43,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{:url('index/index')}">首页<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('index/index')}">首页</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
                 <li><a href="{:url('student/index')}">学生管理</a></li>
                 <li class="active"><a href="#">教师管理<span class="sr-only">(current)</span></a></li>
@@ -75,7 +75,6 @@
         <form method="get" id="ser" action="{:url('teacher/search')}">
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="input-group" style="margin-top: 6px">
-                    <!--TODO 保持搜索，点击清空-->
                     <input type="text" id="name" name="name" class="form-control" placeholder="请输入教师姓名"
                            aria-describedby="basic-addon2" value="{$name}">
                     <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
@@ -87,7 +86,6 @@
             <button class="btn btn btn-success" onclick="add()">添加教师</button>
         </div>
     </div>
-
     <div>
         <!--TODO 固定列宽-->
         <table class="table table-striped table-hover table-condensed">
@@ -237,12 +235,6 @@
             return false;
         }
     }
-
-    //
-    // function ret() {
-    //     window.location.href = "{:url('teacher/index')}";
-    // }
-
 </script>
 </html>
 
