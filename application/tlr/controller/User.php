@@ -22,7 +22,7 @@ class User extends Controller
             exit();
         }
 		$User = new UserModel;
-		$users = $User->paginate(10, false, ['type' => 'bootstrap']);
+		$users = $User->where('status',1)->paginate(10, false, ['type' => 'bootstrap']);
 		$page = $users->render();
 		$Role = new RoleModel;
 		$roles = $Role->select();
@@ -52,7 +52,18 @@ class User extends Controller
         );
         $rbacObj = new Rbac();
         $rbacObj->createUser($data);
-        $this->success("添加成功", "Index/login");
+        $this->success("添加成功");
+    }
+
+    //删除用户
+	public function deleteOne(Request $reques)
+    {
+    	// 假删除
+        $User = new UserModel();
+        $User->save([
+		    'status'  => 2,
+		],['uid' => $_POST['uid']]);
+        $this->success("删除成功");
     }
 	
 	// 为用户分配角色
