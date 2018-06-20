@@ -13,6 +13,9 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
 </head>
 <body>
 <script>
@@ -141,7 +144,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-sm-6 col-md-6 col-lg-6">
+                            <div class="col-sm-6 col-md-6 col-lg-6" id="sname_check" >
                                 姓名 * :
                                 <input type="text" v-model="studentDetailInShow.sname" class="form-control">
                             </div>
@@ -168,7 +171,7 @@
                                 家庭电话:
                                 <input type="text" v-model="studentDetailInShow.tel" class="form-control">
                             </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
+                            <div class="col-sm-6 col-md-6 col-lg-6" id="phone_check">
                                 联系电话 * :
                                 <input type="text" v-model="studentDetailInShow.phone" class="form-control">
                             </div>
@@ -245,7 +248,7 @@
                 $('#myModal').modal();
             },
             newStudent() {
-                this.studentDetailInShow = {};
+                this.studentDetailInShow = {sex: 1};
                 this.add = true;
                 $('#myModal').modal();
             },
@@ -261,6 +264,8 @@
                         success: function (data) {
                             if (data.success) {
                                 tvm.students.splice(index,1)
+                                if (tvm.students.length == 0) 
+                                    tvm.getStudents(tvm.nowPage-1)
                             } else {
                                 alert(data.msg)
                             }
@@ -269,13 +274,18 @@
                 }
             },
             saveStudent(studentDetailInShow) {
-                if (studentDetailInShow.sname == null || studentDetailInShow.sname.length < 1) {
-                    alert("用户名不能为空");
-                    return;
-                }
-                if (studentDetailInShow.phone == null || studentDetailInShow.phone.length < 1) {
-                    alert("联系电话不能为空");
-                    return;
+                $('#sname_check').removeClass("has-error");
+                $('#phone_check').removeClass("has-error");
+                var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+                var phone = phoneReg.test(studentDetailInShow.phone);
+                var name = studentDetailInShow.sname;
+                if (!(name && phone)) {
+                    if (!name)
+                        $('#sname_check').addClass("has-error");
+                    if (!phone)
+                        $('#phone_check').addClass("has-error");
+                    toastr.error('表单红色字段有误请确认后再提交');
+                    return false;
                 }
                 $.ajax({
                     type: "POST",
@@ -293,13 +303,18 @@
                 });
             },
             addStudent(studentDetailInShow) {
-                if (studentDetailInShow.sname == null || studentDetailInShow.sname.length < 1) {
-                    alert("用户名不能为空");
-                    return;
-                }
-                if (studentDetailInShow.phone == null || studentDetailInShow.phone.length < 1) {
-                    alert("用户名不能为空");
-                    return;
+                $('#sname_check').removeClass("has-error");
+                $('#phone_check').removeClass("has-error");
+                var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+                var phone = phoneReg.test(studentDetailInShow.phone);
+                var name = studentDetailInShow.sname;
+                if (!(name && phone)) {
+                    if (!name)
+                        $('#sname_check').addClass("has-error");
+                    if (!phone)
+                        $('#phone_check').addClass("has-error");
+                    toastr.error('表单红色字段有误请确认后再提交');
+                    return false;
                 }
                 $.ajax({
                     type: "POST",
