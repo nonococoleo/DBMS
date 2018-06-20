@@ -22,7 +22,7 @@ class User extends Controller
             exit();
         }
 		$User = new UserModel;
-		$users = $User->where('status',1)->paginate(10, false, ['type' => 'bootstrap']);
+		$users = $User->paginate(10, false, ['type' => 'bootstrap']);
 		$page = $users->render();
 		$Role = new RoleModel;
 		$roles = $Role->select();
@@ -44,7 +44,12 @@ class User extends Controller
 	//添加用户
 	public function registerHandle(Request $reques)
     {
-        // $User = new UserModel();
+        $User = new UserModel();
+        foreach ($_POST as $key => $value)
+            if ($value == "")
+                $_POST[$key] = null;
+        if($User->where('uname', $_POST['uname'])->find())
+        	$this->error('该用户名已被注册，请更换用户名重新添加');
         $data = array(
             'uname' => $_POST['uname'],
             'status' => 1,
@@ -52,18 +57,21 @@ class User extends Controller
         );
         $rbacObj = new Rbac();
         $rbacObj->createUser($data);
-        $this->success("添加成功");
+    	$this->success("添加成功");
+
     }
 
     //删除用户
-	public function deleteOne(Request $reques)
+	public function lockOne(Request $reques)
     {
     	// 假删除
         $User = new UserModel();
+        $user = $User->where('uid',$_POST['uid'])->find();
+        $status = ($user['status'] == 1) ? 2 : 1;
         $User->save([
-		    'status'  => 2,
+		    'status'  => $status,
 		],['uid' => $_POST['uid']]);
-        $this->success("删除成功");
+        $this->success("修改成功");
     }
 	
 	// 为用户分配角色
