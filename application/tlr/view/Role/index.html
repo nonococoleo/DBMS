@@ -5,10 +5,31 @@
     <title>首页</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
+<script>
+    toastr.options.positionClass = 'toast-top-center';
+    toastr.options.timeOut = 2000;
+    window.onload = function () {
+        if ("{:session('uid')}")
+            $('#login').hide();
+        else
+            $('#logout').hide();
+    };
+</script>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -20,18 +41,29 @@
             <a class="navbar-brand" href="#">Brand</a>
         </div>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{:url('index')}">首页<span class="sr-only">(current)</span></a></li>
-                <li><a href="{:url('student/index')}">student</a></li>
-                <li><a href="{:url('teacher/index')}">teacher</a></li>
-                <li><a href="{:url('user/index')}">员工管理</a></li>
-                <li class="active"><a href="{:url('user/role')}">角色管理</a></li>
-                <li><a href="{:url('user/permission')}">权限管理</a></li>
+                <li><a href="#">首页<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('enroll/index')}">报名管理</a></li>
+                <li><a href="{:url('student/index')}">学生管理</a></li>
+                <li><a href="{:url('teacher/index')}">教师管理</a></li>
+                <li><a href="{:url('class/index')}">课程管理</a></li>
+                <li><a href="{:url('refund/index')}">退费管理</a></li>
+                <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">系统管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('user/index')}">用户管理</a></li>
+                        <li><a href="{:url('role/index')}">角色管理</a></li>
+                        <li><a href="{:url('permission/index')}">权限管理</a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{:url('index/login')}" style="display: <?php if(session('uid')) echo 'none';?>;">登录</a></li>
-                <li><a href="{:url('index/logout')}" style="display: <?php if(!session('uid')) echo 'none';?>;">注销</a></li>
+                <li id="login"><a href="{:url('index/login')}">登录</a></li>
+                <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -65,7 +97,7 @@
                 <td class="text-center">{$item->description}</td>
                 <td class="text-center">{$item->status}</td>
                 <td class="text-center">
-                    <a href="{:url('user/setPermission'),'?id='.$item->id.'&name='.$item.name}">
+                    <a href="{:url('role/setPermission'),'?id='.$item->id.'&name='.$item.name}">
                         <button class="btn btn-xs btn-success">
                             分配权限
                         </button>
@@ -78,7 +110,7 @@
     </div>
     <br>
     <div>
-        <form action="{:url('user/addRole')}" method="post">
+        <form action="{:url('role/addRole')}" method="post">
             <input type="text" class="form-control" name="name" placeholder="角色名称">
             <input type="text" class="form-control"  name="status" value="1" placeholder="状态">
             <input type="text" class="form-control"  name="description" placeholder="描述">
@@ -89,11 +121,4 @@
     </div>
 </div>
 </body>
-<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
 </html>

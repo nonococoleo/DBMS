@@ -14,8 +14,19 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+<script>
+    toastr.options.positionClass = 'toast-top-center';
+    toastr.options.timeOut = 2000;
+    window.onload = function () {
+        if ("{:session('uid')}")
+            $('#login').hide();
+        else
+            $('#logout').hide();
+    };
+</script>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -27,18 +38,29 @@
             <a class="navbar-brand" href="#">Brand</a>
         </div>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{:url('index')}">首页<span class="sr-only">(current)</span></a></li>
-                <li><a href="{:url('student/index')}">student</a></li>
-                <li><a href="{:url('teacher/index')}">teacher</a></li>
-                <li class="active"><a href="{:url('user/index')}">员工管理</a></li>
-                <li><a href="{:url('user/role')}">角色管理</a></li>
-                <li><a href="{:url('user/permission')}">权限管理</a></li>
+                <li><a href="#">首页<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('enroll/index')}">报名管理</a></li>
+                <li><a href="{:url('student/index')}">学生管理</a></li>
+                <li><a href="{:url('teacher/index')}">教师管理</a></li>
+                <li><a href="{:url('class/index')}">课程管理</a></li>
+                <li><a href="{:url('refund/index')}">退费管理</a></li>
+                <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">系统管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('user/index')}">用户管理</a></li>
+                        <li><a href="{:url('role/index')}">角色管理</a></li>
+                        <li><a href="{:url('permission/index')}">权限管理</a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{:url('index/login')}" style="display: <?php if(session('uid')) echo 'none';?>;">登录</a></li>
-                <li><a href="{:url('index/logout')}" style="display: <?php if(!session('uid')) echo 'none';?>;">注销</a></li>
+                <li id="login"><a href="{:url('index/login')}">登录</a></li>
+                <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -100,28 +122,29 @@
 </div>
 
 <!-- 添加用户的modal -->
-    <div class="modal fade" tabindex="-1" id="myModal1" role="dialog">
-        <form class="form-group" action="{:url('index/registerHandle')}" method="post" required>
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" style="display: inline;">添加控制器</h4>
-                        <button type="button" class="close" style="display: inline;" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-body">
-                        用户名:
-                        <input type="text" class="form-control" name="name" placeholder="用户名">
-                        密码:
-                        <input type="text" class="form-control" name="path" placeholder="密码">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <input type="submit" class="btn btn-primary" value="添加">
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </form>
-    </div><!-- /.modal -->
+<div class="modal fade" tabindex="-1" id="myModal1" role="dialog">
+    <form class="form-group" action="{:url('user/registerHandle')}" method="post" required>
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="display: inline;">添加用户</h4>
+                    <button type="button" class="close" style="display: inline;" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    用户名:
+                    <input type="text" class="form-control" name="uname" placeholder="用户名">
+                    密码:
+                    <input type="password" class="form-control" name="passwd" placeholder="密码">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" value="添加">
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </form>
+</div><!-- /.modal -->
+
 </body>
 </html>

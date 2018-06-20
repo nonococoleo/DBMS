@@ -52,17 +52,4 @@ class Index extends Controller
             $this->error('操作无效');
         }
     }
-
-    public function registerHandle(Request $reques)
-    {
-        // $User = new UserModel();
-        $data = array(
-            'uname' => $_POST['uname'],
-            'status' => 1,
-            'passwd' => md5($_POST['passwd'])
-        );
-        $rbacObj = new Rbac();
-        $rbacObj->createUser($data);
-        $this->success("添加成功", "Index/login");
-    }
 }
