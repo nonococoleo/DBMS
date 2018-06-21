@@ -16,6 +16,7 @@
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
 </head>
 <body>
+<!--初始化脚本-->
 <script>
     toastr.options.positionClass = 'toast-top-center';
     toastr.options.timeOut = 2000;
@@ -26,6 +27,7 @@
             $('#logout').hide();
     };
 </script>
+<!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -67,7 +69,9 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+<!--页面主体-->
 <div id="app" class="container">
+    <!--页眉-->
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>教师信息</h3>
@@ -86,6 +90,7 @@
             <button class="btn btn-success" onclick="add()">添加教师</button>
         </div>
     </div>
+    <!--列表-->
     <div>
         <!--TODO 固定列宽-->
         <table class="table table-striped table-hover table-condensed">
@@ -122,58 +127,59 @@
             </tbody>
         </table>
     </div>
-</div>
-
-<div style="text-align:center;">
-    {$page}
-</div>
-<!-- 用户信息的modal -->
-<div>
-    <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" style="display: inline;" id="modal-title"></h4>
-                    <button type="button" class="close" style="display: inline;" data-dismiss="modal"
-                            aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                </div>
-                <form action=" " method="POST" id="modal-form">
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
-                                姓名:
-                                <input type="text" name="tname" id="tname" class="form-control">
+    <!--分页-->
+    <div style="text-align:center;">
+        {$page}
+    </div>
+    <!-- 用户信息的modal -->
+    <div>
+        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;" id="modal-title"></h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form action=" " method="POST" id="modal-form">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
+                                    姓名:
+                                    <input type="text" name="tname" id="tname" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    学校:
+                                    <input type="text" name="school" id="school" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="phone_check">
+                                    联系电话:
+                                    <input type="text" name="phone" id="phone" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    课时费:
+                                    <input type="number" step="0.01" name="price" id="price" class="form-control">
+                                </div>
                             </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                学校:
-                                <input type="text" name="school" id="school" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6" id="phone_check">
-                                联系电话:
-                                <input type="text" name="phone" id="phone" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                课时费:
-                                <input type="number" step="0.01" name="price" id="price" class="form-control">
+                            <div>
+                                备注:
+                                <textarea name="memo" id="memo" class="form-control"></textarea>
                             </div>
                         </div>
-                        <div>
-                            备注:
-                            <textarea name="memo" id="memo" class="form-control"></textarea>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" id="mod" onclick="check()">保存修改</button>
+                            <button type="button" class="btn btn-primary" id="add" onclick="check()">添加老师</button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary" id="mod" onclick="check()">保存修改</button>
-                        <button type="button" class="btn btn-primary" id="add" onclick="check()">添加老师</button>
-                    </div>
-                </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
 </div>
 </body>
+<!--业务逻辑-->
 <script>
     function mod(url, tname, school, phone, price, memo) {
         $('#name_check').removeClass("has-error");
@@ -206,7 +212,7 @@
     }
 
     function del(url, tname) {
-        var flag = confirm("确定要删除老师 " + tname + " 吗？");
+        let flag = confirm("确定要删除老师 " + tname + " 吗？");
         if (flag)
             window.location.href = url;
     }
