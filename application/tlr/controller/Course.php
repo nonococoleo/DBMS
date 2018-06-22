@@ -93,4 +93,18 @@ class Course extends Controller
         }
         return null;
     }
+
+    public function ser(Request $request)
+    {
+        $Course = new CourseModel();
+        if (request()->isGet()) {
+            $this->error("404 not found", "Student/index", null, 1);
+            exit();
+        }
+        if ($course = $Course->where('memo', '=', "$_POST[memo]")->select()) {
+            echo json_encode(array("course" => $course, "success" => true));
+        } else {
+            echo json_encode(array("msg" => "查无此人", "success" => false));
+        }
+    }
 }
