@@ -77,7 +77,7 @@ class Course extends Controller
         if (session('uid')) {
             $Course = new CourseModel();
             $Log = new LogModel();
-            $Course->allowField(['delflag'])->save(['delfalg' => 1], ['tid' => $request->param("cid")]);
+            $Course->allowField(['delflag'])->save(['delflag' => 1], ['cid' => $request->param("cid")]);
             $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
         } else {

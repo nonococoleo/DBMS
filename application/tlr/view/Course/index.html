@@ -19,6 +19,17 @@
 
 
 <body>
+<!--初始化脚本-->
+<script>
+    toastr.options.positionClass = 'toast-top-center';
+    toastr.options.timeOut = 2000;
+    window.onload = function () {
+        if ("{:session('uid')}")
+            $('#login').hide();
+        else
+            $('#logout').hide();
+    };
+</script>
 
 <!--导航条-->
 <nav class="navbar navbar-default">
@@ -122,11 +133,11 @@
 
                 <td class="text-center">
                     <button class="btn btn-xs btn-success"
-                            onclick="mod('{:url(\'course/mod\',[\'tid\'=>$course.cid])}','{$course.cname}','{$course.time}','{$course.date}','{$course.semester}','{$course.campus}','{$course.room}','{$course.price}','{$course.unit}','{$course.tid}','{$course.fee}')">
+                            onclick="mod('{:url(\'course/mod\',[\'cid\'=>$course.cid])}','{$course.cname}','{$course.time}','{$course.date}','{$course.semester}','{$course.campus}','{$course.room}','{$course.price}','{$course.unit}','{$course.tid}','{$course.fee}')">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button class="btn btn-xs btn-danger"
-                            onclick="del('{:url(\'course/del\',[\'tid\'=>$course.cid])}','{$course.cname}')">
+                            onclick="del('{:url(\'course/del\',[\'cid\'=>$course.cid])}','{$course.cname}')">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </td>
@@ -268,10 +279,10 @@
 
     }
 
-    function del() {
+    function del(url, cname) {
         let flag = confirm("确定要删除课程" + cname + "吗");
-        if (falg) {
-            window.location.herf = url;
+        if (flag) {
+            window.location.href = url;
         }
 
     }
