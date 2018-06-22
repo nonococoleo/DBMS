@@ -11,6 +11,7 @@ namespace app\tlr\controller;
 
 use app\tlr\model\CourseModel;
 //use app\tlr\model\TeacherModel;
+use app\tlr\model\LogModel;
 use think\Controller;
 use think\Request;
 
@@ -22,7 +23,7 @@ class Course extends Controller
     public function index(Request $request)
     {
         $Course = new CourseModel();
-        $course = $Course->paginate(10, false, ['type' => 'bootstrap']);
+        $course = $Course->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
         $page = $course->render();
 
         $data = ["course" => $course, "page" => $page, "name" => null];
@@ -54,34 +55,53 @@ class Course extends Controller
 
     public function mod(Request $request)
     {
-        $Course = new CourseModel();
-        foreach ($_POST as $key => $value)
-            if ($value == "")
-                $_POST[$key] = null;
-        $Course->allowField(['cname', 'time', 'date', 'semester', 'campus', 'room', 'price', 'unit', 'tid', 'fee', 'memo'])->save($_POST, ['cid' => $request->param("cid")]);
-        $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
+        if (session('uid')) {
+            $Course = new CourseModel();
+            $Log = new LogModel();
+            foreach ($_POST as $key => $value) {
+                if ($value == "") {
+                    $_POST[$key] = null;
+                }
+                $Course->allowField(['cname', 'time', 'date', 'semester', 'campus', 'room', 'price', 'unit', 'tid', 'fee', 'memo'])->save($_POST, ['cid' => $request->param("cid")]);
+                $Log->save(["uid" => session('uid'), "action" => $Course->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+                $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
+            }
+        } else {
+            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+        }
         return null;
     }
 
     public function del(Request $request)
     {
-        $Course = new CourseModel();
-//TODO 修改标志位
-        $Course->destroy(['cid' => $request->param("cid")]);
-//        TODO delflag
-        $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
-//        TODO 日志
+        if (session('uid')) {
+            $Course = new CourseModel();
+            $Log = new LogModel();
+            $Course->allowField(['delflag'])->save(['delfalg' => 1], ['tid' => $request->param("cid")]);
+            $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
+            $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
+        } else {
+            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+        }
+
         return null;
     }
 
     public function add(Request $request)
     {
-        $Course = new CourseModel();
-        foreach ($_POST as $key => $value)
-            if ($value == "")
-                $_POST[$key] = null;
-        $Course->save($_POST);
-        $this->success("添加成功", "Course/index", null, 1);
+        if (session('uid')) {
+            $Course = new CourseModel();
+            $Log = new LogModel();
+            foreach ($_POST as $key => $value)
+                if ($value == "")
+                    $_POST[$key] = null;
+            $Course->save($_POST);
+            $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
+            $this->success("添加成功", "Course/index", null, 1);
+        } else {
+            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+        }
+
         return null;
     }
 }
