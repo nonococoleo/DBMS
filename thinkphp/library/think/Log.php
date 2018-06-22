@@ -14,7 +14,7 @@ namespace think;
 use think\exception\ClassNotFoundException;
 
 /**
- * Class Log
+ * Course Log
  * @package think
  *
  * @method void log($msg) static

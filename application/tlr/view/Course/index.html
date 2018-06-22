@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课程信息{$name}</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
+
+</head>
+
+
+<body>
+
+<!--导航条-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Brand</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="{:url('index/index')}">首页</a></li>
+                <li><a href="{:url('enroll/index')}">报名管理</a></li>
+                <li><a href="{:url('student/index')}">学生管理</a></li>
+                <li><a href="{:url('teacher/index')}">教师管理</a></li>
+                <li class="active"><a href="#">课程管理<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('refund/index')}">退费管理</a></li>
+                <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">系统管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('user/index')}">用户管理</a></li>
+                        <li><a href="{:url('role/index')}">角色管理</a></li>
+                        <li><a href="{:url('permission/index')}">权限管理</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li id="login"><a href="{:url('index/login')}">登录</a></li>
+                <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<!--页面主体-->
+<div id="app" class="container">
+    <!--页眉-->
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>课程信息</h3>
+        </div>
+        <form method="get" id="ser" action="{:url('course/search')}">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="input-group" style="margin-top: 6px">
+                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入课程名"
+                           aria-describedby="basic-addon2" value="{$name}">
+                    <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
+                </div>
+            </div>
+        </form>
+        <div style="margin-top: 6px">
+            <!--TODO-->
+            <button class="btn btn-success" onclick="add()">添加课程</button>
+        </div>
+    </div>
+    <!--列表-->
+    <div>
+        <!--TODO 固定列宽-->
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+            <tr>
+                <td class="text-center">编号</td>
+                <td class="text-center">课程</td>
+                <td class="text-center">时间</td>
+                <td class="text-center">日期</td>
+                <td class="text-center">学期</td>
+                <td class="text-center">校区</td>
+                <td class="text-center">教室</td>
+                <td class="text-center">单价</td>
+                <td class="text-center">课时</td>
+                <td class="text-center">教师</td>
+                <td class="text-center">费用</td>
+                <td class="text-center">操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            {volist id="course" name="course"}
+            <tr>
+
+                <td class="text-center">{$course->cid}</td>
+                <td class="text-center">{$course->cname}</td>
+                <td class="text-center">{$course->time}</td>
+                <td class="text-center">{$course->date}</td>
+                <td class="text-center">{$course->semester}</td>
+                <td class="text-center">{$course->campus}</td>
+                <td class="text-center">{$course->room}</td>
+                <td class="text-center">{$course->price}</td>
+                <td class="text-center">{$course->unit}</td>
+                <td class="text-center">{$course->tid}</td>
+                <td class="text-center">{$course->fee}</td>
+
+                <td class="text-center">
+                    <button class="btn btn-xs btn-success"
+                            onclick="mod('{:url(\'course/mod\',[\'tid\'=>$course.cid])}','{$course.cname}','{$course.time}','{$course.date}','{$course.semester}','{$course.campus}','{$course.room}','{$course.price}','{$course.unit}','{$course.tid}','{$course.fee}')">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                    <button class="btn btn-xs btn-danger"
+                            onclick="del('{:url(\'course/del\',[\'tid\'=>$course.cid])}','{$course.cname}')">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    <div style="text-align:center;">
+        {$page}
+    </div>
+    <!-- 用户信息的modal -->
+    <div>
+        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;" id="modal-title"></h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+
+                    <form action=" " method="POST" id="modal-form">
+                        <div class="modal-body">
+                            <div class="row">
+
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
+                                    课名:
+                                    <input type="text" name="cname" id="cname" class="form-control">
+                                </div>
+
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    时间:
+                                    <input type="text" name="time" id="time" class="form-control">
+                                </div>
+
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    日期:
+                                    <input type="text" name="date" id="date" class="form-control">
+                                </div>
+
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    学期:
+                                    <input type="text" name="semester" id="semester" class="form-control">
+                                </div>
+
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    校区:
+                                    <input type="text" name="campus" id="campus" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    教室:
+                                    <input type="text" name="room" id="room" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    单价:
+                                    <input type="text" name="price" id="price" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    课时:
+                                    <input type="text" name="unit" id="unit" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    教师:
+                                    <input type="text" name="tid" id="tid" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    课时费:
+                                    <input type="text" name="fee" id="fee" class="form-control">
+                                </div>
+                            </div>
+                            <div>
+                                备注:
+                                <textarea name="memo" id="memo" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" id="mod" onclick="check()">保存修改</button>
+                            <button type="button" class="btn btn-primary" id="add" onclick="check()">添加课程</button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+
+</body>
+
+
+<!--业务逻辑-->
+<script>
+    function mod(url, cname, time, date, semester, campus, room, price, unit, tid, fee, memo) {
+        $('#name_check').removeClass("has-error");
+
+        $('#cname').val(cname);
+        $('#time').val(time);
+        $('#date').val(date);
+        $('#semester').val(semester);
+        $('#campus').val(campus);
+        $('#room').val(room);
+        $('#price').val(price);
+        $('#unit').val(unit);
+        $('#tid').val(tid);
+        $('#fee').val(fee);
+        $('#memo').text(memo);
+
+        $('#modal-title').text('修改课程信息');
+        $('#modal-form').attr("action", url);
+        $('#add').hide();
+        $('#mod').show();
+        $('#myModal').modal();
+
+    }
+
+    function add() {
+        $('#name_check').removeClass("has-error");
+
+        $('#cname').val(null);
+        $('#time').val(null);
+        $('#date').val(null);
+        $('#semester').val(null);
+        $('#campus').val(null);
+        $('#room').val(null);
+        $('#price').val(null);
+        $('#unit').val(null);
+        $('#tid').val(null);
+        $('#fee').val(null);
+        $('#memo').text(null);
+
+        $('#modal-title').text('添加课程');
+        $('#modal-form').attr("action", "{:url('course/add')}");
+        $('#mod').hide();
+        $('#add').show();
+        $('#myModal').modal();
+
+    }
+
+    function del() {
+        let flag = confirm("确定要删除课程" + cname + "吗");
+        if (falg) {
+            window.location.herf = url;
+        }
+
+    }
+
+
+    function ser() {
+        if ($('#name').val())
+            $('#ser').submit();
+        else
+            window.location.href = "{:url('course/index')}";
+    }
+
+    function check() {
+        $('name_check').removeClass("has-error");
+        var name = $('#cname').val();
+        if (!name) {
+            $('#name_check').addClass("has-error");
+            toastr.error("表单红色字段有误,请确认后再提交");
+            return false;
+        } else {
+            $('#modal-form').submit();
+        }
+
+    }
+
+
+</script>
+
+
+</html>

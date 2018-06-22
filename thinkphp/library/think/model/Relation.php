@@ -16,7 +16,7 @@ use think\Exception;
 use think\Model;
 
 /**
- * Class Relation
+ * Course Relation
  * @package think\model
  *
  * @mixin Query
