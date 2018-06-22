@@ -7,6 +7,7 @@ use app\tlr\model\UserRoleModel;
 use app\tlr\model\PermissionModel;
 use app\tlr\model\RolePermissionModel;
 use app\tlr\model\ControllerModel;
+use app\tlr\model\LogModel;
 use think\Controller;
 use think\Request;
 use gmars\rbac\Rbac;
@@ -49,14 +50,16 @@ class User extends Controller
             if ($value == "")
                 $_POST[$key] = null;
         if($User->where('uname', $_POST['uname'])->find())
-        	$this->error('该用户名已被注册，请更换用户名重新添加');
+        	$this->error('该用户名已被注册，请更换用户名重新添加');	
         $data = array(
             'uname' => $_POST['uname'],
-            'status' => 1,
+            'delflag' => 1,
             'passwd' => md5($_POST['passwd'])
         );
         $rbacObj = new Rbac();
         $rbacObj->createUser($data);
+        $Log = new LogModel();
+        $Log->save(["uid" => session('uid'), "action" => $User->getlastsql(), "time" => date("Y-m-d H:i:s")]);
     	$this->success("添加成功");
 
     }
@@ -64,13 +67,15 @@ class User extends Controller
     //删除用户
 	public function lockOne(Request $reques)
     {
-    	// 假删除
+      	// 假删除
         $User = new UserModel();
-        $user = $User->where('uid',$_POST['uid'])->find();
-        $status = ($user['status'] == 1) ? 2 : 1;
+        $user = $User->where('uid',$_GET['uid'])->find();
+        $delflag = ($user['delflag'] == 1) ? 0 : 1;
         $User->save([
-		    'status'  => $status,
-		],['uid' => $_POST['uid']]);
+		    'delflag'  => $delflag,
+		],['uid' => $_GET['uid']]);
+		$Log = new LogModel();
+        $Log->save(["uid" => session('uid'), "action" => $User->getlastsql(), "time" => date("Y-m-d H:i:s")]);
         $this->success("修改成功");
     }
 	
@@ -78,6 +83,7 @@ class User extends Controller
 	public function setRole(Request $request)
 	{		
 		$rbacObj = new Rbac();
+		$Log = new LogModel();		
         if(!$rbacObj->can($request->path())) {
             $this->error("没有权限");
             exit();
@@ -94,9 +100,10 @@ class User extends Controller
 		}
 		foreach ($data as $key => $value) {
 			$UserRole->where('user_id', $key)->delete(); //删除旧角色
+	        $Log->save(["uid" => session('uid'), "action" => $UserRole->getlastsql(), "time" => date("Y-m-d H:i:s")]);
 			$rbacObj->assignUserRole($key, $value); //添加新角色
+	        $Log->save(["uid" => session('uid'), "action" => $UserRole->getlastsql(), "time" => date("Y-m-d H:i:s")]);
 		}
-
 		$this->success("操作成功");
 	}
 

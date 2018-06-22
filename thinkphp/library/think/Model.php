@@ -26,7 +26,7 @@ use think\model\relation\MorphOne;
 use think\model\relation\MorphTo;
 
 /**
- * Class Model
+ * Course Model
  * @package think
  * @mixin Query
  */

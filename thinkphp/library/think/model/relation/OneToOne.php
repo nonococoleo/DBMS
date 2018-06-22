@@ -18,7 +18,7 @@ use think\Model;
 use think\model\Relation;
 
 /**
- * Class OneToOne
+ * Course OneToOne
  * @package think\model\relation
  *
  */

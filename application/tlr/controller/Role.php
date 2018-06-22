@@ -7,6 +7,7 @@ use app\tlr\model\UserRoleModel;
 use app\tlr\model\PermissionModel;
 use app\tlr\model\RolePermissionModel;
 use app\tlr\model\ControllerModel;
+use app\tlr\model\LogModel;
 use think\Controller;
 use think\Request;
 use gmars\rbac\Rbac;
@@ -38,6 +39,9 @@ class Role extends Controller
         }
 		$rbacObj = new Rbac();
 		$rbacObj->createRole($_POST);
+		$Role = new RoleModel();
+        $Log = new LogModel();
+        $Log->save(["uid" => session('uid'), "action" => $Role->getlastsql(), "time" => date("Y-m-d H:i:s")]);
 		$this->success("操作成功");
 	}
 
@@ -93,6 +97,9 @@ class Role extends Controller
         if(isset($_POST['permissions'])){
         	$rbacObj = new Rbac();
 			$rbacObj->assignRolePermission($_POST['role_id'], $_POST['permissions']);
+			$RolePermission = new RolePermissionModel();
+	        $Log = new LogModel();
+	        $Log->save(["uid" => session('uid'), "action" => $RolePermission->getlastsql(), "time" => date("Y-m-d H:i:s")]);
         }
 		$this->success("操作成功");
 	}

@@ -3,6 +3,7 @@
 namespace app\tlr\controller;
 
 use app\tlr\model\StudentModel;
+use app\tlr\model\LogModel;
 use think\Controller;
 use think\Request;
 
@@ -33,7 +34,7 @@ class Student extends Controller
         }
         $page = (isset($_POST['page'])) ? $_POST['page'] : 1;
         $student = new StudentModel;
-        $students = $student->page($page, 10)->select();
+        $students = $student->where('delflag', '0')->page($page, 10)->select();
         $totalPage = ceil(db('student')->count() / 10);
         echo json_encode(array("students" => $students, "totalPage" => $totalPage, "success" => true));
     }
@@ -94,6 +95,8 @@ class Student extends Controller
 
         $student = new StudentModel($_POST);
         if ($student->allowField(['sname', 'sex', 'grade', 'school', 'home', 'tel', 'phone', 'memo'])->save($_POST)) {
+            $Log = new LogModel();
+            $Log->save(["uid" => session('uid'), "action" => $student->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             echo json_encode(array("success" => true, "id" => $student->sid));
             exit();
         } else {
@@ -115,7 +118,9 @@ class Student extends Controller
             exit();
         }
         $student = new StudentModel;
-        if ($students = $student->where('sid', $_POST['sid'])->delete()) {
+        if ($student->save(['delflag'  => 1],['sid' => $_POST['sid']])) {
+            $Log = new LogModel();
+            $Log->save(["uid" => session('uid'), "action" => $student->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             echo json_encode(array("success" => true));
         } else {
             echo json_encode(array("msg" => "删除失败", "success" => false));

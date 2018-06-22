@@ -47,7 +47,7 @@
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
                 <li><a href="{:url('student/index')}">学生管理</a></li>
                 <li><a href="{:url('teacher/index')}">教师管理</a></li>
-                <li><a href="{:url('class/index')}">课程管理</a></li>
+                <li><a href="{:url('course/index')}">课程管理</a></li>
                 <li><a href="{:url('refund/index')}">退费管理</a></li>
                 <li><a href="{:url('invoice/index')}">发票管理</a></li>
                 <li class="dropdown active">
@@ -105,12 +105,12 @@
                             <?php if($item->status==1) echo '正常'; else echo '被锁定'; ?>
                         </td>
                         <td class="text-center">
-                            <form action="{:url('user/lockOne')}" method="post">
+                            <a href="{:url('user/lockOne')}?uid={$item->uid}" method="post">
                                 <input type="hidden" name="uid" value="{$item->uid}">
-                                <button type="submit" class="btn btn-xs btn-default"">
+                                <button type="button" class="btn btn-xs btn-default"">
                                     <?php if($item->status==1) echo '锁定'; else echo '解锁'; ?>
                                 </button>
-                            </form>
+                            </a>
                         </td>
                     </tr>
                     {/volist}
