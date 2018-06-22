@@ -15,7 +15,6 @@
     <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
 </head>
-<body>
 <script>
     toastr.options.positionClass = 'toast-top-center';
     toastr.options.timeOut = 2000;
@@ -26,6 +25,7 @@
             $('#logout').hide();
     };
 </script>
+<body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -91,40 +91,40 @@
             </tr>
             </thead>
             <tbody>
-                <form action="{:url('user/setRole')}" method="post">
-                    {volist id="item" name="users"}
-                    <tr>
-                        <td class="text-center">{$item->uid}</td>
-                        <td class="text-center">{$item->uname}</td>
-                        <td class="text-center">
-                            {volist id="role" name="roles"}
-                            <input type="checkbox" name="roles[]" value="{$item->uid}_{$role->id}" <?php if(in_array($role->id,$item->userRoles)) echo 'checked';?> />{$role->name}
-                            {/volist}
-                        </td>
-                        <td class="text-center">
-                            <?php if($item->status==1) echo '正常'; else echo '被锁定'; ?>
-                        </td>
-                        <td class="text-center">
-                            <a href="{:url('user/lockOne')}?uid={$item->uid}" method="post">
-                                <input type="hidden" name="uid" value="{$item->uid}">
-                                <button type="button" class="btn btn-xs btn-default"">
-                                    <?php if($item->status==1) echo '锁定'; else echo '解锁'; ?>
-                                </button>
-                            </a>
-                        </td>
-                    </tr>
-                    {/volist}
-                    <tr>
-                        <td colspan="4" align="right">
-                            <input type="submit" name="" value="保存修改" class="btn btn-primary">
-                        </td>
-                    </tr>
-                </form>
+            <form action="{:url('user/setRole')}" method="post">
+                {volist id="item" name="users"}
+                <tr>
+                    <td class="text-center">{$item->uid}</td>
+                    <td class="text-center">{$item->uname}</td>
+                    <td class="text-center">
+                        {volist id="role" name="roles"}
+                        <input type="checkbox" name="roles[]" value="{$item->uid}_{$role->id}" <?php if(in_array($role->id,$item->userRoles)) echo 'checked';?> />{$role->name}
+                        {/volist}
+                    </td>
+                    <td class="text-center">
+                        <?php if($item->status==1) echo '正常'; else echo '被锁定'; ?>
+                    </td>
+                    <td class="text-center">
+                        <a href="{:url('user/lockOne')}?uid={$item->uid}" method="post">
+                            <input type="hidden" name="uid" value="{$item->uid}">
+                            <button type="button" class="btn btn-xs btn-default"">
+                            <?php if($item->status==1) echo '锁定'; else echo '解锁'; ?>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+                {/volist}
+                <tr>
+                    <td colspan="4" align="right">
+                        <input type="submit" name="" value="保存修改" class="btn btn-primary">
+                    </td>
+                </tr>
+            </form>
             </tbody>
         </table>
     </div>
     <div style="text-align:center;">
-    {$page}
+        {$page}
 </div>
 
 </div>

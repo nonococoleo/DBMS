@@ -2,32 +2,36 @@
 
 namespace app\tlr\controller;
 
-use app\tlr\model\LogModel;
 use app\tlr\model\InvoiceModel;
+use app\tlr\model\LogModel;
 use think\Controller;
 use think\Request;
 
 class Invoice extends Controller
 {
-    // 发票页面
+//    public function index(Request $request)
+//    {
+//        $Invoice = new InvoiceModel();
+//        $invoice=$Invoice->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
+//        $page = $invoice->render();
+//
+//        $data = ["invoice" => $invoice, "page" => $page, "state" => 0];
+//        $this->assign($data);
+//        $htmls = $this->fetch('index');
+//        return $htmls;
+//    }
+
     public function index(Request $request)
     {
         $Invoice = new InvoiceModel();
-        $invoice = $Invoice->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
-        $page = $invoice->render();
-
-        $data = ["invoice" => $invoice, "page" => $page, "name" => null];
-        $this->assign($data);
-        $htmls = $this->fetch('index');
-        return $htmls;
-    }
-
-    public function search(Request $request)
-    {
-        $Invoice = new InvoiceModel();
-        $stuid = $request->param('stuid');
-        $query = ["stuid" => $stuid];
-        $invoice = $Invoice->table('pay,invoice')->where(pay.sid ,eq,"%$stuid%")->where(pay.iid ,eq,invoice.iid)->where("delflag", "=", 0)->order('iid', 'asc')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        $state = $request->param('state');
+        if ($state) {
+            $query = ["state" => $state];
+            $invoice = $Invoice->where("delflag", "=", 0)->where("state", "=", "$state")->paginate(10, false, ['type' => 'bootstrap']);
+        } else {
+            $query = ["state" => 0];
+            $invoice = $Invoice->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
+        }
         if ($invoice->count() > 0) {
             $page = $invoice->render();
 

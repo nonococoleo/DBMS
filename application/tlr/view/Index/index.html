@@ -15,7 +15,6 @@
     <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
 </head>
-<body>
 <!--初始化脚本-->
 <script>
     toastr.options.positionClass = 'toast-top-center';
@@ -27,6 +26,7 @@
             $('#logout').hide();
     };
 </script>
+<body>
 <!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -40,8 +40,15 @@
                 <li><a href="{:url('student/index')}">学生管理</a></li>
                 <li><a href="{:url('teacher/index')}">教师管理</a></li>
                 <li><a href="{:url('course/index')}">课程管理</a></li>
-                <li><a href="{:url('refund/index')}">退费管理</a></li>
-                <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('pay/index')}">缴费管理</a></li>
+                        <li><a href="{:url('refund/index')}">退费管理</a></li>
+                        <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                    </ul>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">系统管理<span class="caret"></span></a>

@@ -16,7 +16,6 @@
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
-<body>
 <!--初始化脚本-->
 <script>
     toastr.options.positionClass = 'toast-top-center';
@@ -28,6 +27,7 @@
             $('#logout').hide();
     };
 </script>
+<body>
 <!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -41,8 +41,15 @@
                 <li><a href="{:url('student/index')}">学生管理</a></li>
                 <li><a href="{:url('teacher/index')}">教师管理</a></li>
                 <li><a href="{:url('course/index')}">课程管理</a></li>
-                <li><a href="{:url('refund/index')}">退费管理</a></li>
-                <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('pay/index')}">缴费管理</a></li>
+                        <li><a href="{:url('refund/index')}">退费管理</a></li>
+                        <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                    </ul>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">系统管理<span class="caret"></span></a>
@@ -66,6 +73,11 @@
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>报名信息</h3>
+            <select onchange="sel()" id="seme">
+                {volist id="s" name="seme"}
+                <option value="{$s}">{$s}</option>
+                {/volist}
+            </select>
         </div>
     </div>
     <!--选择学生-->
@@ -89,12 +101,12 @@
     </div>
     <!--课程查询-->
     <div id="choice" hidden>
-        <select>
-            {volist id="s" name="seme"}
-            <option value="{$s}">{$s}</option>
+        <select id="class">
+            {volist id="c" name="classes"}
+            <option value="{$c}">{$c}</option>
             {/volist}
         </select>
-        <button>查询</button>
+        <button onclick="">查询</button>
     </div>
     <!-- 用户信息的modal -->
     <div>
@@ -300,6 +312,11 @@
         $('#money').text(money);
         $('#infor').show();
         $('#choice').show();
+    }
+
+    function sel() {
+        let temp = $('#seme').val();
+        window.location.href = "{:url('enroll/index')}?semester=" + temp;
     }
 </script>
 </html>

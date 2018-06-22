@@ -15,7 +15,7 @@
     <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
 </head>
-<body>
+<!--初始化脚本-->
 <script>
     toastr.options.positionClass = 'toast-top-center';
     toastr.options.timeOut = 2000;
@@ -24,8 +24,10 @@
             $('#login').hide();
         else
             $('#logout').hide();
+        $('#status').val("{$state}");
     };
 </script>
+<body>
 <!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -39,8 +41,15 @@
                 <li><a href="{:url('student/index')}">学生管理</a></li>
                 <li><a href="{:url('student/index')}">教师管理</a></li>
                 <li><a href="{:url('course/index')}">课程管理</a></li>
-                <li class="active"><a href="#">退费管理<span class="sr-only">(current)</span></a></li>
-                <li><a href="{:url('course/index')}">发票管理</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('pay/index')}">缴费管理</a></li>
+                        <li><a href="#">退费管理</a></li>
+                        <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                    </ul>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">系统管理<span class="caret"></span></a>
@@ -58,7 +67,6 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-
 <!--页面主体-->
 <div id="app" class="container">
     <!--页眉-->
@@ -66,23 +74,15 @@
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>退费信息</h3>
         </div>
-        <form method="get" id="ser" action="{:url('refund/search')}">
-            <div class="col-sm-4 col-md-4 col-lg-4">
-                <div class="input-group" style="margin-top: 6px">
-                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入学生编号"
-                           aria-describedby="basic-addon2" value="{$name}">
-                    <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
-                </div>
-            </div>
-        </form>
-        <div style="margin-top: 6px">
-            &nbsp;
-            <button class="btn btn-success" onclick="add()">新建退费业务</button>
-        </div>
+        <select id="status" onchange="sel()">
+            <option value="0">全部</option>
+            <option value="1">申请</option>
+            <option value="2">处理</option>
+            <option value="3">成功</option>
+        </select>
     </div>
     <!--列表-->
     <div>
-        <!--TODO 固定列宽-->
         <table class="table table-striped table-hover table-condensed">
             <thead>
             <tr>
@@ -105,9 +105,22 @@
                 <td class="text-center">{$ref->semster}</td>
                 <td class="text-center">{$ref->sid}</td>
                 <td class="text-center">{$ref->fee}</td>
-                <td class="text-center">{$ref->method}</td>
+                <td class="text-center">
+                    {switch name="$ref->method"}
+                    {case value="1"}银行卡{/case}
+                    {case value="2"}其他{/case}
+                    {default}{/default}
+                    {/switch}
+                </td>
                 <td class="text-center">{$ref->date}</td>
-                <td class="text-center">{$ref->state}</td>
+                <td class="text-center">
+                    {switch name="$ref->state"}
+                    {case value="1"}申请{/case}
+                    {case value="2"}处理{/case}
+                    {case value="3"}成功{/case}
+                    {default}{/default}
+                    {/switch}
+                </td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-success"
                             onclick="mod('{:url(\'refund/mod\',[\'rid\'=>$ref.rid])}','{$ref.pid}','{$ref.semster}','{$ref.sid}','{$ref.fee}','{$ref.method}','{$ref.card}','{$ref.bank}','{$ref.person}','{$ref.date}','{$ref.state}','{$ref.uid}','{$ref.memo}')">
@@ -141,19 +154,19 @@
                     <form action=" " method="POST" id="modal-form">
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     缴费号:
                                     <input type="text" name="pid" id="pid" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     学期:
                                     <input type="text" name="semster" id="semster" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     学生:
                                     <input type="text" name="sid" id="sid" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     费用:
                                     <input type="text" name="fee" id="fee" class="form-control">
                                 </div>
@@ -165,15 +178,15 @@
                                         <option value="2">其他</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     银行卡号:
                                     <input type="text" name="card" id="card" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     开户行:
                                     <input type="text" name="bank" id="bank" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     持卡人:
                                     <input type="text" name="person" id="person" class="form-control">
                                 </div>
@@ -265,6 +278,11 @@
     }
     function check() {
         $('#modal-form').submit();
+    }
+
+    function sel() {
+        let temp = $('#status').val();
+        window.location.href = "{:url('refund/index')}?state=" + temp;
     }
 </script>
 </html>

@@ -1,25 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: HP
- * Date: 2018/6/22
- * Time: 12:52
- */
-
 
 namespace app\tlr\controller;
 
 use app\tlr\model\CourseModel;
-//use app\tlr\model\TeacherModel;
 use app\tlr\model\LogModel;
 use think\Controller;
 use think\Request;
 
-//课程Course
+//use app\tlr\model\TeacherModel;
+
 class Course extends Controller
 {
-
-
     public function index(Request $request)
     {
         $Course = new CourseModel();
@@ -83,7 +74,6 @@ class Course extends Controller
         } else {
             $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
         }
-
         return null;
     }
 
@@ -101,7 +91,6 @@ class Course extends Controller
         } else {
             $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
         }
-
         return null;
     }
 }
