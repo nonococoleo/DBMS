@@ -22,7 +22,7 @@ use think\console\output\question\Choice;
 use think\console\output\question\Confirmation;
 
 /**
- * Class Output
+ * Course Output
  * @package think\console
  *
  * @see     \think\console\output\driver\Console::setDecorated

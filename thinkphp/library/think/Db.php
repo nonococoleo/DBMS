@@ -15,7 +15,7 @@ use think\db\Connection;
 use think\db\Query;
 
 /**
- * Class Db
+ * Course Db
  * @package think
  * @method Query table(string $table) static 指定数据表（含前缀）
  * @method Query name(string $name) static 指定数据表（不含前缀）
