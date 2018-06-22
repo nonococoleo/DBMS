@@ -105,12 +105,12 @@
                             <?php if($item->status==1) echo '正常'; else echo '被锁定'; ?>
                         </td>
                         <td class="text-center">
-                            <form action="{:url('user/lockOne')}" method="post">
+                            <a href="{:url('user/lockOne')}?uid={$item->uid}" method="post">
                                 <input type="hidden" name="uid" value="{$item->uid}">
-                                <button type="submit" class="btn btn-xs btn-default"">
+                                <button type="button" class="btn btn-xs btn-default"">
                                     <?php if($item->status==1) echo '锁定'; else echo '解锁'; ?>
                                 </button>
-                            </form>
+                            </a>
                         </td>
                     </tr>
                     {/volist}
