@@ -17,6 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
+<!--初始化脚本-->
 <script>
     toastr.options.positionClass = 'toast-top-center';
     toastr.options.timeOut = 2000;
@@ -27,29 +28,19 @@
             $('#logout').hide();
     };
 </script>
-
+<!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Brand</a>
+            <img src="/static/logo.png" height="50" width="50">
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{:url('index/index')}">首页</a></li>
+                <li><a href="{:url('index/index')}">同路人教育</a></li>
                 <li class="active"><a href="#">报名管理<span class="sr-only">(current)</span></a></li>
                 <li><a href="{:url('student/index')}">学生管理</a></li>
                 <li><a href="{:url('teacher/index')}">教师管理</a></li>
-                <li><a href="{:url('class/index')}">课程管理</a></li>
+                <li><a href="{:url('course/index')}">课程管理</a></li>
                 <li><a href="{:url('refund/index')}">退费管理</a></li>
                 <li><a href="{:url('invoice/index')}">发票管理</a></li>
                 <li class="dropdown">
@@ -69,137 +60,153 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<div class="col-lg-6">
-    <button class="btn btn-success center-block" onclick="newStudent()" id="addstu">添加学生</button>
-</div>
-<div class="col-lg-6">
-    <div class="input-group" id="serstu">
-        <input type="text" id="name" name="name" class="form-control" placeholder="请输入学生姓名"
-               aria-describedby="basic-addon2" value="">
-        <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="search()">搜索</span>
+<!--页面主体-->
+<div class="container">
+    <!--页眉-->
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>报名信息</h3>
+        </div>
+    </div>
+    <!--选择学生-->
+    <div id="stu">
+        <div class="col-lg-6">
+            <button class="btn btn-success center-block" onclick="newStudent()">添加学生</button>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" id="name" name="name" class="form-control" placeholder="请输入学生姓名"
+                       aria-describedby="basic-addon2" value="">
+                <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="search()">搜索</span>
+            </div>
+    </div>
+    </div>
+    <!--学生信息-->
+    <div id="infor" hidden>
+        <h3 id="stuname">name</h3>
+        <h3 id="money">money</h3>
+        <hr>
+    </div>
+    <!--课程查询-->
+    <div id="choice" hidden>
+        <select>
+            {volist id="s" name="seme"}
+            <option value="{$s}">{$s}</option>
+            {/volist}
+        </select>
+        <button>查询</button>
+    </div>
+    <!-- 用户信息的modal -->
+    <div>
+        <!--添加学生-->
+        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">添加学生</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-6" id="sname_check">
+                                姓名 * :
+                                <input type="text" id="sname" class="form-control" required>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                性别:
+                                <select class="form-control" id="sex">
+                                    <option value="0">请选择...</option>
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                年级:
+                                <input type="number" id="grade" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                学校:
+                                <input type="text" id="school" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                家庭住址:
+                                <input type="text" id="home" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                家庭电话:
+                                <input type="text" id="tel" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6" id="phone_check">
+                                联系电话 * :
+                                <input type="text" id="phone" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                余额:
+                                <input type="number" id="balance" value="0" step="0.01" disabled class="form-control">
+                            </div>
+                        </div>
+                        <div>
+                            备注:
+                            <textarea id="memo" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button class="btn btn-primary" onclick="addStudent()">添加学生
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <!--查询学生-->
+        <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">搜索结果</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped table-hover table-condensed">
+                            <thead>
+                            <tr>
+                                <td class="text-center">编号</td>
+                                <td class="text-center">姓名</td>
+                                <td class="text-center">性别</td>
+                                <td class="text-center">年级</td>
+                                <td class="text-center">学校</td>
+                                <td class="text-center">余额</td>
+                                <td class="text-center">操作</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- 用js做循环我目前只想到这种方式 -->
+                            <tr v-for="(student,index) in students">
+                                <td class="text-center">{{student.sid}}</td>
+                                <td class="text-center">{{student.sname}}</td>
+                                <td class="text-center">{{(student.sex==1)?'男':'女'}}</td>
+                                <td class="text-center">{{student.grade}}</td>
+                                <td class="text-center">{{student.school}}</td>
+                                <td class="text-center">{{student.balance}}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-xs btn-success" @click="enroll(student)">报名</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     </div>
 </div>
-<div id="infor" hidden>
-    <h3 id="stuname">name</h3>
-    <h3 id="money">money</h3>
-    <hr>
-</div>
-<div id="choice" hidden>
-    <select>
-        {volist id="s" name="seme"}
-        <option value="{$s}">{$s}</option>
-        {/volist}
-    </select>
-    <button>查询</button>
-</div>
-<!-- 用户信息的modal -->
-<div>
-    <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" style="display: inline;">添加学生</h4>
-                    <button type="button" class="close" style="display: inline;" data-dismiss="modal"
-                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            姓名 * :
-                            <input type="text" id="sname" class="form-control" required>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            性别:
-                            <select class="form-control" id="sex">
-                                <option value="1">男</option>
-                                <option value="2">女</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            年级:
-                            <input type="text" id="grade" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            学校:
-                            <input type="text" id="school" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            家庭住址:
-                            <input type="text" id="home" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            家庭电话:
-                            <input type="text" id="tel" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            联系电话 * :
-                            <input type="text" id="phone" class="form-control">
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6">
-                            余额:
-                            <input type="number" id="balance" value="0" step="0.01" disabled class="form-control">
-                        </div>
-                    </div>
-                    <div>
-                        备注:
-                        <textarea id="memo" class="form-control"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button class="btn btn-primary" onclick="addStudent()">添加学生
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" style="display: inline;">搜索结果</h4>
-                    <button type="button" class="close" style="display: inline;" data-dismiss="modal"
-                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-striped table-hover table-condensed">
-                        <thead>
-                        <tr>
-                            <td class="text-center">编号</td>
-                            <td class="text-center">姓名</td>
-                            <td class="text-center">性别</td>
-                            <td class="text-center">年级</td>
-                            <td class="text-center">学校</td>
-                            <td class="text-center">余额</td>
-                            <td class="text-center">操作</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- 用js做循环我目前只想到这种方式 -->
-                        <tr v-for="(student,index) in students">
-                            <td class="text-center">{{student.sid}}</td>
-                            <td class="text-center">{{student.sname}}</td>
-                            <td class="text-center">{{(student.sex==1)?'男':'女'}}</td>
-                            <td class="text-center">{{student.grade}}</td>
-                            <td class="text-center">{{student.school}}</td>
-                            <td class="text-center">{{student.balance}}</td>
-                            <td class="text-center">
-                                <button class="btn btn-xs btn-success" @click="enroll(student)">报名</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-</div>
-
 </body>
+<!--业务逻辑-->
 <script type="text/javascript">
     var app = new Vue({
         el: '#myModal2',
@@ -215,7 +222,18 @@
     });
 
     function newStudent() {
-        $('#myModal').modal();
+        $('#sname').val(null);
+        $('#sex').val(0);
+        $('#grade').val(null);
+        $('#school').val(null);
+        $('#home').val(null);
+        $('#tel').val(null);
+        $('#phone').val(null);
+        $('#balance').val(null);
+        $('#memo').val(null);
+        $('#sname_check').removeClass("has-error");
+        $('#phone_check').removeClass("has-error");
+        $('#myModal').modal('show');
     }
 
     function addStudent() {
@@ -230,6 +248,17 @@
             balance: $('#balance').val(),
             memo: $('#memo').val()
         };
+        var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+        var phone = phoneReg.test(studentDetailInShow.phone);
+        var name = studentDetailInShow.sname;
+        if (!(name && phone)) {
+            if (!name)
+                $('#sname_check').addClass("has-error");
+            if (!phone)
+                $('#phone_check').addClass("has-error");
+            toastr.error('表单红色字段有误请确认后再提交');
+            return false;
+        }
         $.ajax({
             type: "POST",
             url: "{:URL('tlr/student/add','','')}",
@@ -266,8 +295,7 @@
 
     function choose_class(id, name, money) {
         // alert(id);
-        $('#addstu').hide();
-        $('#serstu').hide();
+        $('#stu').hide();
         $('#stuname').text(name);
         $('#money').text(money);
         $('#infor').show();
