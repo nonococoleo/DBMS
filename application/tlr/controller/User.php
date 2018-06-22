@@ -49,10 +49,10 @@ class User extends Controller
             if ($value == "")
                 $_POST[$key] = null;
         if($User->where('uname', $_POST['uname'])->find())
-        	$this->error('该用户名已被注册，请更换用户名重新添加');
+        	$this->error('该用户名已被注册，请更换用户名重新添加');	
         $data = array(
             'uname' => $_POST['uname'],
-            'status' => 1,
+            'delflag ' => 1,
             'passwd' => md5($_POST['passwd'])
         );
         $rbacObj = new Rbac();
@@ -67,9 +67,9 @@ class User extends Controller
     	// 假删除
         $User = new UserModel();
         $user = $User->where('uid',$_POST['uid'])->find();
-        $status = ($user['status'] == 1) ? 2 : 1;
+        $delflag  = ($user['delflag '] == 1) ? 0 : 1;
         $User->save([
-		    'status'  => $status,
+		    'delflag '  => $delflag ,
 		],['uid' => $_POST['uid']]);
         $this->success("修改成功");
     }
