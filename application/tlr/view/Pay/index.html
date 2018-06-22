@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>学生信息</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
+</head>
+<body>
+<!--初始化脚本-->
+<script>
+    toastr.options.positionClass = 'toast-top-center';
+    toastr.options.timeOut = 2000;
+    window.onload = function () {
+        if ("{:session('uid')}")
+            $('#login').hide();
+        else
+            $('#logout').hide();
+    };
+</script>
+<!--导航条-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img src="/static/logo.png" height="50" width="50">
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="{:url('index/index')}">同路人教育</a></li>
+                <li><a href="{:url('enroll/index')}">报名管理</a></li>
+                <li class="active"><a href="#">学生管理<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('teacher/index')}">教师管理</a></li>
+                <li><a href="{:url('course/index')}">课程管理</a></li>
+                <li><a href="{:url('refund/index')}">退费管理</a></li>
+                <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">系统管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('user/index')}">用户管理</a></li>
+                        <li><a href="{:url('role/index')}">角色管理</a></li>
+                        <li><a href="{:url('permission/index')}">权限管理</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li id="login"><a href="{:url('index/login')}">登录</a></li>
+                <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<!--页面主体-->
+<div id="app" class="container">
+    <!--页眉-->
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>缴费信息</h3>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <div class="input-group" style="margin-top: 6px">
+              <input type="text" class="form-control" placeholder="请输入学生学号" aria-describedby="basic-addon2" v-model="searchSname">
+              <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" @click="search(searchSname)">搜索</span>
+            </div>
+        </div>
+        <div style="margin-top: 6px">
+            &nbsp;
+            <button class="btn btn-success" @click="newPay()">添加账单</button>
+        </div>
+    </div>
+    <!--列表-->
+    <div>
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+            <tr>
+                <td class="text-center">编号</td>
+                <td class="text-center">学号</td>
+                <td class="text-center">学期</td>
+                <td class="text-center">费用</td>
+                <td class="text-center">发票</td>
+                <td class="text-center">日期</td>
+                <td class="text-center">操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(pay,index) in pays">
+                <td class="text-center">{{pay.pid}}</td>
+                <td class="text-center">{{pay.sid}}</td>
+                <td class="text-center">{{pay.semster}}</td>
+                <td class="text-center">{{pay.fee}}</td>
+                <td class="text-center">{{(pay.invoice==1)?'未开':'已开'}}</td>
+                <td class="text-center">{{pay.date}}</td>
+                <td class="text-center">
+                    <button class="btn btn-xs btn-success" @click="open(index)" title="编辑">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                    <button class="btn btn-xs btn-danger" @click="deletePay(index)" title="删除">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    <div style="text-align:center;">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li :class="(nowPage==1)?'page-item disabled':'page-item'" @click="page(nowPage-1)">
+                    <span class="page-link">&laquo;</span>
+                </li>
+                <li :class="(nowPage==i)?'page-item active':'page-item'" v-for="i in totalPage" @click="page(i)">
+                    <span class="page-link">{{i}}</span>
+                </li>
+                <li :class="(nowPage==totalPage)?'page-item disabled':'page-item'" @click="page(nowPage+1)">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!-- 用户信息的modal -->
+    <div>
+        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">{{(add)?'添加账单':'修改缴费信息'}}</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-6" id="sname_check" >
+                                学号 * :
+                                <input type="number" v-model="payDetailInShow.sid" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                学期:
+                                <input type="text" v-model="payDetailInShow.semster" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                费用 *:
+                                <input type="number" v-model="payDetailInShow.fee" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                费用明细:
+                                <input type="text" v-model="payDetailInShow.detail" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                缴费方式:
+                                <select class="form-control" v-model="payDetailInShow.method">
+                                    <option value="0">请选择...</option>
+                                    <option value="1">现金</option>
+                                    <option value="2">银行卡</option>
+                                    <option value="3">其他</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                发票:
+                                <select class="form-control" v-model="payDetailInShow.invoice">
+                                    <option value="0">请选择...</option>
+                                    <option value="1">未开</option>
+                                    <option value="2">已开</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                日期:
+                                <input type="date" v-model="payDetailInShow.date" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6" id="phone_check">
+                                员工:
+                                <input type="number" v-model="payDetailInShow.uid" class="form-control">
+                            </div>
+                        </div>
+                        <div>
+                            备注:
+                            <textarea v-model="payDetailInShow.memo" class="form-control">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button v-if="add" class="btn btn-primary" @click="addPay(payDetailInShow)">添加账单
+                        </button>
+                        <button v-if="!add" type="button" class="btn btn-primary"
+                                @click="savePay(payDetailInShow)">保存修改
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+</body>
+<!--业务逻辑-->
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#app',
+        data: {
+            pays: [],
+            payDetailInShow: {},
+            nowPage: 1,
+            totalPage: 1,
+            add: false,
+            searchSname: '',
+        },
+        mounted() {
+            this.getPays(1)
+        },
+        methods: {
+            getPays(page) {
+                let tvm = this;
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/pay/pays','','')}?page=" + page,
+                    data: {"page": page},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            tvm.pays = data.pays;
+                            tvm.totalPage = data.totalPage;
+                            tvm.nowPage = page;
+                        } else {
+                            console.log("some troubles")
+                        }
+                    }
+                });
+            },
+            page(newPage) {
+                if (newPage < 1) {
+                    newPage = 1
+                } else if (newPage > this.totalPage) {
+                    newPage = this.totalPage
+                }
+                this.getPays(newPage)
+            },
+            open(index) {
+                this.payDetailInShow = this.pays[index];
+                this.add = false;
+                $('#sname_check').removeClass("has-error");
+                $('#phone_check').removeClass("has-error");
+                $('#myModal').modal();
+            },
+            newPay() {
+                this.payDetailInShow = {
+                    sid: null,
+                    semster: null,
+                    fee: null,
+                    detail: null,
+                    method: null,
+                    invoice: null,
+                    data: null,
+                    uid: null,
+                    memo: null
+                };
+                this.add = true;
+                $('#sname_check').removeClass("has-error");
+                $('#phone_check').removeClass("has-error");
+                $('#myModal').modal();
+            },
+            deletePay(index) {
+                let tvm = this;
+                var msg = '您确定要删除' + tvm.pays[index].sid + '的信息吗？ 删除后不可恢复！';
+                if (confirm(msg)==true){ 
+                    $.ajax({
+                        type: "POST",
+                        url: "{:URL('tlr/pay/deleteone','','')}",
+                        data: {sid: tvm.pays[index].sid},
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                toastr.success("操作成功");
+                                tvm.students.splice(index, 1);
+                                if (tvm.pays.length == 0) 
+                                    tvm.getPays(tvm.nowPage-1)
+                            } else {
+                                alert(data.msg)
+                            }
+                        }
+                    });
+                }
+            },
+            savePay(payDetailInShow) {
+                let id = payDetailInShow.sid;
+                let fee = payDetailInShow.fee;
+                if (!(id && fee)) {
+                    if (!id)
+                        $('#sid_check').addClass("has-error");
+                    if (!fee)
+                        $('#fee_check').addClass("has-error");
+                    toastr.error('表单红色字段有误请确认后再提交');
+                    return false;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/pay/update','','')}",
+                    data: payDetailInShow,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            toastr.success("操作成功");
+                            setTimeout("window.location.reload()", "500");
+                        } else {
+                            alert(data.msg)
+                        }
+                    }
+                });
+            },
+            addPay(payDetailInShow) {
+                let id = payDetailInShow.sid;
+                let fee = payDetailInShow.fee;
+                if (!(id && fee)) {
+                    if (!id)
+                        $('#sid_check').addClass("has-error");
+                    if (!fee)
+                        $('#fee_check').addClass("has-error");
+                    toastr.error('表单红色字段有误请确认后再提交');
+                    return false;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/pay/add','','')}",
+                    data: payDetailInShow,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            toastr.success("操作成功");
+                            //TODO 跳转到最新页
+                            setTimeout("window.location.reload()", "500");
+                        } else {
+                            alert(data.msg)
+                        }
+                    }
+                });
+            },
+            search(searchSid) {
+                let tvm = this;
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/pay/search','','')}",
+                    data: {sid:searchSid},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            tvm.students = data.students;
+                            tvm.totalPage = 1
+                        } else {
+                            alert(data.msg)
+                        }
+                    }
+                });
+            }
+        }
+    })
+</script>
+</html>
