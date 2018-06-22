@@ -81,7 +81,7 @@ class Invoice extends Controller
             foreach ($_POST as $key => $value)
                 if ($value == "")
                     $_POST[$key] = null;
-            $Invoice->allowField(['pid', 'fee', 'title', 'number', 'date', 'uid', 'memo'])->save($_POST, ['iid' => $request->param("iid")]);
+            $Invoice->allowField(['pid', 'fee', 'title', 'number', 'date', 'state', 'memo'])->save($_POST, ['iid' => $request->param("iid")]);
             $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
         } else {

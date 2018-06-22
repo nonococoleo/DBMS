@@ -38,7 +38,11 @@
                 <li><a href="{:url('index/index')}">同路人教育</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
                 <li><a href="{:url('student/index')}">学生管理</a></li>
+<<<<<<< Updated upstream
                 <li><a href="{:url('invoice/index')}">教师管理</a></li>
+=======
+                <li><a href="{:url('student/index')}">教师管理</a></li>
+>>>>>>> Stashed changes
                 <li><a href="{:url('course/index')}">课程管理</a></li>
                 <li><a href="{:url('refund/index')}">退费管理</a></li>
                 <li class="active"><a href="#">发票管理<span class="sr-only">(current)</span></a></li>
@@ -160,8 +164,13 @@
                                     <input type="date" name="date" id="date" class="form-control">
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
-                                    员工:
-                                    <input type="text" name="uid" id="uid" class="form-control">
+                                    状态:
+                                    <select class="form-control" name="state" id="state">
+                                        <option value="0">请选择...</option>
+                                        <option value="1">申请</option>
+                                        <option value="2">处理</option>
+                                        <option value="3">成功</option>
+                                    </select>
                                 </div>
                             </div>
                             <div>
@@ -174,6 +183,7 @@
                             <button type="button" class="btn btn-primary" id="mod" onclick="check()">保存修改</button>
                             <button type="button" class="btn btn-primary" id="add" onclick="check()">开发票</button>
                         </div>
+                        <input type="hidden" name="uid" value="{:session('uid')}">
                     </form>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
