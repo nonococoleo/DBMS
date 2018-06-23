@@ -121,16 +121,23 @@
                             <td class="text-center">{$item->status}</td>
                             <td class="text-center">{$item->create_time}</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-xs btn-danger" title="删除">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                </button>
+                                <a href="{:url('permission/deletePermission'),'?id='.$item->id}">
+                                    <button type="button" class="btn btn-xs btn-danger" title="删除">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </a>
                             </td>
                         </tr>
                         {/volist}
                         </tbody>
                     </table>
                   </div>
-                  <button class="btn btn-success" style="width: 100%"  onclick="addPermission('{$controller->path}','{$controller->cid}')">添加权限</button>
+                  <div align="center">
+                        <button class="btn btn-success" style="width: 49%"  onclick="addPermission('{$controller->path}','{$controller->cid}')">添加权限</button>
+                        <a href="{:url('permission/deleteController'),'?cid='.$controller->cid}">
+                            <button class="btn btn-danger" style="width: 49%" >删除控制器</button>
+                        </a>
+                  </div>
                 </div>
           </div>
           {/volist}
