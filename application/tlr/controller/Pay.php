@@ -115,7 +115,7 @@ class Pay extends Controller
             echo json_encode(array("success" => false, 'msg' => "员工号不能为空"));
             exit();
         }
-
+ 
         $pay = new PayModel($_POST);
         if ($pay->allowField(['sid', 'semster', 'fee', 'detail', 'method', 'invoice', 'date', 'uid', 'memo'])->save($_POST)) {
             $Log = new LogModel();
