@@ -361,10 +361,22 @@
         data: {
             courses: []
         },
+        computed: {
+            realCourses () {
+                let t = [];
+                let tvm = this;
+                for(let i=0; i < tvm.courses.length; i++) {
+                    console.log(tvm.courses[i].checked)
+                    if(tvm.courses[i].checked) {
+                        t.push(tvm.courses[i]);
+                    }
+                }
+                return t;
+            }
+        },
         methods: {
             baoming() {
-                let courses = this.courses;
-                alert(courses[0].cid);
+                alert(this.realCourses[0].cid);
                 alert('哈哈哈');
             }
         }
