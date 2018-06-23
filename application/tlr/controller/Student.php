@@ -35,7 +35,7 @@ class Student extends Controller
         $page = (isset($_POST['page'])) ? $_POST['page'] : 1;
         $student = new StudentModel;
         $students = $student->where('delflag', '0')->page($page, 10)->select();
-        $totalPage = ceil(db('student')->count() / 10);
+        $totalPage = ceil(db('student')->where('delflag', '0')->count() / 10);
         echo json_encode(array("students" => $students, "totalPage" => $totalPage, "success" => true));
     }
 
