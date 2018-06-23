@@ -16,7 +16,6 @@
     <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
 </head>
-<body>
 <!--初始化脚本-->
 <script>
     toastr.options.positionClass = 'toast-top-center';
@@ -28,6 +27,7 @@
             $('#logout').hide();
     };
 </script>
+<body>
 <!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -42,8 +42,15 @@
                 <li class="active"><a href="#">学生管理<span class="sr-only">(current)</span></a></li>
                 <li><a href="{:url('teacher/index')}">教师管理</a></li>
                 <li><a href="{:url('course/index')}">课程管理</a></li>
-                <li><a href="{:url('refund/index')}">退费管理</a></li>
-                <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('pay/index')}">缴费管理</a></li>
+                        <li><a href="{:url('refund/index')}">退费管理</a></li>
+                        <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                    </ul>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">系统管理<span class="caret"></span></a>
@@ -70,8 +77,8 @@
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4">
             <div class="input-group" style="margin-top: 6px">
-              <input type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2" v-model="searchSname">
-              <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" @click="search(searchSname)">搜索</span>
+                <input type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2" v-model="searchSname">
+                <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" @click="search(searchSname)">搜索</span>
             </div>
         </div>
         <div style="margin-top: 6px">
@@ -113,6 +120,7 @@
         </table>
     </div>
     <!--分页-->
+    <!--TODO 有时有问题，应该与软删除有关-->
     <div style="text-align:center;">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
@@ -287,6 +295,7 @@
                 }
             },
             saveStudent(studentDetailInShow) {
+                let tvm = this;
                 let phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
                 let phone = phoneReg.test(studentDetailInShow.phone);
                 let name = studentDetailInShow.sname;
@@ -306,7 +315,13 @@
                     success: function (data) {
                         if (data.success) {
                             toastr.success("操作成功");
-                            setTimeout("window.location.reload()", "500");
+                            for(i in tvm.students) {
+                                if(tvm.students[i].sid == studentDetailInShow.sid)
+                                    tvm.students[i] = studentDetailInShow;
+                            }
+                            $('#myModal').modal("hide");
+                            //TODO 分页信息刷新
+                            // setTimeout("window.location.reload()", "500");
                         } else {
                             alert(data.msg)
                         }
@@ -314,6 +329,7 @@
                 });
             },
             addStudent(studentDetailInShow) {
+                let tvm = this;
                 let phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
                 let phone = phoneReg.test(studentDetailInShow.phone);
                 let name = studentDetailInShow.sname;
@@ -333,8 +349,8 @@
                     success: function (data) {
                         if (data.success) {
                             toastr.success("操作成功");
-                            //TODO 跳转到最新页
-                            setTimeout("window.location.reload()", "500");
+                            tvm.getStudents(data.totalPage);
+                            $('#myModal').modal("hide");
                         } else {
                             alert(data.msg)
                         }
@@ -342,6 +358,9 @@
                 });
             },
             search(searchSname) {
+                if(searchSname == '') {
+                    window.location.reload(); //搜索空值即为搜索全部
+                }
                 let tvm = this;
                 $.ajax({
                     type: "POST",

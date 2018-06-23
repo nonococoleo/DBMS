@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>报名信息</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<!--初始化脚本-->
+<script>
+    toastr.options.positionClass = 'toast-top-center';
+    toastr.options.timeOut = 2000;
+    window.onload = function () {
+        if ("{:session('uid')}")
+            $('#login').hide();
+        else
+            $('#logout').hide();
+    };
+</script>
+<body>
+<!--导航条-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img src="/static/logo.png" height="50" width="50">
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="{:url('index/index')}">同路人教育</a></li>
+                <li class="active"><a href="#">报名管理<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('student/index')}">学生管理</a></li>
+                <li><a href="{:url('teacher/index')}">教师管理</a></li>
+                <li><a href="{:url('course/index')}">课程管理</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('pay/index')}">缴费管理</a></li>
+                        <li><a href="{:url('refund/index')}">退费管理</a></li>
+                        <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">系统管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('user/index')}">用户管理</a></li>
+                        <li><a href="{:url('role/index')}">角色管理</a></li>
+                        <li><a href="{:url('permission/index')}">权限管理</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li id="login"><a href="{:url('index/login')}">登录</a></li>
+                <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<!--页面主体-->
+<div class="container">
+    <!--页眉-->
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>报名信息</h3>
+            {$semester}
+        </div>
+    </div>
+    <!--选择学生-->
+    <div id="stu">
+        <div class="col-lg-6">
+            <button class="btn btn-success center-block" onclick="newStudent()">添加学生</button>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" id="name" name="name" class="form-control" placeholder="请输入学生姓名"
+                       aria-describedby="basic-addon2" value="">
+                <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="search()">搜索</span>
+            </div>
+        </div>
+    </div>
+    <!--学生信息-->
+    <div id="infor" hidden>
+        <h3 id="stuname">name</h3>
+        <h3 id="money">money</h3>
+        <hr>
+    </div>
+    <!--课程查询-->
+    <div id="choice" hidden>
+        <select id="classes">
+            {volist id="c" name="classes"}
+            <option value="{$c}">{$c}</option>
+            {/volist}
+        </select>
+        <button onclick="ser()">查询</button>
+    </div>
+    <div id="selectedTable">
+        <div v-if="courses.length>0">
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                <tr>
+                    <td class="text-center">编号</td>
+                    <td class="text-center">课程</td>
+                    <td class="text-center">时间</td>
+                    <!--<td class="text-center">日期</td>-->
+                    <td class="text-center">学期</td>
+                    <td class="text-center">校区</td>
+                    <td class="text-center">教室</td>
+                    <td class="text-center">单价</td>
+                    <td class="text-center">课时</td>
+                    <td class="text-center">教师</td>
+                    <td class="text-center">费用</td>
+                    <td class="text-center">操作</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(course,index) in courses">
+                    <td class="text-center">{{course.cid}}</td>
+                    <td class="text-center">{{course.cname}}</td>
+                    <td class="text-center">{{course.time}}</td>
+                    <!--<td class="text-center">{{course.date}}</td>-->
+                    <td class="text-center">{{course.semester}}</td>
+                    <td class="text-center">{{course.campus}}</td>
+                    <td class="text-center">{{course.room}}</td>
+                    <td class="text-center">{{course.price}}</td>
+                    <td class="text-center">{{course.unit}}</td>
+                    <td class="text-center">{{course.tid}}</td>
+                    <td class="text-center">{{course.fee}}</td>
+                    <td class="text-center">
+                        <input type="checkbox" v-model="course.checked"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" @click="baoming()">报名</button>
+        </div>
+    </div>
+    <!-- 用户信息的modal -->
+    <div>
+        <!--添加学生-->
+        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">添加学生</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-6" id="sname_check">
+                                姓名 * :
+                                <input type="text" id="sname" class="form-control" required>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                性别:
+                                <select class="form-control" id="sex">
+                                    <option value="0">请选择...</option>
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                年级:
+                                <input type="number" id="grade" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                学校:
+                                <input type="text" id="school" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                家庭住址:
+                                <input type="text" id="home" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                家庭电话:
+                                <input type="text" id="tel" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6" id="phone_check">
+                                联系电话 * :
+                                <input type="text" id="phone" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                余额:
+                                <input type="number" id="balance" value="0" step="0.01" disabled class="form-control">
+                            </div>
+                        </div>
+                        <div>
+                            备注:
+                            <textarea id="memo" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button class="btn btn-primary" onclick="addStudent()">添加学生
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <!--查询学生-->
+        <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">搜索结果</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped table-hover table-condensed">
+                            <thead>
+                            <tr>
+                                <td class="text-center">编号</td>
+                                <td class="text-center">姓名</td>
+                                <td class="text-center">性别</td>
+                                <td class="text-center">年级</td>
+                                <td class="text-center">学校</td>
+                                <td class="text-center">余额</td>
+                                <td class="text-center">操作</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- 用js做循环我目前只想到这种方式 -->
+                            <tr v-for="(student,index) in students">
+                                <td class="text-center">{{student.sid}}</td>
+                                <td class="text-center">{{student.sname}}</td>
+                                <td class="text-center">{{(student.sex==1)?'男':'女'}}</td>
+                                <td class="text-center">{{student.grade}}</td>
+                                <td class="text-center">{{student.school}}</td>
+                                <td class="text-center">{{student.balance}}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-xs btn-success" @click="enroll(student)">报名</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <!--查询课程-->
+        <div class="modal fade" tabindex="-1" id="myModal3" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">搜索结果</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body" id="content">
+                        <table class="table table-striped table-hover table-condensed">
+                            <thead>
+                            <tr>
+                                <td class="text-center">编号</td>
+                                <td class="text-center">课程</td>
+                                <td class="text-center">时间</td>
+                                <!--<td class="text-center">日期</td>-->
+                                <td class="text-center">学期</td>
+                                <td class="text-center">校区</td>
+                                <td class="text-center">教室</td>
+                                <td class="text-center">单价</td>
+                                <td class="text-center">课时</td>
+                                <td class="text-center">教师</td>
+                                <td class="text-center">费用</td>
+                                <td class="text-center">操作</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(course,index) in courses">
+                                <td class="text-center">{{course.cid}}</td>
+                                <td class="text-center">{{course.cname}}</td>
+                                <td class="text-center">{{course.time}}</td>
+                                <!--<td class="text-center">{{course.date}}</td>-->
+                                <td class="text-center">{{course.semester}}</td>
+                                <td class="text-center">{{course.campus}}</td>
+                                <td class="text-center">{{course.room}}</td>
+                                <td class="text-center">{{course.price}}</td>
+                                <td class="text-center">{{course.unit}}</td>
+                                <td class="text-center">{{course.tid}}</td>
+                                <td class="text-center">{{course.fee}}</td>
+                                <td class="text-center">
+                                    <input type="checkbox" v-model="course.checked"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" @click="add()" data-dismiss="modal">添加</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+</body>
+<!--业务逻辑-->
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#myModal2',
+        data: {
+            students: []
+        },
+        methods: {
+            enroll(student) {
+                $('#myModal2').modal('hide');
+                choose_class(student.sid, student.sname, student.balance);
+            }
+        }
+    });
+    var modal3 = new Vue({
+        el: '#myModal3',
+        data: {
+            courses: [],
+            checked: [],
+        },
+        methods: {
+            add() {
+                let tvm = this;
+                let x;
+                for (x in tvm.courses) {
+                    if (tvm.courses[x].checked) {
+                        if (!inArray(tvm.courses[x].cid, tvm.checked))
+                            tvm.checked.push(tvm.courses[x].cid);
+                        if (!haveSelected(tvm.courses[x].cid, selectedTable.courses))
+                            selectedTable.courses.push(tvm.courses[x]);
+                    }
+                    if (!tvm.courses[x].checked) {
+                        if (inArray(tvm.courses[x].cid, tvm.checked))
+                            tvm.checked.splice(inArray(tvm.courses[x].cid, tvm.checked) - 1, 1);
+                        if (haveSelected(tvm.courses[x].cid, selectedTable.courses)) {
+                            for (var i = 0; i < selectedTable.courses.length; i++) {
+                                if (selectedTable.courses[i].cid == tvm.courses[x].cid) {
+                                    selectedTable.courses.splice(i, 1);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+    var selectedTable = new Vue({
+        el: '#selectedTable',
+        data: {
+            courses: [],
+            price: 0
+        },
+        computed: {
+            realCourses() {
+                let t = [];
+                let tvm = this;
+                for (let i = 0; i < tvm.courses.length; i++) {
+                    if (tvm.courses[i].checked) {
+                        t.push(tvm.courses[i].cid);
+                        tvm.price += tvm.courses[i].price;
+                    }
+                }
+                return t;
+            }
+        },
+        methods: {
+            baoming() {
+                alert(this.realCourses);
+                alert(this.price);
+            },
+        }
+    });
+
+    function inArray(x, arr) {
+        for (let i = 0; i < arr.length; i++) {
+            if (x == arr[i])
+                return i + 1; //因为返回0,会判断为bool的false
+        }
+        return false;
+    }
+
+    function haveSelected(cid, courses) {
+        for (let i = 0; i < courses.length; i++) {
+            if (courses[i].cid == cid) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function newStudent() {
+        $('#sname').val(null);
+        $('#sex').val(0);
+        $('#grade').val(null);
+        $('#school').val(null);
+        $('#home').val(null);
+        $('#tel').val(null);
+        $('#phone').val(null);
+        $('#balance').val(null);
+        $('#memo').val(null);
+        $('#sname_check').removeClass("has-error");
+        $('#phone_check').removeClass("has-error");
+        $('#myModal').modal('show');
+    }
+
+    function addStudent() {
+        let studentDetailInShow = {
+            sname: $('#sname').val(),
+            sex: $('#sex').val(),
+            grade: $('#grade').val(),
+            school: $('#school').val(),
+            home: $('#home').val(),
+            tel: $('#tel').val(),
+            phone: $('#phone').val(),
+            balance: $('#balance').val(),
+            memo: $('#memo').val()
+        };
+        var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+        var phone = phoneReg.test(studentDetailInShow.phone);
+        var name = studentDetailInShow.sname;
+        if (!(name && phone)) {
+            if (!name)
+                $('#sname_check').addClass("has-error");
+            if (!phone)
+                $('#phone_check').addClass("has-error");
+            toastr.error('表单红色字段有误请确认后再提交');
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "{:URL('tlr/student/add','','')}",
+            data: studentDetailInShow,
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#myModal').modal('hide');
+                    choose_class(data.id, studentDetailInShow.sname, 0.0);
+                } else {
+                    alert(data.msg)
+                }
+            }
+        });
+    }
+
+    function search() {
+        let name = $('#name').val();
+        $.ajax({
+            type: "POST",
+            url: "{:URL('tlr/student/search','','')}",
+            data: {sname: name},
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#myModal2').modal();
+                    Vue.set(app, "students", data.students);
+                } else {
+                    alert(data.msg)
+                }
+            }
+        });
+    }
+
+    function choose_class(id, name, money) {
+        // alert(id);
+        $('#stu').hide();
+        $('#stuname').text(name);
+        $('#money').text(money);
+        $('#infor').show();
+        $('#choice').show();
+    }
+
+    function ser() {
+        let memo = $('#classes').val();
+        let seme = "{$semester}";
+        $.ajax({
+            type: "POST",
+            url: "{:URL('tlr/course/ser')}",
+            data: {memo: memo, seme: seme},
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    for (let i = 0; i < data.course.length; i++) {
+                        if (inArray(data.course[i].cid, modal3.checked)) {
+                            data.course[i].checked = true;
+                        }
+                    }
+                    Vue.set(modal3, "courses", data.course);
+                    $('#myModal3').modal('show');
+                } else {
+                    console.log("some troubles")
+                }
+            }
+        });
+    }
+</script>
+</html>

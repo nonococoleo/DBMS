@@ -45,6 +45,21 @@ class Role extends Controller
 		$this->success("操作成功");
 	}
 
+	//删除角色
+	public function deleteRole(Request $request)
+	{
+		$rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限");
+            exit();
+        }
+		$Role = new RoleModel();
+		$Role->where('id', $_GET['id'])->delete();
+        $Log = new LogModel();
+        $Log->save(["uid" => session('uid'), "action" => $Role->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+		$this->success("操作成功");
+	}
+
 	// 角色权限列表
 	public function setPermission(Request $request)
 	{

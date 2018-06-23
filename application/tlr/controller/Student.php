@@ -35,7 +35,7 @@ class Student extends Controller
         $page = (isset($_POST['page'])) ? $_POST['page'] : 1;
         $student = new StudentModel;
         $students = $student->where('delflag', '0')->page($page, 10)->select();
-        $totalPage = ceil(db('student')->count() / 10);
+        $totalPage = ceil(db('student')->where('delflag', '0')->count() / 10);
         echo json_encode(array("students" => $students, "totalPage" => $totalPage, "success" => true));
     }
 
@@ -97,7 +97,12 @@ class Student extends Controller
         if ($student->allowField(['sname', 'sex', 'grade', 'school', 'home', 'tel', 'phone', 'memo'])->save($_POST)) {
             $Log = new LogModel();
             $Log->save(["uid" => session('uid'), "action" => $student->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            echo json_encode(array("success" => true, "id" => $student->sid));
+            $totalPage = ceil(db('student')->where('delflag', '0')->count() / 10);
+            echo json_encode(
+                array("success" => true, 
+                    "id" => $student->sid,
+                    "totalPage" => $totalPage
+                ));
             exit();
         } else {
             echo json_encode(array("success" => false, 'msg' => "服务器繁忙，请稍后重试"));
@@ -140,7 +145,7 @@ class Student extends Controller
             exit();
         }
         $student = new StudentModel;
-        if ($students = $student->where('sname','like',"%$_POST[sname]%")->select()) {
+        if ($students = $student->where('sname','like',"%$_POST[sname]%")->where('delflag', '0')->select()) {
             echo json_encode(array("students" => $students, "success" => true));
         } else {
             echo json_encode(array("msg" => "查无此人", "success" => false));
