@@ -102,7 +102,7 @@
             <tr>
                 <td class="text-center">{$ref->rid}</td>
                 <td class="text-center">{$ref->pid}</td>
-                <td class="text-center">{$ref->semster}</td>
+                <td class="text-center">{$ref->semester}</td>
                 <td class="text-center">{$ref->sid}</td>
                 <td class="text-center">{$ref->fee}</td>
                 <td class="text-center">
@@ -123,7 +123,7 @@
                 </td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-success"
-                            onclick="mod('{:url(\'refund/mod\',[\'rid\'=>$ref.rid])}','{$ref.pid}','{$ref.semster}','{$ref.sid}','{$ref.fee}','{$ref.method}','{$ref.card}','{$ref.bank}','{$ref.person}','{$ref.date}','{$ref.state}','{$ref.uid}','{$ref.memo}')">
+                            onclick="mod('{:url(\'refund/mod\',[\'rid\'=>$ref.rid])}','{$ref.pid}','{$ref.semester}','{$ref.sid}','{$ref.fee}','{$ref.method}','{$ref.card}','{$ref.bank}','{$ref.person}','{$ref.date}','{$ref.state}','{$ref.uid}','{$ref.memo}')">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button class="btn btn-xs btn-danger"
@@ -160,7 +160,7 @@
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     学期:
-                                    <input type="text" name="semster" id="semster" class="form-control">
+                                    <input type="text" name="semester" id="semester" class="form-control">
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     学生:
@@ -224,9 +224,9 @@
 </body>
 <!--业务逻辑-->
 <script>
-    function mod(url, pid, semster, sid, fee, method, card, bank, person, date, state, uid, memo) {
+    function mod(url, pid, semester, sid, fee, method, card, bank, person, date, state, uid, memo) {
         $('#pid').val(pid);
-        $('#semster').val(semster);
+        $('#semester').val(semester);
         $('#sid').val(sid);
         $('#fee').val(fee);
         $('#method').val(method);
@@ -246,7 +246,7 @@
 
     function add() {
         $('#pid').val(null);
-        $('#semster').val(null);
+        $('#semester').val(null);
         $('#sid').val(null);
         $('#fee').val(null);
         $('#method').val(null);

@@ -5,6 +5,7 @@ namespace app\tlr\controller;
 use app\tlr\model\CourseModel;
 use app\tlr\model\EnrollModel;
 use app\tlr\model\LogModel;
+use app\tlr\model\PayModel;
 use think\Controller;
 use think\Request;
 
@@ -125,11 +126,14 @@ class Enroll extends Controller
     {
         $pid = $request->param('pid');
         if ($pid) {
+            $name = "text";
+            $Pay = new PayModel();
             $Class = new CourseModel();
             $Enroll = new EnrollModel();
             $course = $Enroll->where("delflag", "=", 0)->where("pid", "=", $pid)->column("cid");
+            $pay = $Pay->join("student s", "pay.sid=s.sid")->where("pid", "=", $pid)->select('pid,sid,semester,fee,date,detail,method');
             $class = $Class->wherein("cid", $course)->select();
-            $data = ["course" => $class];
+            $data = ["course" => $class, "name" => $name, "pay" => $pay[0]];
             $this->assign($data);
             $htmls = $this->fetch('success');
             return $htmls;

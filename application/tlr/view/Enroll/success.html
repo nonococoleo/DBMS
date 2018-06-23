@@ -72,6 +72,17 @@
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>报名成功</h3>
+            <h3>{$pay.sname}</h3>
+            <h3>{$pay.fee}</h3>
+            <h3>{$pay.semester}</h3>
+            <h3>{switch name="$pay.method"}
+                {case value="1"}现金{/case}
+                {case value="2"}银行卡{/case}
+                {case value="3"}其他{/case}
+                {default}{/default}
+                {/switch}</h3>
+            <h3>{$pay.date}</h3>
+            <h3>{$pay.detail}</h3>
         </div>
     </div>
     <!--列表-->
@@ -79,39 +90,45 @@
         <table class="table table-striped table-hover table-condensed">
             <thead>
             <tr>
-                <td class="text-center">编号</td>
+                <!--<td class="text-center">编号</td>-->
                 <td class="text-center">课程</td>
                 <td class="text-center">时间</td>
-                <!--<td class="text-center">日期</td>-->
-                <td class="text-center">学期</td>
+                <td class="text-center">日期</td>
+                <!--<td class="text-center">学期</td>-->
                 <td class="text-center">校区</td>
                 <td class="text-center">教室</td>
                 <td class="text-center">单价</td>
                 <td class="text-center">课时</td>
-                <td class="text-center">教师</td>
+                <!--<td class="text-center">教师</td>-->
                 <!--<td class="text-center">费用</td>-->
             </tr>
             </thead>
             <tbody>
             {volist id="cou" name="course"}
             <tr>
-                <td class="text-center">{$cou->cid}</td>
+                <!--<td class="text-center">{$cou->cid}</td>-->
                 <td class="text-center">{$cou->cname}</td>
                 <td class="text-center">{$cou->time}</td>
-                <!--<td class="text-center">{$cou->date}</td>-->
-                <td class="text-center">{$cou->semester}</td>
-                <td class="text-center">{$cou->campus}</td>
+                <td class="text-center">{$cou->date}</td>
+                <!--<td class="text-center">{$cou->semester}</td>-->
+                <td class="text-center">
+                    {switch name="$cou->campus"}
+                    {case value="1"}杨浦{/case}
+                    {case value="2"}徐汇{/case}
+                    {default}{/default}
+                    {/switch}
+                </td>
                 <td class="text-center">{$cou->room}</td>
                 <td class="text-center">{$cou->price}</td>
                 <td class="text-center">{$cou->unit}</td>
-                <td class="text-center">{$cou->tid}</td>
+                <!--<td class="text-center">{$cou->tid}</td>-->
                 <!--<td class="text-center">{$cou->fee}</td>-->
             </tr>
             {/volist}
             </tbody>
         </table>
     </div>
-
+    <a href="{:url('enroll/choose')}?semester={$pay.semester}">继续报名</a>
 </div>
 </body>
 </html>

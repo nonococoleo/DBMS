@@ -114,7 +114,13 @@
                 <td class="text-center">{$course->time}</td>
                 <!--<td class="text-center">{$course->date}</td>-->
                 <td class="text-center">{$course->semester}</td>
-                <td class="text-center">{$course->campus}</td>
+                <td class="text-center">
+                    {switch name="$course->campus"}
+                    {case value="1"}杨浦{/case}
+                    {case value="2"}徐汇{/case}
+                    {default}{/default}
+                    {/switch}
+                </td>
                 <td class="text-center">{$course->room}</td>
                 <td class="text-center">{$course->price}</td>
                 <td class="text-center">{$course->unit}</td>

@@ -410,7 +410,7 @@
                 for (let i = 0; i < tvm.courses.length; i++) {
                     if (tvm.courses[i].checked) {
                         t.push(tvm.courses[i].cid);
-                        tvm.price += tvm.courses[i].price;
+                        tvm.price += tvm.courses[i].price * tvm.courses[i].unit;
                     }
                 }
                 return t;
