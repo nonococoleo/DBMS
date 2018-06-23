@@ -39,12 +39,12 @@
             <ul class="nav navbar-nav">
                 <li><a href="{:url('index/index')}">同路人教育</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
-                <li class="active"><a href="#">学生管理<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('student/index')}">学生管理<span class="sr-only">(current)</span></a></li>
                 <li><a href="{:url('teacher/index')}">教师管理</a></li>
                 <li><a href="{:url('course/index')}">课程管理</a></li>
                 <li><a href="{:url('refund/index')}">退费管理</a></li>
-                <li><a href="{:url('invoice/index')}">发票管理</a></li>
-                <li class="dropdown">
+                <li><a href="{:url('iid/index')}">发票管理</a></li>
+                <li class="dropdown active">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">系统管理<span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -97,9 +97,9 @@
             <tr v-for="(pay,index) in pays">
                 <td class="text-center">{{pay.pid}}</td>
                 <td class="text-center">{{pay.sid}}</td>
-                <td class="text-center">{{pay.semster}}</td>
+                <td class="text-center">{{pay.semester}}</td>
                 <td class="text-center">{{pay.fee}}</td>
-                <td class="text-center">{{(pay.invoice==1)?'未开':'已开'}}</td>
+                <td class="text-center">{{pay.iid}}</td>
                 <td class="text-center">{{pay.date}}</td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-success" @click="open(index)" title="编辑">
@@ -141,13 +141,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-sm-6 col-md-6 col-lg-6" id="sname_check" >
+                            <div class="col-sm-6 col-md-6 col-lg-6" id="sid_check" >
                                 学号 * :
                                 <input type="number" v-model="payDetailInShow.sid" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                 学期:
-                                <input type="text" v-model="payDetailInShow.semster" class="form-control">
+                                <input type="text" v-model="payDetailInShow.semester" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                 费用 *:
@@ -168,11 +168,7 @@
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                 发票:
-                                <select class="form-control" v-model="payDetailInShow.invoice">
-                                    <option value="0">请选择...</option>
-                                    <option value="1">未开</option>
-                                    <option value="2">已开</option>
-                                </select>
+                                <input type="number" v-model="payDetailInShow.iid" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                 日期:
@@ -255,11 +251,11 @@
             newPay() {
                 this.payDetailInShow = {
                     sid: null,
-                    semster: null,
+                    semester: null,
                     fee: null,
                     detail: null,
                     method: null,
-                    invoice: null,
+                    iid: null,
                     data: null,
                     uid: null,
                     memo: null
@@ -276,12 +272,12 @@
                     $.ajax({
                         type: "POST",
                         url: "{:URL('tlr/pay/deleteone','','')}",
-                        data: {sid: tvm.pays[index].sid},
+                        data: {pid: tvm.pays[index].pid},
                         dataType: "json",
                         success: function (data) {
                             if (data.success) {
                                 toastr.success("操作成功");
-                                tvm.students.splice(index, 1);
+                                tvm.pays.splice(index, 1);
                                 if (tvm.pays.length == 0) 
                                     tvm.getPays(tvm.nowPage-1)
                             } else {
@@ -318,6 +314,7 @@
                 });
             },
             addPay(payDetailInShow) {
+                let tvm = this;
                 let id = payDetailInShow.sid;
                 let fee = payDetailInShow.fee;
                 if (!(id && fee)) {
@@ -337,7 +334,9 @@
                         if (data.success) {
                             toastr.success("操作成功");
                             //TODO 跳转到最新页
-                            setTimeout("window.location.reload()", "500");
+                            //setTimeout("window.location.reload()", "500");
+                            tvm.getPays(data.totalPage);
+                            $('#myModal').modal("hide");
                         } else {
                             alert(data.msg)
                         }
@@ -353,7 +352,7 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.success) {
-                            tvm.students = data.students;
+                            tvm.pays = data.pays;
                             tvm.totalPage = 1
                         } else {
                             alert(data.msg)

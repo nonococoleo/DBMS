@@ -9,7 +9,7 @@ use think\Request;
 
 class Pay extends Controller
 {
-    // 学生页面
+    // 缴费页面
     public function index(Request $request)
     {
         // $rbacObj = new Rbac();
@@ -19,12 +19,12 @@ class Pay extends Controller
         // }
         return $this->fetch('index');
     }
-    // 获取学生列表
+    // 获取缴费列表
     public function pays(Request $request)
     {
         // $rbacObj = new Rbac();
         // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
+        //     $this->error("没有权限", "Pay/index", null, 1);
         //     exit();
         // }
         if (request()->isGet()) {
@@ -32,18 +32,18 @@ class Pay extends Controller
             exit();
         }
         $page = (isset($_POST['page'])) ? $_POST['page'] : 1;
-        $pay = new StudentModel;
+        $pay = new PayModel;
         $pays = $pay->where('delflag', '0')->page($page, 10)->select();
-        $totalPage = ceil(db('pay')->count() / 10);
+        $totalPage = ceil(db('pay')->where('delflag', '0')->count() / 10);
         echo json_encode(array("pays" => $pays, "totalPage" => $totalPage, "success" => true));
     }
 
-    // 修改学生信息
+    // 修改缴费信息
     public function update(Request $request)
     {
         // $rbacObj = new Rbac();
         // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
+        //     $this->error("没有权限", "Pay/index", null, 1);
         //     exit();
         // }
         if (!request()->isPost() || empty($_POST)) {
@@ -52,10 +52,10 @@ class Pay extends Controller
         }
 
         if ($_POST['sid'] == '' || !isset($_POST['sid'])) {
-            echo json_encode(array("success" => false, 'msg' => "学生学号不能为空"));
+            echo json_encode(array("success" => false, 'msg' => "缴费学号不能为空"));
             exit();
         }
-        if ($_POST['semster'] == '' || $_POST['semster'] == null) {
+        if ($_POST['semester'] == '' || $_POST['semester'] == null) {
             echo json_encode(array("success" => false, 'msg' => "学期不能为空"));
             exit();
         }
@@ -68,12 +68,12 @@ class Pay extends Controller
             exit();
         }
         if ($_POST['uid'] == '' || $_POST['uid'] == null) {
-            echo json_encode(array("success" => false, 'msg' => "员工号不能为空"));
+            echo json_encode(array("success" => false, 'msg' => "员工号不能为空"));   
             exit();
         }
 
         $pay = new PayModel;
-        if ($pay->allowField(['sid', 'semster', 'fee', 'detail', 'method', 'invoice', 'date', 'uid', 'memo'])->save($_POST, ['pid' => $_POST['pid']])) {
+        if ($pay->allowField(['sid', 'semester', 'fee', 'detail', 'method', 'iid', 'date', 'uid', 'memo'])->save($_POST, ['pid' => $_POST['pid']])) {
             echo json_encode(array("success" => true));
             exit();
         } else {
@@ -82,12 +82,12 @@ class Pay extends Controller
         }
     }
 
-    //新增学生
+    //新增缴费
     public function add(Request $request)
     {
         // $rbacObj = new Rbac();
         // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
+        //     $this->error("没有权限", "Pay/index", null, 1);
         //     exit();
         // }
         if (!request()->isPost() || empty($_POST)) {
@@ -96,15 +96,19 @@ class Pay extends Controller
         }
 
         if ($_POST['sid'] == '' || !isset($_POST['sid'])) {
-            echo json_encode(array("success" => false, 'msg' => "学生学号不能为空"));
+            echo json_encode(array("success" => false, 'msg' => "学号不能为空"));
             exit();
         }
-        if ($_POST['semster'] == '' || $_POST['semster'] == null) {
+        if ($_POST['semester'] == '' || $_POST['semester'] == null) {
             echo json_encode(array("success" => false, 'msg' => "学期不能为空"));
             exit();
         }
         if ($_POST['fee'] == '' || $_POST['fee'] == null) {
             echo json_encode(array("success" => false, 'msg' => "费用不能为空"));
+            exit();
+        }
+        if ($_POST['method'] == '' || $_POST['method'] == null) {
+            echo json_encode(array("success" => false, 'msg' => "缴费方式不能为空"));
             exit();
         }
         if ($_POST['date'] == '' || $_POST['date'] == null) {
@@ -117,10 +121,15 @@ class Pay extends Controller
         }
  
         $pay = new PayModel($_POST);
-        if ($pay->allowField(['sid', 'semster', 'fee', 'detail', 'method', 'invoice', 'date', 'uid', 'memo'])->save($_POST)) {
+        if ($pay->allowField(['sid', 'semester', 'fee', 'detail', 'method', 'iid', 'date', 'uid', 'memo'])->save($_POST)) {
             $Log = new LogModel();
             $Log->save(["uid" => session('uid'), "action" => $pay->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            echo json_encode(array("success" => true, "id" => $pay->pid));
+            $totalPage = ceil(db('pay')->where('delflag', '0')->count() / 10);
+            echo json_encode(
+                array("success" => true, 
+                    "id" => $pay->pid,
+                    "totalPage" => $totalPage
+                ));
             exit();
         } else {
             echo json_encode(array("success" => false, 'msg' => "服务器繁忙，请稍后重试"));
@@ -128,12 +137,12 @@ class Pay extends Controller
         }
     }
 
-    //删除学生
+    //删除缴费
     public function deleteone(Request $request)
     {
         // $rbacObj = new Rbac();
         // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
+        //     $this->error("没有权限", "Pay/index", null, 1);
         //     exit();
         // }
         if (!request()->isPost() || empty($_POST)) {
@@ -150,12 +159,12 @@ class Pay extends Controller
         }
     }
 
-    //搜索学生
+    //搜索缴费
     public function search(Request $request)
     {
         // $rbacObj = new Rbac();
         // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
+        //     $this->error("没有权限", "Pay/index", null, 1);
         //     exit();
         // }
         if (request()->isGet()) {
