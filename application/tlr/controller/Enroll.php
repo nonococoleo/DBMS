@@ -15,7 +15,7 @@ class Enroll extends Controller
 
         $data = ["seme" => $seme];
         $this->assign($data);
-        $htmls = $this->fetch('front');
+        $htmls = $this->fetch('index');
         return $htmls;
     }
 
@@ -29,7 +29,7 @@ class Enroll extends Controller
         $class = $Class->where("semester", "=", $semester)->distinct("true")->column("memo");
         $data = ["seme" => $seme, "classes" => $class, "semester" => $semester];
         $this->assign($data);
-        $htmls = $this->fetch('index');
+        $htmls = $this->fetch('choose');
         return $htmls;
     }
 }
