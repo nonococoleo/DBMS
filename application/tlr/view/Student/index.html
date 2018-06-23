@@ -295,6 +295,7 @@
                 }
             },
             saveStudent(studentDetailInShow) {
+                let tvm = this;
                 let phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
                 let phone = phoneReg.test(studentDetailInShow.phone);
                 let name = studentDetailInShow.sname;
@@ -314,8 +315,13 @@
                     success: function (data) {
                         if (data.success) {
                             toastr.success("操作成功");
+                            for(i in tvm.students) {
+                                if(tvm.students[i].sid == studentDetailInShow.sid)
+                                    tvm.students[i] =studentDetailInShow;
+                            }
+                            $('#myModal').modal("hide");
                             //TODO 分页信息刷新
-                            setTimeout("window.location.reload()", "500");
+                            // setTimeout("window.location.reload()", "500");
                         } else {
                             alert(data.msg)
                         }
