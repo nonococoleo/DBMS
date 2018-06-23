@@ -4,6 +4,7 @@ namespace app\tlr\controller;
 
 use app\tlr\model\InvoiceModel;
 use app\tlr\model\LogModel;
+use app\tlr\model\PayModel;
 use think\Controller;
 use think\Request;
 
@@ -51,10 +52,12 @@ class Invoice extends Controller
         if (session('uid')) {
             $Invoice = new InvoiceModel();
             $Log = new LogModel();
+            $Pay = new PayModel();
             foreach ($_POST as $key => $value)
                 if ($value == "")
                     $_POST[$key] = null;
             $Invoice->save($_POST);
+            $Pay->save(["iid" => $Invoice->getLastInsID()], ['pid' => $request->param("pid")]);
             $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("添加成功", "Invoice/index", null, 1);
         } else {
