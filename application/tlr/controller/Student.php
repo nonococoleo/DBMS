@@ -140,7 +140,7 @@ class Student extends Controller
             exit();
         }
         $student = new StudentModel;
-        if ($students = $student->where('sname','like',"%$_POST[sname]%")->select()) {
+        if ($students = $student->where('sname','like',"%$_POST[sname]%")->where('delflag', '0')->select()) {
             echo json_encode(array("students" => $students, "success" => true));
         } else {
             echo json_encode(array("msg" => "查无此人", "success" => false));
