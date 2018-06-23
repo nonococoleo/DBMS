@@ -104,6 +104,47 @@
         </select>
         <button onclick="ser()">查询</button>
     </div>
+    <div id="selectedTable">
+        <div v-if="courses.length>0">
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                <tr>
+                    <td class="text-center">编号</td>
+                    <td class="text-center">课程</td>
+                    <td class="text-center">时间</td>
+                    <!--<td class="text-center">日期</td>-->
+                    <td class="text-center">学期</td>
+                    <td class="text-center">校区</td>
+                    <td class="text-center">教室</td>
+                    <td class="text-center">单价</td>
+                    <td class="text-center">课时</td>
+                    <td class="text-center">教师</td>
+                    <td class="text-center">费用</td>
+                    <td class="text-center">操作</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(course,index) in courses">
+                    <td class="text-center">{{course.cid}}</td>
+                    <td class="text-center">{{course.cname}}</td>
+                    <td class="text-center">{{course.time}}</td>
+                    <!--<td class="text-center">{{course.date}}</td>-->
+                    <td class="text-center">{{course.semester}}</td>
+                    <td class="text-center">{{course.campus}}</td>
+                    <td class="text-center">{{course.room}}</td>
+                    <td class="text-center">{{course.price}}</td>
+                    <td class="text-center">{{course.unit}}</td>
+                    <td class="text-center">{{course.tid}}</td>
+                    <td class="text-center">{{course.fee}}</td>
+                    <td class="text-center">
+                        <input type="checkbox" v-model="course.checked"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" @click="baoming()">报名</button>
+        </div>
+    </div>
     <!-- 用户信息的modal -->
     <div>
         <!--添加学生-->
@@ -221,10 +262,46 @@
                             aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body" id="content">
-
+                    <table class="table table-striped table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <td class="text-center">编号</td>
+                            <td class="text-center">课程</td>
+                            <td class="text-center">时间</td>
+                            <!--<td class="text-center">日期</td>-->
+                            <td class="text-center">学期</td>
+                            <td class="text-center">校区</td>
+                            <td class="text-center">教室</td>
+                            <td class="text-center">单价</td>
+                            <td class="text-center">课时</td>
+                            <td class="text-center">教师</td>
+                            <td class="text-center">费用</td>
+                            <td class="text-center">操作</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(course,index) in courses">
+                            <td class="text-center">{{course.cid}}</td>
+                            <td class="text-center">{{course.cname}}</td>
+                            <td class="text-center">{{course.time}}</td>
+                            <!--<td class="text-center">{{course.date}}</td>-->
+                            <td class="text-center">{{course.semester}}</td>
+                            <td class="text-center">{{course.campus}}</td>
+                            <td class="text-center">{{course.room}}</td>
+                            <td class="text-center">{{course.price}}</td>
+                            <td class="text-center">{{course.unit}}</td>
+                            <td class="text-center">{{course.tid}}</td>
+                            <td class="text-center">{{course.fee}}</td>
+                            <td class="text-center">
+                                <input type="checkbox" v-model="course.checked"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" @click="add()" data-dismiss="modal">添加</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -246,6 +323,69 @@
             }
         }
     });
+    var modal3 = new Vue({
+        el: '#myModal3',
+        data: {
+            courses: [],
+            checked: [],
+        },
+        methods: {
+            add() {
+                let tvm = this;
+                let x;
+                for(x in tvm.courses) {
+                    if(tvm.courses[x].checked) {
+                        if(!inArray(tvm.courses[x].cid, tvm.checked))
+                            tvm.checked.push(tvm.courses[x].cid);
+                        if(!haveSelected(tvm.courses[x].cid, selectedTable.courses))
+                            selectedTable.courses.push(tvm.courses[x]);
+                    }
+                    if(!tvm.courses[x].checked) {
+                        if(inArray(tvm.courses[x].cid, tvm.checked))
+                            tvm.checked.splice(inArray(tvm.courses[x].cid, tvm.checked)-1, 1);
+                        if(haveSelected(tvm.courses[x].cid, selectedTable.courses)) {
+                            for (var i = 0; i < selectedTable.courses.length; i++) {
+                                if (selectedTable.courses[i].cid == tvm.courses[x].cid) {
+                                    selectedTable.courses.splice(i, 1);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+    var selectedTable = new Vue({
+        el: '#selectedTable',
+        data: {
+            courses: []
+        },
+        methods: {
+            baoming() {
+                let courses = this.courses;
+                alert(courses[0].cid);
+                alert('哈哈哈');
+            }
+        }
+    });
+
+    function inArray(x, arr) {
+        for(let i = 0; i < arr.length; i++) {
+            if(x == arr[i])
+                return i+1; //因为返回0,会判断为bool的false
+        }
+        return false;
+    }
+
+    function haveSelected(cid, courses) {
+        for(let i = 0; i < courses.length; i++) {
+            if(courses[i].cid == cid) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     function newStudent() {
         $('#sname').val(null);
@@ -337,7 +477,12 @@
             dataType: "json",
             success: function (data) {
                 if (data.success) {
-                    alert(data);
+                    for(let i = 0; i < data.course.length; i++) {
+                        if(inArray(data.course[i].cid,modal3.checked)) {
+                            data.course[i].checked = true;
+                        }
+                    }
+                    Vue.set(modal3, "courses", data.course);
                     $('#myModal3').modal('show');
                 } else {
                     console.log("some troubles")
