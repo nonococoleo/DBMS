@@ -97,7 +97,12 @@ class Student extends Controller
         if ($student->allowField(['sname', 'sex', 'grade', 'school', 'home', 'tel', 'phone', 'memo'])->save($_POST)) {
             $Log = new LogModel();
             $Log->save(["uid" => session('uid'), "action" => $student->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            echo json_encode(array("success" => true, "id" => $student->sid));
+            $totalPage = ceil(db('student')->where('delflag', '0')->count() / 10);
+            echo json_encode(
+                array("success" => true, 
+                    "id" => $student->sid,
+                    "totalPage" => $totalPage
+                ));
             exit();
         } else {
             echo json_encode(array("success" => false, 'msg' => "服务器繁忙，请稍后重试"));

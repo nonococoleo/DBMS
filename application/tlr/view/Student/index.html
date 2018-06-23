@@ -323,6 +323,7 @@
                 });
             },
             addStudent(studentDetailInShow) {
+                let tvm = this;
                 let phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
                 let phone = phoneReg.test(studentDetailInShow.phone);
                 let name = studentDetailInShow.sname;
@@ -342,8 +343,8 @@
                     success: function (data) {
                         if (data.success) {
                             toastr.success("操作成功");
-                            //TODO 跳转到最新页
-                            setTimeout("window.location.reload()", "500");
+                            tvm.getStudents(data.totalPage);
+                            $('#myModal').modal("hide");
                         } else {
                             alert(data.msg)
                         }
@@ -351,6 +352,9 @@
                 });
             },
             search(searchSname) {
+                if(searchSname == '') {
+                    window.location.reload(); //搜索空值即为搜索全部
+                }
                 let tvm = this;
                 $.ajax({
                     type: "POST",
