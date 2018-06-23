@@ -63,7 +63,7 @@ class Teacher extends Controller
         if (session('uid')) {
             $Teacher = new TeacherModel();
             $Log = new LogModel();
-            $Teacher->allowField(['delflag'])->save(["delflag" => 1], ['tid' => $request->param("tid")]);
+            $Teacher->save(["delflag" => 1], ['tid' => $request->param("tid")]);
             $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
         } else {

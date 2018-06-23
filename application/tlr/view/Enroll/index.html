@@ -70,12 +70,114 @@
 <!--页面主体-->
 <div class="container">
     <!--页眉-->
-    <select id="seme">
-        {volist id="s" name="seme"}
-        <option value="{$s}">{$s}</option>
-        {/volist}
-    </select>
-    <button onclick="sel()">确定</button>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>报名信息</h3>
+        </div>
+        <select id="seme" name="semester">
+            <option value="" selected="{if condition='!$semester'} selected {/if}">全部</option>
+            {volist id="s" name="seme"}
+            <option value="{$s}">{$s}</option>
+            {/volist}
+        </select>
+        <form method="get" id="ser" action="{:url('enroll/index')}">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="input-group" style="margin-top: 17px">
+                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入学生姓名"
+                           aria-describedby="basic-addon2" value="">
+                    <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
+                </div>
+            </div>
+        </form>
+        <div style="margin-top: 17px">
+            <button class="btn btn-success" onclick="sel()">报名</button>
+        </div>
+    </div>
+    <!--列表-->
+    <div>
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+            <tr>
+                <td class="text-center">编号</td>
+                <td class="text-center">姓名</td>
+                <td class="text-center">课程</td>
+                <td class="text-center">参加次数</td>
+                <td class="text-center">缴费</td>
+                <td class="text-center">操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            {volist id="en" name="enroll"}
+            <tr>
+                <td class="text-center">{$en->eid}</td>
+                <td class="text-center">{$en->sid}</td>
+                <td class="text-center">{$en->cid}</td>
+                <td class="text-center">{$en->attend}</td>
+                <td class="text-center">{$en->pid}</td>
+                <td class="text-center">
+                    <button class="btn btn-xs btn-success"
+                            onclick="mod('{:url(\'enroll/mod\',[\'eid\'=>$en.eid])}','{$en.sid}','{$en.cid}','{$en.attend}','{$en.pid}','{$en.memo}')">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                    <button class="btn btn-xs btn-danger"
+                            onclick="del('{:url(\'enroll/del\',[\'eid\'=>$en.eid])}','{$en.cid}')">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    <div style="text-align:center;">
+        {$page}
+    </div>
+    <!-- 用户信息的modal -->
+    <div>
+        <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;" id="modal-title">修改选课</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form action=" " method="POST" id="modal-form">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    姓名:
+                                    <input type="text" name="sid" id="sid" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    课程:
+                                    <input type="text" name="cid" id="cid" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    参加次数:
+                                    <input type="text" name="attend" id="attend" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    缴费:
+                                    <input type="text" name="pid" id="pid" class="form-control">
+                                </div>
+                            </div>
+                            <div>
+                                备注:
+                                <textarea name="memo" id="memo" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <input type="submit" class="btn btn-primary" id="mod" value="保存修改"/>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
 </div>
 </body>
 <script>
@@ -83,5 +185,29 @@
         let temp = $('#seme').val();
         window.location.href = "{:url('enroll/choose')}?semester=" + temp;
     }
+
+    function mod(url, sid, cid, attend, pid, memo) {
+        $('#sid').val(sid);
+        $('#cid').val(cid);
+        $('#attend').val(attend);
+        $('#pid').val(pid);
+        $('#memo').text(memo);
+        $('#modal-form').attr("action", url);
+        $('#myModal').modal();
+    }
+
+    function del(url, tname) {
+        let flag = confirm("确定要删除选课 " + tname + " 吗？");
+        if (flag)
+            window.location.href = url;
+    }
+
+    function ser() {
+        if ($('#name').val())
+            $('#ser').submit();
+        else
+            window.location.href = "{:url('enroll/index')}";
+    }
+
 </script>
 </html>

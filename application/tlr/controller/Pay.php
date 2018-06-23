@@ -2,8 +2,8 @@
 
 namespace app\tlr\controller;
 
-use app\tlr\model\PayModel;
 use app\tlr\model\LogModel;
+use app\tlr\model\PayModel;
 use think\Controller;
 use think\Request;
 
@@ -68,7 +68,7 @@ class Pay extends Controller
             exit();
         }
         if ($_POST['uid'] == '' || $_POST['uid'] == null) {
-            echo json_encode(array("success" => false, 'msg' => "员工号不能为空"));   
+            echo json_encode(array("success" => false, 'msg' => "员工号不能为空"));
             exit();
         }
 
@@ -119,15 +119,15 @@ class Pay extends Controller
             echo json_encode(array("success" => false, 'msg' => "员工号不能为空"));
             exit();
         }
- 
-        $pay = new PayModel($_POST);
-        if ($pay->allowField(['sid', 'semester', 'fee', 'detail', 'method', 'iid', 'date', 'uid', 'memo'])->save($_POST)) {
+
+        $pay = new PayModel();
+        if ($pay->allowField(['sid', 'semester', 'fee', 'detail', 'method', 'invoice', 'date', 'uid', 'memo'])->save($_POST)) {
             $Log = new LogModel();
             $Log->save(["uid" => session('uid'), "action" => $pay->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $totalPage = ceil(db('pay')->where('delflag', '0')->count() / 10);
             echo json_encode(
-                array("success" => true, 
-                    "id" => $pay->pid,
+                array("success" => true,
+                    "pid" => $pay->pid,
                     "totalPage" => $totalPage
                 ));
             exit();

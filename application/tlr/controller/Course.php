@@ -7,14 +7,12 @@ use app\tlr\model\LogModel;
 use think\Controller;
 use think\Request;
 
-//use app\tlr\model\TeacherModel;
-
 class Course extends Controller
 {
     public function index(Request $request)
     {
         $Course = new CourseModel();
-        $course = $Course->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
+        $course = $Course->alias("c")->where("c.delflag", "=", 0)->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap']);
         $page = $course->render();
 
         $data = ["course" => $course, "page" => $page, "name" => null];
@@ -29,7 +27,7 @@ class Course extends Controller
         $Course = new CourseModel();
         $name = $request->param('name');
         $query = ["name" => $name];
-        $course = $Course->where('cname', 'like', "%$name%")->order('cid', 'asc')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        $course = $Course->alias("c")->where("c.delflag", "=", 0)->where('cname', 'like', "%$name%")->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         if ($course->count() > 0) {
             $page = $course->render();
 

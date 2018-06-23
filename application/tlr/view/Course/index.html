@@ -102,7 +102,7 @@
                 <td class="text-center">单价</td>
                 <td class="text-center">课时</td>
                 <td class="text-center">教师</td>
-                <td class="text-center">费用</td>
+                <!--<td class="text-center">费用</td>-->
                 <td class="text-center">操作</td>
             </tr>
             </thead>
@@ -118,8 +118,8 @@
                 <td class="text-center">{$course->room}</td>
                 <td class="text-center">{$course->price}</td>
                 <td class="text-center">{$course->unit}</td>
-                <td class="text-center">{$course->tid}</td>
-                <td class="text-center">{$course->fee}</td>
+                <td class="text-center">{$course->tname}</td>
+                <!--<td class="text-center">{$course->fee}</td>-->
                 <td class="text-center">
                     <button class="btn btn-xs btn-success"
                             onclick="mod('{:url(\'course/mod\',[\'cid\'=>$course.cid])}','{$course.cname}','{$course.time}','{$course.date}','{$course.semester}','{$course.campus}','{$course.room}','{$course.price}','{$course.unit}','{$course.tid}','{$course.fee}','{$course.memo}')">

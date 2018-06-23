@@ -120,7 +120,6 @@
         </table>
     </div>
     <!--分页-->
-    <!--TODO 有时有问题，应该与软删除有关-->
     <div style="text-align:center;">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
@@ -320,8 +319,6 @@
                                     tvm.students[i] = studentDetailInShow;
                             }
                             $('#myModal').modal("hide");
-                            //TODO 分页信息刷新
-                            // setTimeout("window.location.reload()", "500");
                         } else {
                             alert(data.msg)
                         }
