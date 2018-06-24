@@ -28,28 +28,25 @@
 <body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Brand</a>
+            <img src="/static/logo.png" height="50" width="50">
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="#">首页<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('index/index')}">同路人教育</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
                 <li><a href="{:url('student/index')}">学生管理</a></li>
                 <li><a href="{:url('teacher/index')}">教师管理</a></li>
                 <li><a href="{:url('course/index')}">课程管理</a></li>
-                <li><a href="{:url('refund/index')}">退费管理</a></li>
-                <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{:url('pay/index')}">缴费管理</a></li>
+                        <li><a href="{:url('refund/index')}">退费管理</a></li>
+                        <li><a href="{:url('invoice/index')}">发票管理</a></li>
+                    </ul>
+                </li>
                 <li class="dropdown active">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">系统管理<span class="caret"></span></a>
@@ -102,21 +99,21 @@
                         {/volist}
                     </td>
                     <td class="text-center">
-                        <?php if($item->status==1) echo '正常'; else echo '被锁定'; ?>
+                        <?php if($item->delflag==0) echo '正常'; else echo '被锁定'; ?>
                     </td>
                     <td class="text-center">
                         <a href="{:url('user/lockOne')}?uid={$item->uid}" method="post">
                             <input type="hidden" name="uid" value="{$item->uid}">
                             <button type="button" class="btn btn-xs btn-default"">
-                            <?php if($item->status==1) echo '锁定'; else echo '解锁'; ?>
+                            <?php if($item->delflag==0) echo '锁定'; else echo '解锁'; ?>
                             </button>
                         </a>
                     </td>
                 </tr>
                 {/volist}
                 <tr>
-                    <td colspan="4" align="right">
-                        <input type="submit" name="" value="保存修改" class="btn btn-primary">
+                    <td colspan="5">
+                        <button type="submit" style="width: 100%" class="btn btn-success">保存修改</button>
                     </td>
                 </tr>
             </form>
