@@ -79,6 +79,9 @@ class Student extends Controller
         //     $this->error("没有权限", "Student/index", null, 1);
         //     exit();
         // }
+        foreach ($_POST as $key => $value)
+                if ($value == "")
+                    $_POST[$key] = null;
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();

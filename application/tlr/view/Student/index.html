@@ -104,7 +104,7 @@
                 <td class="text-center">{{student.sid}}</td>
                 <td class="text-center">{{student.sname}}</td>
                 <!--TODO 值0不显示-->
-                <td class="text-center">{{(student.sex==1)?'男':'女'}}</td>
+                <td class="text-center">{{(student.sex==1)?'男':(student.sex==2)?'女':''}}</td>
                 <td class="text-center">{{student.grade}}</td>
                 <td class="text-center">{{student.school}}</td>
                 <td class="text-center">
