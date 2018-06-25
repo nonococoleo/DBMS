@@ -73,7 +73,7 @@ class Pay extends Controller
         }
 
         $pay = new PayModel;
-        if ($pay->allowField(['sid', 'semester', 'fee', 'detail', 'method', 'iid', 'date', 'uid', 'memo'])->save($_POST, ['pid' => $_POST['pid']])) {
+        if ($pay->allowField(['sid', 'semester', 'fee', 'detail', 'method', 'iid', 'rid', 'date', 'uid', 'memo'])->save($_POST, ['pid' => $_POST['pid']])) {
             echo json_encode(array("success" => true));
             exit();
         } else {

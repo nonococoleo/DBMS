@@ -138,5 +138,6 @@ class Enroll extends Controller
             $htmls = $this->fetch('success');
             return $htmls;
         }
+        return null;
     }
 }

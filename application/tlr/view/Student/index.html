@@ -103,9 +103,8 @@
             <tr v-for="(student,index) in students">
                 <td class="text-center">{{student.sid}}</td>
                 <td class="text-center">{{student.sname}}</td>
-                <!--TODO 值0不显示-->
                 <td class="text-center">{{(student.sex==1)?'男':(student.sex==2)?'女':''}}</td>
-                <td class="text-center">{{student.grade}}</td>
+                <td class="text-center">{{(student.grade>0)?student.grade:''}}</td>
                 <td class="text-center">{{student.school}}</td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-success" @click="open(index)" title="编辑">

@@ -60,10 +60,12 @@ class Refund extends Controller
         if (session('uid')) {
             $Refund = new RefundModel();
             $Log = new LogModel();
+            $Pay = new PayModel();
             foreach ($_POST as $key => $value)
                 if ($value == "")
                     $_POST[$key] = null;
             $Refund->save($_POST);
+            $Pay->save(["rid" => $Refund->getLastInsID()], ['pid' => $request->param("pid")]);
             $Log->save(["uid" => session('uid'), "action" => $Refund->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("添加成功", "Refund/index", null, 1);
         } else {
