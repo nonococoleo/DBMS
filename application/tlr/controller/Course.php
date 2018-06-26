@@ -127,25 +127,56 @@ class Course extends Controller
 
     public function upload()
     {
-        $file = request()->file('files');
+        $file = request()->file('file');
         if (empty($file)) {
             $this->error('请选择上传文件');
         }
-        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
-        if ($info) {
-            $this->success('文件上传成功');
-        } else {
-            $this->error($file->getError());
+        $replacename = session('uid') . '_' . time() . '_' . $_FILES["file"]['name'];
+        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
+//TODO 转码
+        foreach ($info as $key => $value) {
+//            echo mb_detect_encoding($key);
+//            echo mb_detect_encoding($value);
+//            echo '<br>';
+//            echo '<br>';
+//            echo '<br>';
+//            echo mb_detect_encoding($info);
+
+            echo $key;
+            echo '<br>';
+            echo $value;
+            $value = eval('return ' . iconv('ascii', 'utf-8', var_export($value, true)) . ';');
+
+////            $value = mb_convert_encoding($value, "UTF-8", "GBK");
+//            iconv('GBK','UTF-8//IGNORE',$value);
+//            iconv('GBK','UTF-8//TRANSLIT//IGNORE',$value);
+            echo $value;
+            echo '<br>';
+            echo '<br>';
+            echo '<br>';
+            echo '------------------------<br>';
         }
+//        print_r(iconv_get_encoding());//得到当前页面编码信息 
+
+
+        $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\\' . $replacename;
+        $this->addFromFile($filename);
+
+//        if ($this->addFromFile($filename)) {
+//            $this->success('文件上传成功');
+//        } else {
+//            $this->error($file->getError());
+//        }
     }
 
-    public function addFromFile()
+    public function addFromFile($filename = '')
     {
-        $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\20180626\test.csv';
         $file = fopen($filename, 'r');
         //读取内容
         $count = 0;
         while (!feof($file)) {
+
+
             $line = fgetcsv($file);
             $cname = 2;
 
@@ -165,14 +196,12 @@ class Course extends Controller
 
             $count++;
             if ($count == 1) {
-                continue;
+                continue;//去掉首行记录
             }
-//            TODO 去掉最后一条记录
             $courses[$count - 2] = $data;
         }
         fclose($file);
-
-        unset($courses[$count - 2]);
+        unset($courses[$count - 2]);//去掉尾行记录
 
 //批量添加
         $Course = new CourseModel();
