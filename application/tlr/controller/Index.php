@@ -31,7 +31,7 @@ class Index extends Controller
             'passwd' => md5($_POST['passwd'])
         );
         $user = $User->where('uname', $_POST['uname'])->find();
-        if($user->status != 1) {
+        if($user->delflag != 0) {
             $this->error("帐号被锁定，请联系管理员");
         }
         if ($user['passwd'] == md5($_POST['passwd'])) {
