@@ -96,9 +96,16 @@
 
     <!--TODO upload files-->
     <div>
-        <FORM method="post" enctype="multipart/form-data" class="form" action="{:url('upload')}">
+        <form method="post" enctype="multipart/form-data" class="form" action="{:url('download')}">
+            <INPUT type="submit" class="btn btn-success" value="下载模板文件">
+        </form>
+
+    </div>
+    <div>
+        <form method="post" enctype="multipart/form-data" class="form" action="{:url('upload')}">
             <INPUT type="file" class="file" name="file">
-            <INPUT type="submit" class="btn" value=" 提交 ">
+            <INPUT type="submit" class="btn btn-success" value="批量导入">
+        </form>
     </div>
 
 
@@ -276,9 +283,7 @@
         $('#myModal').modal();
     }
 
-    function upload() {
 
-    }
 
     function add() {
         $('#name_check').removeClass("has-error");
@@ -330,6 +335,7 @@
         }
 
     }
+
 
 </script>
 </html>
