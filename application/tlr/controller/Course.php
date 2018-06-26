@@ -4,6 +4,8 @@ namespace app\tlr\controller;
 
 use app\tlr\model\CourseModel;
 use app\tlr\model\LogModel;
+use app\tlr\model\SemesterModel;
+use app\tlr\model\TeacherModel;
 use think\Controller;
 use think\Request;
 
@@ -14,10 +16,14 @@ class Course extends Controller
     public function index(Request $request)
     {
         $Course = new CourseModel();
-        $course = $Course->alias("c")->where("c.delflag", "=", 0)->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap']);
+        $course = $Course->alias("c")->where("c.delflag", "=", 0)->where("semester", "=", session('cur_semester'))->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap']);
+        $Teacher = new TeacherModel();
+        $teacher = $Teacher->where("delflag", "=", "0")->select();
+        $Semester = new SemesterModel();
+        $semester = $Semester->select();
         $page = $course->render();
 
-        $data = ["course" => $course, "page" => $page, "name" => null];
+        $data = ["course" => $course, "page" => $page, "name" => null, "teacher" => $teacher, "semester" => $semester];
         $this->assign($data);
         $htmls = $this->fetch('index');
         return $htmls;
@@ -28,8 +34,14 @@ class Course extends Controller
     {
         $Course = new CourseModel();
         $name = $request->param('name');
-        $query = ["name" => $name];
-        $course = $Course->alias("c")->where("c.delflag", "=", 0)->where('cname', 'like', "%$name%")->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        $semester = $request->param('semester');
+        $query = ["name" => $name, "semester" => $semester];
+        $course = $Course->alias("c")->where("c.delflag", "=", 0);
+        if ($name)
+            $course = $course->where('cname', 'like', "%$name%");
+        if ($semester)
+            $course = $course->where('semester', '=', $semester);
+        $course = $course->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         if ($course->count() > 0) {
             $page = $course->render();
 

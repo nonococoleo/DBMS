@@ -3,6 +3,7 @@
 namespace app\tlr\controller;
 
 use app\tlr\model\LogModel;
+use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
 use think\Controller;
 use think\Request;
@@ -96,7 +97,7 @@ class Refund extends Controller
             foreach ($_POST as $key => $value)
                 if ($value == "")
                     $_POST[$key] = null;
-            $Refund->allowField(['pid', 'semster', 'sid', 'fee', 'method', 'card', 'bank', 'person', 'date', 'state', 'memo'])->save($_POST, ['rid' => $request->param("rid")]);
+            $Refund->allowField(['pid', 'semster', 'fee', 'method', 'card', 'bank', 'person', 'date', 'state', 'memo'])->save($_POST, ['rid' => $request->param("rid")]);
             $Log->save(["uid" => session('uid'), "action" => $Refund->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
         } else {

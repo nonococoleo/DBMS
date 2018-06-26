@@ -83,7 +83,6 @@
             </div>
         </form>
         <div style="margin-top: 6px">
-            <!--TODO-->
             <button class="btn btn-success" onclick="add()">添加课程</button>
         </div>
     </div>
@@ -122,7 +121,7 @@
                 <td class="text-center">{$course->cname}</td>
                 <td class="text-center">{$course->time}</td>
                 <!--<td class="text-center">{$course->date}</td>-->
-                <td class="text-center">{$course->semester}</td>
+                <td class="text-center">{$semester["$course->semester"]->name}</td>
                 <td class="text-center">
                     {switch name="$course->campus"}
                     {case value="1"}杨浦{/case}
@@ -187,12 +186,20 @@
 
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     学期:
-                                    <input type="text" name="semester" id="semester" class="form-control">
+                                    <select class="form-control" name="semester" id="semester">
+                                        {volist id="sem" name="semester"}
+                                        <option value="{$sem->id}">{$sem->name}</option>
+                                        {/volist}
+                                    </select>
                                 </div>
 
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     校区:
-                                    <input type="text" name="campus" id="campus" class="form-control">
+                                    <select class="form-control" name="campus" id="campus">
+                                        <option value="0">请选择...</option>
+                                        <option value="1">杨浦</option>
+                                        <option value="2">徐汇</option>
+                                    </select>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     教室:
@@ -208,7 +215,13 @@
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     教师:
-                                    <input type="text" name="tid" id="tid" class="form-control">
+                                    <select class="form-control" name="tid" id="tid">
+                                        <option value="0">请选择...</option>
+                                        {volist id="tea" name="teacher"}
+                                        <option value="{$tea->tid}">{$tea->tname}</option>
+                                        {/volist}
+                                    </select>
+                                    <!--<input type="text" name="tid" id="tid" class="form-control">-->
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     课时费:
@@ -236,7 +249,6 @@
 <script>
     function mod(url, cname, time, date, semester, campus, room, price, unit, tid, fee, memo) {
         $('#name_check').removeClass("has-error");
-
         $('#cname').val(cname);
         $('#time').val(time);
         $('#date').val(date);
@@ -262,16 +274,15 @@
 
     function add() {
         $('#name_check').removeClass("has-error");
-
         $('#cname').val(null);
         $('#time').val(null);
         $('#date').val(null);
-        $('#semester').val(null);
-        $('#campus').val(null);
+        $('#semester').val(0);
+        $('#campus').val(0);
         $('#room').val(null);
         $('#price').val(null);
         $('#unit').val(null);
-        $('#tid').val(null);
+        $('#tid').val(0);
         $('#fee').val(null);
         $('#memo').text(null);
 

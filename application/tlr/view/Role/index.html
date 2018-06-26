@@ -84,9 +84,9 @@
             <tr>
                 <td class="text-center">编号</td>
                 <td class="text-center">名称</td>
-                <td class="text-center">父ID</td>
+                <!-- <td class="text-center">父ID</td> -->
                 <td class="text-center">描述</td>
-                <td class="text-center">状态</td>
+                <!-- <td class="text-center">状态</td> -->
                 <td class="text-center">操作</td>
             </tr>
             </thead>
@@ -94,10 +94,10 @@
             {volist id="item" name="roles"}
             <tr>
                 <td class="text-center">{$item->id}</td>
-                <td class="text-center">{$item->name}</td>
-                <td class="text-center">{$item->parent_id}</td>
+                <td class="text-center">
+                    <div style="cursor: pointer;" onclick="window.location.href = '{:url('role/setPermission'),'?id='.$item->id.'&name='.$item.name}'">{$item->name}</div>
+                </td>
                 <td class="text-center">{$item->description}</td>
-                <td class="text-center">{$item->status}</td>
                 <td class="text-center">
                     <a href="{:url('role/setPermission'),'?id='.$item->id.'&name='.$item.name}">
                         <button class="btn btn-xs btn-success" title="分配权限">
