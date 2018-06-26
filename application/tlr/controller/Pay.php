@@ -33,7 +33,7 @@ class Pay extends Controller
         }
         $page = (isset($_POST['page'])) ? $_POST['page'] : 1;
         $pay = new PayModel;
-        $pays = $pay->where('delflag', '0')->page($page, 10)->select();
+        $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where('p.delflag', '0')->page($page, 10)->select();
         $totalPage = ceil(db('pay')->where('delflag', '0')->count() / 10);
         echo json_encode(array("pays" => $pays, "totalPage" => $totalPage, "success" => true));
     }
