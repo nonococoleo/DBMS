@@ -128,29 +128,39 @@ class Course extends Controller
     public function upload()
     {
         $file = request()->file('file');
-//        echo $_FILES["file"]['name'].'<br>';
-//        echo $_FILES["file"]['type'].'<br>';
-//        echo $_FILES["file"]['size'].'<br>';
-//        echo $_FILES["file"]['tmp_name'].'<br>';
         if (empty($file)) {
             $this->error('请选择上传文件');
         }
-        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads', $_FILES["file"]['name'], false);
+        $replacename = session('uid') . '_' . time() . '_' . $_FILES["file"]['name'];
+        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
+//TODO 转码
+        foreach ($info as $key => $value) {
+//            echo mb_detect_encoding($key);
+//            echo mb_detect_encoding($value);
+//            echo '<br>';
+//            echo '<br>';
+//            echo '<br>';
+//            echo mb_detect_encoding($info);
 
-//        foreach ($info as $keys => $values) {
-//            echo $keys;
-//            echo '<br>';
-//            echo $values;
-//            echo '<br>';
-//            echo '<br>';
-//            echo '<br>';
-//            echo '<br>';
-//
-//        }
+            echo $key;
+            echo '<br>';
+            echo $value;
+            $value = eval('return ' . iconv('ascii', 'utf-8', var_export($value, true)) . ';');
 
-        echo $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\\' . $_FILES["file"]['name'];
+////            $value = mb_convert_encoding($value, "UTF-8", "GBK");
+//            iconv('GBK','UTF-8//IGNORE',$value);
+//            iconv('GBK','UTF-8//TRANSLIT//IGNORE',$value);
+            echo $value;
+            echo '<br>';
+            echo '<br>';
+            echo '<br>';
+            echo '------------------------<br>';
+        }
+//        print_r(iconv_get_encoding());//得到当前页面编码信息 
+
+
+        $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\\' . $replacename;
         $this->addFromFile($filename);
-
 
 //        if ($this->addFromFile($filename)) {
 //            $this->success('文件上传成功');
@@ -192,16 +202,6 @@ class Course extends Controller
         }
         fclose($file);
         unset($courses[$count - 2]);//去掉尾行记录
-
-        foreach ($courses as $key => $values) {
-            echo $key;
-            echo '<br>';
-            print_r($values);
-            echo '<br>';
-            echo '<br>';
-            echo '<br>';
-            echo '<br>';
-        }
 
 //批量添加
         $Course = new CourseModel();
