@@ -69,10 +69,18 @@
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>员工列表</h3>
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-6">
-            <h3 align="right">
-                <button class="btn btn-success" onclick="$('#myModal1').modal()">添加员工</button>
-            </h3>
+        <form method="get" id="ser" action="{:url('user/search')}">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="input-group" style="margin-top: 17px">
+                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入员工姓名"
+                           aria-describedby="basic-addon2" value="{$name}">
+                    <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
+                </div>
+            </div>
+        </form>
+        <div style="margin-top: 17px">
+            &nbsp;
+            <button class="btn btn-success" onclick="$('#myModal1').modal()">添加员工</button>
         </div>
     </div>
 
@@ -148,6 +156,10 @@
                         用户名:
                         <input type="text" class="form-control" name="uname" id="uname" placeholder="用户名">
                     </div>
+                    <div id="uname_check">
+                        姓名:
+                        <input type="text" class="form-control" name="name" id="name" placeholder="姓名">
+                    </div>
                     <div id="passwd_check">
                         密码:
                         <input type="password" class="form-control" name="passwd" id="passwd" placeholder="密码">
@@ -190,6 +202,12 @@
 
 </body>
 <script type="text/javascript">
+    function ser() {
+        if ($('#name').val())
+            $('#ser').submit();
+        else
+            window.location.href = "{:url('user/index')}";
+    }
     function check() {
         $('#uname_check').removeClass("has-error");
         $('#passwd_check').removeClass("has-error");

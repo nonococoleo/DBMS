@@ -37,10 +37,39 @@ class User extends Controller
 			}
 			$users[$key]['userRoles'] = $t;
 		}
-		$data = ["users" => $users, "page" => $page, "roles" => $roles];
+		$data = ["users" => $users, "page" => $page, "roles" => $roles, "name" => ''];
         $this->assign($data);
         return $this->fetch('index');
 	}
+
+	//搜索员工
+	public function search(Request $request)
+    {
+    	$rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限");
+            exit();
+        }
+        $name = $_GET['name'];
+		$User = new UserModel;
+		$users = $User->where('name', 'like', "%$name%")->paginate(10, false, ['type' => 'bootstrap']);
+		$page = $users->render();
+		$Role = new RoleModel;
+		$roles = $Role->select();
+		$UserRole = new UserRoleModel;
+		foreach ($users as $key => $user) {
+			$uid = $user['uid'];
+			$userRoles = $UserRole->where('user_id', $user['uid'])->select();
+			$t = array();
+			for($i = 0; $i < sizeof($userRoles); $i++) {
+				$t[$i] = $userRoles[$i]['role_id'];
+			}
+			$users[$key]['userRoles'] = $t;
+		}
+		$data = ["users" => $users, "page" => $page, "roles" => $roles, "name" => $name];
+        $this->assign($data);
+        return $this->fetch('index');
+    }
 
 	//添加用户
 	public function registerHandle(Request $reques)
@@ -53,6 +82,7 @@ class User extends Controller
         	$this->error('该用户名已被注册，请更换用户名重新添加');	
         $data = array(
             'uname' => $_POST['uname'],
+            'name' => $_POST['name'],
             'delflag' => 1,
             'passwd' => md5($_POST['passwd'])
         );
