@@ -38,6 +38,19 @@ class Pay extends Controller
         echo json_encode(array("pays" => $pays, "totalPage" => $totalPage, "success" => true));
     }
 
+    // 根据Id获取缴费信息
+    public function payById(Request $request)
+    {
+        // $rbacObj = new Rbac();
+        // if(!$rbacObj->can($request->path())) {
+        //     $this->error("没有权限", "Pay/index", null, 1);
+        //     exit();
+        // }
+        $Pay = new PayModel;
+        $pay = $Pay->where('pid', $_POST['pid'])->find();
+        echo json_encode(array("pay" => $pay, "success" => true));
+    }
+
     // 修改缴费信息
     public function update(Request $request)
     {

@@ -12,6 +12,7 @@
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
 </head>
@@ -100,7 +101,7 @@
             {volist id="ref" name="refund"}
             <tr>
                 <td class="text-center">{$ref->rid}</td>
-                <td class="text-center">{$ref->pid}</td>
+                <td class="text-center"><div style="cursor:pointer" onclick="payInfo({$ref->pid})">{$ref->pid}</div></td>
                 <td class="text-center">{$ref->semester}</td>
                 <td class="text-center">{$ref->fee}</td>
                 <td class="text-center">
@@ -210,11 +211,80 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+
+        <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">修改缴费信息</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                学号 * :
+                                <input type="number" disabled v-model="payDetailInShow.sid" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                学期:
+                                <input type="text" disabled v-model="payDetailInShow.semester" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                费用 *:
+                                <input type="number" disabled v-model="payDetailInShow.fee" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                费用明细:
+                                <input type="text" disabled v-model="payDetailInShow.detail" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                缴费方式:
+                                <select class="form-control" disabled v-model="payDetailInShow.method">
+                                    <option value="0">请选择...</option>
+                                    <option value="1">现金</option>
+                                    <option value="2">银行卡</option>
+                                    <option value="3">其他</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                发票:
+                                <input type="number" disabled v-model="payDetailInShow.iid" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                日期:
+                                <input type="date" disabled v-model="payDetailInShow.date" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                员工:
+                                <input type="number" disabled v-model="payDetailInShow.uid" class="form-control">
+                            </div>
+                        </div>
+                        <div>
+                            备注:
+                            <textarea disabled v-model="payDetailInShow.memo" class="form-control">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     </div>
 </div>
 </body>
 <!--业务逻辑-->
 <script>
+    var myModal2 = new Vue({
+        el: '#myModal2',
+        data: {
+            payDetailInShow: {}
+        },
+        methods: {
+        }
+    });
     function mod(url, pid, semester, fee, method, card, bank, person, date, state, uid, memo) {
         $('#pid').val(pid);
         $('#semester').val(semester);
@@ -272,6 +342,24 @@
     function sel() {
         let temp = $('#status').val();
         window.location.href = "{:url('refund/index')}?state=" + temp;
+    }
+
+    function payInfo(pid) {
+        $.ajax({
+            type: "POST",
+            url: "{:URL('tlr/pay/payById','','')}",
+            data: {"pid": pid},
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#myModal2').modal();
+                    Vue.set(myModal2, "payDetailInShow", data.pay);
+                } else {
+                    console.log("some troubles")
+                }
+            }
+        });
+        // body...
     }
 </script>
 </html>
