@@ -89,7 +89,6 @@
                 <td class="text-center">退费号</td>
                 <td class="text-center">缴费号</td>
                 <td class="text-center">学期</td>
-                <td class="text-center">学生</td>
                 <td class="text-center">费用</td>
                 <td class="text-center">退费方式</td>
                 <td class="text-center">日期</td>
@@ -103,7 +102,6 @@
                 <td class="text-center">{$ref->rid}</td>
                 <td class="text-center">{$ref->pid}</td>
                 <td class="text-center">{$ref->semester}</td>
-                <td class="text-center">{$ref->sid}</td>
                 <td class="text-center">{$ref->fee}</td>
                 <td class="text-center">
                     {switch name="$ref->method"}
@@ -123,7 +121,7 @@
                 </td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-success"
-                            onclick="mod('{:url(\'refund/mod\',[\'rid\'=>$ref.rid])}','{$ref.pid}','{$ref.semester}','{$ref.sid}','{$ref.fee}','{$ref.method}','{$ref.card}','{$ref.bank}','{$ref.person}','{$ref.date}','{$ref.state}','{$ref.uid}','{$ref.memo}')">
+                            onclick="mod('{:url(\'refund/mod\',[\'rid\'=>$ref.rid])}','{$ref.pid}','{$ref.semester}','{$ref.fee}','{$ref.method}','{$ref.card}','{$ref.bank}','{$ref.person}','{$ref.date}','{$ref.state}','{$ref.uid}','{$ref.memo}')">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button class="btn btn-xs btn-danger"
@@ -155,16 +153,8 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-6">
-                                    缴费号:
-                                    <input type="text" name="pid" id="pid" class="form-control">
-                                </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     学期:
                                     <input type="text" name="semester" id="semester" class="form-control">
-                                </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    学生:
-                                    <input type="text" name="sid" id="sid" class="form-control">
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     费用:
@@ -215,6 +205,7 @@
                             <button type="button" class="btn btn-primary" id="add" onclick="check()">退费处理</button>
                         </div>
                         <input type="hidden" name="uid" value="{:session('uid')}">
+                        <input type="hidden" name="pid" id="pid">
                     </form>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -224,10 +215,9 @@
 </body>
 <!--业务逻辑-->
 <script>
-    function mod(url, pid, semester, sid, fee, method, card, bank, person, date, state, uid, memo) {
+    function mod(url, pid, semester, fee, method, card, bank, person, date, state, uid, memo) {
         $('#pid').val(pid);
         $('#semester').val(semester);
-        $('#sid').val(sid);
         $('#fee').val(fee);
         $('#method').val(method);
         $('#card').val(card);
@@ -247,7 +237,6 @@
     function add() {
         $('#pid').val(null);
         $('#semester').val(null);
-        $('#sid').val(null);
         $('#fee').val(null);
         $('#method').val(null);
         $('#card').val(null);

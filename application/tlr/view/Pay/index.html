@@ -270,7 +270,6 @@
                             <input type="submit" class="btn btn-primary" value="提交"/>
                         </div>
                         <input type="hidden" name="pid" id="re-pid">
-                        <input type="hidden" name="sid" id="re-sid">
                         <input type="hidden" name="semester" id="re-semester">
                         <input type="hidden" name="date" value="{:date('Y-m-d')}">
                         <input type="hidden" name="uid" value="{:session('uid')}">
@@ -502,7 +501,6 @@
                 let tvm = this;
                 $('#re-pid').val(tvm.pays[index].pid);
                 $('#re-fee').val(tvm.pays[index].fee);
-                $('#re-sid').val(tvm.pays[index].sid);
                 $('#re-semester').val(tvm.pays[index].semester);
                 $('#myModal2').modal('show');
             },
