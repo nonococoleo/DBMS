@@ -102,7 +102,7 @@
             <tbody>
             <tr v-for="(student,index) in students">
                 <td class="text-center">{{student.sid}}</td>
-                <td class="text-center">{{student.sname}}</td>
+                <td class="text-center" @click="open(index)" style="cursor: pointer;">{{student.sname}}</td>
                 <td class="text-center">{{(student.sex==1)?'男':(student.sex==2)?'女':''}}</td>
                 <td class="text-center">{{(student.grade>0)?student.grade:''}}</td>
                 <td class="text-center">{{student.school}}</td>

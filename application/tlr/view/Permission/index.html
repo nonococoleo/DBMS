@@ -103,7 +103,7 @@
                             <td class="text-center">名称</td>
                             <td class="text-center">路径</td>
                             <td class="text-center">描述</td>
-                            <td class="text-center">状态</td>
+                            <!-- <td class="text-center">状态</td> -->
                             <td class="text-center">创建时间</td>
                             <td class="text-center">权限</td>
                         </tr>
@@ -115,7 +115,6 @@
                             <td class="text-center">{$item->name}</td>
                             <td class="text-center">{$item->path}</td>
                             <td class="text-center">{$item->description}</td>
-                            <td class="text-center">{$item->status}</td>
                             <td class="text-center">{$item->create_time}</td>
                             <td class="text-center">
                                 <a href="{:url('permission/deletePermission'),'?id='.$item->id}">
