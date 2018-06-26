@@ -24,6 +24,7 @@
             $('#login').hide();
         else
             $('#logout').hide();
+        $('#sel_semester').val("{:session('cur_semester')}");
     };
 </script>
 <body>
@@ -75,6 +76,11 @@
         </div>
         <form method="get" id="ser" action="{:url('course/search')}">
             <div class="col-sm-4 col-md-4 col-lg-4">
+                <select class="form-control" name="seme" id="sel_semester">
+                    {volist id="sem" name="semester"}
+                    <option value="{$sem->id}">{$sem->name}</option>
+                    {/volist}
+                </select>
                 <div class="input-group" style="margin-top: 6px">
                     <input type="text" id="name" name="name" class="form-control" placeholder="请输入课程名"
                            aria-describedby="basic-addon2" value="{$name}">
@@ -290,10 +296,11 @@
     }
 
     function ser() {
-        if ($('#name').val())
-            $('#ser').submit();
-        else
+        let seme = $('#sel_semester').val();
+        if (seme == 0 && !$('#name').val())
             window.location.href = "{:url('course/index')}";
+        else
+            $('#ser').submit();
     }
 
     function check() {
@@ -308,7 +315,6 @@
         }
 
     }
-
 
 </script>
 </html>

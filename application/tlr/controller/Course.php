@@ -32,8 +32,8 @@ class Course extends Controller
     {
         $Course = new CourseModel();
         $name = $request->param('name');
-        $semester = $request->param('semester');
-        $query = ["name" => $name, "semester" => $semester];
+        $semester = $request->param('seme');
+        $query = ["name" => $name, "seme" => $semester];
         $course = $Course->alias("c")->where("c.delflag", "=", 0);
         if ($name)
             $course = $course->where('cname', 'like', "%$name%");
@@ -41,9 +41,13 @@ class Course extends Controller
             $course = $course->where('semester', '=', $semester);
         $course = $course->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         if ($course->count() > 0) {
+            $Semester = new SemesterModel();
+            $semester = $Semester->select();
+            $Teacher = new TeacherModel();
+            $teacher = $Teacher->where("delflag", "=", "0")->select();
             $page = $course->render();
 
-            $data = array_merge(["course" => $course, "page" => $page], $query);
+            $data = array_merge(["course" => $course, "page" => $page, "semester" => $semester, "teacher" => $teacher], $query);
             $this->assign($data);
 
             $htmls = $this->fetch("index");
