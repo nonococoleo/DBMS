@@ -64,6 +64,19 @@ class User extends Controller
 
     }
 
+    //修改用户姓名
+	public function changeName(Request $reques)
+    {
+        $User = new UserModel();
+        foreach ($_POST as $key => $value)
+            if ($value == "")
+                $_POST[$key] = null;
+        $User->save(['name'  => $_POST['name']],['uid' => $_POST['uid']]);
+        $Log = new LogModel();
+        $Log->save(["uid" => session('uid'), "action" => $User->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        echo json_encode(array('success'=>true));
+    }
+
     //删除用户
 	public function lockOne(Request $reques)
     {
