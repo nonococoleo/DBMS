@@ -26,6 +26,7 @@
         else
             $('#logout').hide();
         $('#status').val("{$state}");
+        $('#sel_semester').val("{$seme}");
     };
 </script>
 <body>
@@ -75,12 +76,21 @@
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>退费信息</h3>
         </div>
-        <select id="status" onchange="sel()">
-            <option value="0">全部</option>
-            <option value="1">申请</option>
-            <option value="2">处理</option>
-            <option value="3">成功</option>
-        </select>
+        <form method="get" id="ser" action="{:url('refund/index')}">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <select id="status" onchange="ser()">
+                    <option value="0">全部</option>
+                    <option value="1">申请</option>
+                    <option value="2">处理</option>
+                    <option value="3">成功</option>
+                </select>
+                <select class="form-control" name="seme" id="sel_semester" onchange="ser()">
+                    {volist id="sem" name="semester"}
+                    <option value="{$sem->id}">{$sem->name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </form>
     </div>
     <!--列表-->
     <div>
@@ -102,7 +112,7 @@
             <tr>
                 <td class="text-center">{$ref->rid}</td>
                 <td class="text-center"><div style="cursor:pointer" onclick="payInfo({$ref->pid})">{$ref->pid}</div></td>
-                <td class="text-center">{$ref->semester}</td>
+                <td class="text-center">{$semester["$ref->semester"]->name}</td>
                 <td class="text-center">{$ref->fee}</td>
                 <td class="text-center">
                     {switch name="$ref->method"}
@@ -330,11 +340,11 @@
     }
 
     function ser() {
-        if ($('#name').val())
-            $('#ser').submit();
-        else
-            window.location.href = "{:url('refund/index')}";
+        let seme = $('#sel_semester').val();
+        let temp = $('#status').val();
+        window.location.href = "{:url('refund/index')}?state=" + temp + "&seme=" + seme;
     }
+
     function check() {
         $('#modal-form').submit();
     }
