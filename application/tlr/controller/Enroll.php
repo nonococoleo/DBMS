@@ -34,7 +34,7 @@ class Enroll extends Controller
 
     public function choose(Request $request)
     {
-        $semester = $request->param('semester');
+        $semester = $request->param('seme');
         if (!$semester) {
             $this->error("确定学期", "Enroll/index", null, 1);
             return null;
@@ -163,6 +163,16 @@ class Enroll extends Controller
 
     public function attend(Request $request)
     {
+        $eid = input('post.eid/a');
+        if ($eid) {
+            $Enroll = new EnrollModel();
+            $Log = new LogModel();
+            foreach ($eid as $key => $value) {
+                $Enroll->save(["attend" => $value], ["eid" => $key]);
+                $Log->save(["uid" => session('uid'), "action" => $Enroll->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+            }
+            $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
+        }
         return null;
     }
 }
