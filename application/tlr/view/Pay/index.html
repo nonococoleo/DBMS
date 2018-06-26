@@ -93,7 +93,7 @@
             <thead>
             <tr>
                 <td class="text-center">编号</td>
-                <td class="text-center">学号</td>
+                <td class="text-center">姓名</td>
                 <td class="text-center">学期</td>
                 <td class="text-center">费用</td>
                 <td class="text-center">发票</td>
@@ -324,7 +324,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -693,6 +692,7 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.success) {
+                            tvm.totalPage = 1;
                             tvm.pays = data.pays;
                         } else {
                             // tvm.pays = [];

@@ -185,7 +185,7 @@ class Pay extends Controller
             exit();
         }
         $pay = new PayModel;
-        if ($pays = $pay->where('sid','=',"$_POST[sid]")->select()) {
+        if ($pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where('p.delflag', '0')->where('p.sid','=',"$_POST[sid]")->select()) {
             echo json_encode(array("pays" => $pays, "success" => true));
         } else {
             echo json_encode(array("msg" => "没有查询到相关记录", "success" => false));
