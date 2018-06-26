@@ -36,6 +36,13 @@ class Refund extends Controller
         }
     }
 
+    // 根据ID获取退费
+    public function refById(Request $request)
+    {
+        $Refund = new RefundModel();
+        echo json_encode(array('ref'=>$Refund->where('rid', $_POST['rid'])->find(),'success'=>true));
+    }
+
 //    public function search(Request $request)
 //    {
 //        $Refund = new RefundModel();
