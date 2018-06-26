@@ -31,7 +31,7 @@ class Refund extends Controller
             $htmls = $this->fetch("index");
             return $htmls;
         } else {
-            $this->error("此人未开发票", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("查无记录", $_SERVER["HTTP_REFERER"], null, 1);
             return null;
         }
     }
