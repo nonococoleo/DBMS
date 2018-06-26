@@ -188,7 +188,7 @@ class Pay extends Controller
         if ($pays = $pay->where('sid','=',"$_POST[sid]")->select()) {
             echo json_encode(array("pays" => $pays, "success" => true));
         } else {
-            echo json_encode(array("msg" => "查无此人", "success" => false));
+            echo json_encode(array("msg" => "没有查询到相关记录", "success" => false));
         }
     }
 }
