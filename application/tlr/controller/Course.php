@@ -127,25 +127,46 @@ class Course extends Controller
 
     public function upload()
     {
-        $file = request()->file('files');
+        $file = request()->file('file');
+//        echo $_FILES["file"]['name'].'<br>';
+//        echo $_FILES["file"]['type'].'<br>';
+//        echo $_FILES["file"]['size'].'<br>';
+//        echo $_FILES["file"]['tmp_name'].'<br>';
         if (empty($file)) {
             $this->error('请选择上传文件');
         }
-        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
-        if ($info) {
-            $this->success('文件上传成功');
-        } else {
-            $this->error($file->getError());
-        }
+        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads', $_FILES["file"]['name'], false);
+
+//        foreach ($info as $keys => $values) {
+//            echo $keys;
+//            echo '<br>';
+//            echo $values;
+//            echo '<br>';
+//            echo '<br>';
+//            echo '<br>';
+//            echo '<br>';
+//
+//        }
+
+        echo $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\\' . $_FILES["file"]['name'];
+        $this->addFromFile($filename);
+
+
+//        if ($this->addFromFile($filename)) {
+//            $this->success('文件上传成功');
+//        } else {
+//            $this->error($file->getError());
+//        }
     }
 
-    public function addFromFile()
+    public function addFromFile($filename = '')
     {
-        $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\20180626\test.csv';
         $file = fopen($filename, 'r');
         //读取内容
         $count = 0;
         while (!feof($file)) {
+
+
             $line = fgetcsv($file);
             $cname = 2;
 
@@ -165,14 +186,22 @@ class Course extends Controller
 
             $count++;
             if ($count == 1) {
-                continue;
+                continue;//去掉首行记录
             }
-//            TODO 去掉最后一条记录
             $courses[$count - 2] = $data;
         }
         fclose($file);
+        unset($courses[$count - 2]);//去掉尾行记录
 
-        unset($courses[$count - 2]);
+        foreach ($courses as $key => $values) {
+            echo $key;
+            echo '<br>';
+            print_r($values);
+            echo '<br>';
+            echo '<br>';
+            echo '<br>';
+            echo '<br>';
+        }
 
 //批量添加
         $Course = new CourseModel();
