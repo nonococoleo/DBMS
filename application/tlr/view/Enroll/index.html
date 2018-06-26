@@ -38,7 +38,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="{:url('index/index')}">同路人教育</a></li>
-                <li class="active"><a href="#">报名管理<span class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="{:url('enroll/index')}">报名管理<span class="sr-only">(current)</span></a></li>
                 <li><a href="{:url('student/index')}">学生管理</a></li>
                 <li><a href="{:url('teacher/index')}">教师管理</a></li>
                 <li><a href="{:url('course/index')}">课程管理</a></li>
@@ -82,17 +82,18 @@
                     <option value="{$sem->id}">{$sem->name}</option>
                     {/volist}
                 </select>
-                <select class="form-control" name="course" id="course">
+                <select class="form-control" id="course">
                     {volist id="cou" name="course"}
                     <option value="{$sem->id}">{$cou->cname}</option>
                     {/volist}
                 </select>
                 <div class="input-group" style="margin-top: 17px">
-                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入学生姓名"
+                    <input type="text" id="name" class="form-control" placeholder="请输入学生姓名"
                            aria-describedby="basic-addon2" value="">
                     <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
                 </div>
             </div>
+            <input type="hidden" name="sid" id="ser_sid" value="{$sid}">
         </form>
         <div style="margin-top: 17px">
             <button class="btn btn-success" onclick="enroll()">报名</button>
@@ -301,8 +302,9 @@
         methods: {
             search(student) {
                 $('#myModal2').modal('hide');
-                alert("学生id:"+student.sid);
-                // choose_class(student.sid, student.sname, student.balance);
+                $('#ser_sid').val(student.sid);
+                $('#ser').submit();
+                // window.location.href = "{:url('enroll/index')}?sid=" + student.sid;
             }
         }
     });
@@ -317,8 +319,8 @@
     });
 
     function sel() {
-        let temp = $('#sel_semester').val();
-        window.location.href = "{:url('enroll/index')}?seme=" + temp;
+        $('#ser_sid').val();
+        $('#ser').submit();
     }
 
     function mod(url, sid, cid, attend, pid, memo) {
@@ -338,8 +340,6 @@
     }
 
     function ser() {
-        if (!$('#name').val())
-            window.location.href = "{:url('enroll/index')}";
         let name = $('#name').val();
         $.ajax({
             type: "POST",

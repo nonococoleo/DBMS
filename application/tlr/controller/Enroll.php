@@ -15,6 +15,7 @@ class Enroll extends Controller
     public function index(Request $request)
     {
         $seme = $request->param('seme');
+        $sid = $request->param('sid');
         if (!$seme)
             $seme = session('cur_semester');
 
@@ -24,9 +25,13 @@ class Enroll extends Controller
         $course = $Course->where("semester", "=", $seme)->select();
 
         $Enroll = new EnrollModel();
-        $enroll = $Enroll->alias("e")->join("course c", "c.cid=e.cid")->where("e.delflag", "=", 0)->join("student s", "s.sid=e.sid")->where("c.semester", "=", $seme)->paginate(10, false, ['type' => 'bootstrap']);
+        $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->join("course c", "c.cid=e.cid")->join("student s", "s.sid=e.sid")->where("c.semester", "=", $seme);
+        if ($sid)
+            $enroll = $enroll->where("e.sid", "=", $sid);
+
+        $enroll = $enroll->paginate(10, false, ['type' => 'bootstrap']);
         $page = $enroll->render();
-        $data = ["semester" => $semester, "enroll" => $enroll, "page" => $page, "seme" => $seme, "course" => $course];
+        $data = ["semester" => $semester, "enroll" => $enroll, "page" => $page, "seme" => $seme, "course" => $course, "sid" => $sid];
         $this->assign($data);
         $htmls = $this->fetch('index');
         return $htmls;
@@ -34,15 +39,17 @@ class Enroll extends Controller
 
     public function choose(Request $request)
     {
-        $semester = $request->param('seme');
-        if (!$semester) {
+        $seme = $request->param('seme');
+        if (!$seme) {
             $this->error("确定学期", "Enroll/index", null, 1);
             return null;
         } else {
             $Class = new CourseModel();
-            $seme = $Class->distinct("true")->column("semester");
-            $class = $Class->where("semester", "=", $semester)->distinct("true")->column("memo");
-            $data = ["seme" => $seme, "classes" => $class, "semester" => $semester];
+            $Semester = new SemesterModel();
+            $semester = $Semester->where("id", "=", $seme)->select();
+//            $semester = $Semester->select();
+            $class = $Class->where("semester", "=", $seme)->distinct("true")->column("memo");
+            $data = ["seme" => $semester[0]->name, "classes" => $class, "semester" => $seme];
             $this->assign($data);
             $htmls = $this->fetch('choose');
             return $htmls;
@@ -175,4 +182,6 @@ class Enroll extends Controller
         }
         return null;
     }
+
+
 }

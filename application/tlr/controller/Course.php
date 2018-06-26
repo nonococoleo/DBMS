@@ -16,14 +16,14 @@ class Course extends Controller
     public function index(Request $request)
     {
         $Course = new CourseModel();
-        $course = $Course->alias("c")->where("c.delflag", "=", 0)->where("semester", "=", session('cur_semester'))->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap']);
+        $course = $Course->alias("c")->where("c.delflag", "=", 0)->where("semester", "=", session('cur_semester'))->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->order("campus")->paginate(10, false, ['type' => 'bootstrap']);
         $Teacher = new TeacherModel();
         $teacher = $Teacher->where("delflag", "=", "0")->select();
         $Semester = new SemesterModel();
         $semester = $Semester->select();
         $page = $course->render();
 
-        $data = ["course" => $course, "page" => $page, "name" => null, "teacher" => $teacher, "semester" => $semester];
+        $data = ["course" => $course, "page" => $page, "name" => null, "teacher" => $teacher, "semester" => $semester, "seme" => session('cur_semester')];
         $this->assign($data);
         $htmls = $this->fetch('index');
         return $htmls;
