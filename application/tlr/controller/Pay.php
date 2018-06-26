@@ -172,7 +172,7 @@ class Pay extends Controller
             exit();
         }
         $pay = new PayModel;
-        if ($pays = $pay->where('sid','like',"%$_POST[sid]%")->select()) {
+        if ($pays = $pay->where('sid','=',"$_POST[sid]")->select()) {
             echo json_encode(array("pays" => $pays, "success" => true));
         } else {
             echo json_encode(array("msg" => "查无此人", "success" => false));
