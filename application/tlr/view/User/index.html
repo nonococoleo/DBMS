@@ -106,7 +106,7 @@
                     <td class="text-center">
                         <div id="name{$item->uid}" style="display: inline;">{$item->name}
                         </div>&nbsp;&nbsp;
-                        <span class="glyphicon glyphicon-pencil" style="cursor:pointer" onclick="changeName({$item->uid},{$item->name})"></span>
+                        <span class="glyphicon glyphicon-pencil" style="cursor:pointer" onclick="changeName({$item->uid},'{$item->name}')"></span>
                     </td>
                     <td class="text-center">
                         {volist id="role" name="roles"}
