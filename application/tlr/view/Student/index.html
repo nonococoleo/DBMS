@@ -102,7 +102,7 @@
             <tbody>
             <tr v-for="(student,index) in students">
                 <td class="text-center">{{student.sid}}</td>
-                <td class="text-center">{{student.sname}}</td>
+                <td class="text-center" @click="open(index)" style="cursor: pointer;">{{student.sname}}</td>
                 <td class="text-center">{{(student.sex==1)?'男':(student.sex==2)?'女':''}}</td>
                 <td class="text-center">{{(student.grade>0)?student.grade:''}}</td>
                 <td class="text-center">{{student.school}}</td>
@@ -272,7 +272,7 @@
             },
             deleteStudent(index) {
                 let tvm = this;
-                var msg = '您确定要删除' + tvm.students[index].sname + '的信息吗？ 删除后不可恢复！';
+                var msg = '您确定要删除' + tvm.students[index].sname + '的信息吗?';
                 if (confirm(msg)==true){ 
                     $.ajax({
                         type: "POST",
