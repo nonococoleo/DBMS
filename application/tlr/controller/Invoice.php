@@ -47,6 +47,13 @@ class Invoice extends Controller
         }
     }
 
+    // 根据ID获取发票
+    public function invById(Request $request)
+    {
+        $Invoice = new InvoiceModel();
+        echo json_encode(array('inv'=>$Invoice->where('iid', $_POST['iid'])->find(),'success'=>true));
+    }
+
     public function add(Request $request)
     {
         if (session('uid')) {

@@ -79,7 +79,7 @@
                 <input type="text" class="form-control" placeholder="请输入学生学号" aria-describedby="basic-addon2"
                        v-model="searchSname">
                 <span class="input-group-addon" style="cursor:pointer" id="basic-addon2"
-                      @click="search1(searchSname)">搜索</span>
+                      @click="search2(searchSname)">搜索</span>
             </div>
         </div>
         <!-- <div style="margin-top: 6px">
@@ -108,8 +108,8 @@
                 <td class="text-center">{{pay.sid}}</td>
                 <td class="text-center">{{pay.semester}}</td>
                 <td class="text-center">{{pay.fee}}</td>
-                <td class="text-center">{{pay.iid}}</td>
-                <td class="text-center">{{pay.rid}}</td>
+                <td class="text-center"><div style="cursor: pointer;" @click="invInfo(pay.iid)">{{pay.iid}}</td>
+                <td class="text-center"><div style="cursor: pointer;" @click="refInfo(pay.rid)">{{pay.rid}}</td>
                 <td class="text-center">{{pay.date}}</td>
                 <td class="text-center">
                     <!--TODO 根据情况显示-->
@@ -282,16 +282,13 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" style="display: inline;">添加账单</h4>
+                        <h4 class="modal-title" style="display: inline;">搜索结果</h4>
                         <button type="button" class="close" style="display: inline;" data-dismiss="modal"
                                 aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
                     </div>
                         <div class="modal-body">
-                            <div class="input-group" style="margin-top: 6px">
-                                <input type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2" v-model="searchSname">
-                                <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" @click="search2(searchSname)">搜索</span>
-                            </div>
+                            
                             <div v-if="students.length>0">
                                 <table class="table table-striped table-hover table-condensed">
                                     <thead>
@@ -315,7 +312,7 @@
                                         <td class="text-center">{{student.school}}</td>
                                         <td class="text-center">{{student.balance}}</td>
                                         <td class="text-center">
-                                            <button class="btn btn-xs btn-success" @click="newPay(student)">添加账单</button>
+                                            <button class="btn btn-xs btn-success" @click="search1(student.sid)">缴费记录</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -376,6 +373,125 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+
+        <div class="modal fade" tabindex="-1" id="myModal5" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;" id="modal-title"></h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form action=" " method="POST" id="modal-form">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    状态:
+                                    <select disabled  class="form-control" name="state" v-model="invDetailInShow.state">
+                                        <option value="1">申请</option>
+                                        <option value="2">处理</option>
+                                        <option value="3">成功</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    金额:
+                                    <input disabled  type="text" name="fee" v-model="invDetailInShow.fee" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    抬头:
+                                    <input disabled  type="text" name="title" v-model="invDetailInShow.title" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    税号:
+                                    <input disabled  type="text" name="number" v-model="invDetailInShow.number" class="form-control">
+                                </div>
+                            </div>
+                            <div>
+                                备注:
+                                <textarea disabled  name="memo" v-model="invDetailInShow.memo" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </div>
+                        <input type="hidden" name="pid" id="pid">
+                        <input type="hidden" name="date" value="{:date('Y-m-d')}">
+                        <input type="hidden" name="uid" value="{:session('uid')}">
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <div class="modal fade" tabindex="-1" id="myModal6" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;" id="modal-title"></h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form action=" " method="POST" id="modal-form">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    学期:
+                                    <input disabled  type="text" name="semester" v-model="refDetailInShow.semester" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    费用:
+                                    <input disabled  type="text" name="fee" v-model="refDetailInShow.fee" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    退费方式:
+                                    <select disabled  class="form-control" name="method" v-model="refDetailInShow.method">
+                                        <option value="0">请选择...</option>
+                                        <option value="1">银行卡</option>
+                                        <option value="2">其他</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    银行卡号:
+                                    <input disabled  type="text" name="card" v-model="refDetailInShow.card" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    开户行:
+                                    <input disabled  type="text" name="bank" v-model="refDetailInShow.bank" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    持卡人:
+                                    <input disabled  type="text" name="person" v-model="refDetailInShow.person" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    日期:
+                                    <input disabled  type="date" name="date" v-model="refDetailInShow.date" class="form-control">
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                    状态:
+                                    <select disabled  class="form-control" name="state" v-model="refDetailInShow.state">
+                                        <option value="0">请选择...</option>
+                                        <option value="1">申请</option>
+                                        <option value="2">处理</option>
+                                        <option value="3">成功</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                备注:
+                                <textarea disabled name="memo" id="memo" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </div>
+                        <input type="hidden" name="uid" value="{:session('uid')}">
+                        <input type="hidden" name="pid" id="pid">
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
     </div>
 </div>
 </body>
@@ -392,11 +508,45 @@
             searchSid: '',
             searchSname: '',
             students: [],
+            invDetailInShow: {},
+            refDetailInShow: {}
         },
         mounted() {
             this.getPays(1)
         },
         methods: {
+            invInfo(iid) {
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/invoice/invById','','')}",
+                    data: {"iid": iid},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            $('#myModal5').modal();
+                            Vue.set(app, "invDetailInShow", data.inv);
+                        } else {
+                            console.log("some troubles")
+                        }
+                    }
+                });
+            },
+            refInfo(rid) {
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/refund/refById','','')}",
+                    data: {"rid": rid},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            $('#myModal6').modal();
+                            Vue.set(app, "refDetailInShow", data.ref);
+                        } else {
+                            console.log("some troubles")
+                        }
+                    }
+                });
+            },
             getPays(page) {
                 let tvm = this;
                 $.ajax({
@@ -530,7 +680,26 @@
                     }
                 });
             },
-            search1(searchSname) {
+            search1(searchSid) {
+                let tvm = this;
+                $('#myModal4').modal('hide');
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/pay/search','','')}",
+                    data: {sid: searchSid},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            tvm.pays = data.pays;
+                        } else {
+                            // tvm.pays = [];
+                            alert(data.msg);
+                        }
+                    }
+                });
+                
+            },
+            search2(searchSname) {
                 if(!searchSname)
                     window.location.reload();
                 let tvm = this;
@@ -541,45 +710,7 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.success) {
-                            tvm.totalPage = 1
-                            // $('#myModal2').modal();
-                            // Vue.set(app, "students", data.students);
-                            tvm.pays = [];
-                            for(let i=0; i<data.students.length; i++) {
-                                $.ajax({
-                                    type: "POST",
-                                    url: "{:URL('tlr/pay/search','','')}",
-                                    data: {sid: data.students[i].sid},
-                                    dataType: "json",
-                                    success: function (data) {
-                                        if (data.success) {
-                                            for(let j=0; j<data.pays.length; j++)
-                                                tvm.pays.push(data.pays[j]);
-                                            
-                                        } else {
-                                            // alert(data.msg)
-                                        }
-                                    }
-                                });
-                                
-                            }
-                        } else {
-                            alert(data.msg)
-                        }
-                    }
-                });
-                
-            },
-            search2(searchSname) {
-                let tvm = this;
-                $.ajax({
-                    type: "POST",
-                    url: "{:URL('tlr/student/search','','')}",
-                    data: {sname: searchSname},
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.success) {
-                            // $('#myModal2').modal();
+                            $('#myModal4').modal();
                             Vue.set(app, "students", data.students);
                         } else {
                             alert(data.msg)
