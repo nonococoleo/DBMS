@@ -6,6 +6,7 @@ use app\tlr\model\CourseModel;
 use app\tlr\model\EnrollModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
+use app\tlr\model\SemesterModel;
 use think\Controller;
 use think\Request;
 
@@ -13,18 +14,19 @@ class Enroll extends Controller
 {
     public function index(Request $request)
     {
-        $Class = new CourseModel();
-        $seme = $Class->distinct("true")->column("semester");
-        $semester = $request->param('semester');
-        $name = $request->param('name');
+        $seme = $request->param('seme');
+        if (!$seme)
+            $seme = session('cur_semester');
+
+        $Semester = new SemesterModel();
+        $semester = $Semester->select();
+        $Course = new CourseModel();
+        $course = $Course->where("semester", "=", $seme)->select();
+
         $Enroll = new EnrollModel();
-        if ($name)
-            $Enroll = $Enroll->where("sid", "=", $name);
-//        if($semester)
-//            $Enroll=$Enroll->where("semester","=",$semester);
-        $enroll = $Enroll->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
+        $enroll = $Enroll->alias("e")->join("course c", "c.cid=e.cid")->where("e.delflag", "=", 0)->join("student s", "s.sid=e.sid")->where("c.semester", "=", $seme)->paginate(10, false, ['type' => 'bootstrap']);
         $page = $enroll->render();
-        $data = ["seme" => $seme, "enroll" => $enroll, "page" => $page, "semester" => null];
+        $data = ["semester" => $semester, "enroll" => $enroll, "page" => $page, "seme" => $seme, "course" => $course];
         $this->assign($data);
         $htmls = $this->fetch('index');
         return $htmls;
@@ -137,7 +139,30 @@ class Enroll extends Controller
             $this->assign($data);
             $htmls = $this->fetch('success');
             return $htmls;
+        } else {
+            $this->error("没有信息", $_SERVER["HTTP_REFERER"], null, 1);
         }
+        return null;
+    }
+
+    public function course(Request $request)
+    {
+        $cid = $request->param('cid');
+        if ($cid) {
+            $Enroll = new EnrollModel();
+            $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->where("e.cid", "=", $cid)->join("course c", "c.cid=e.cid")->join("student s", "s.sid=e.sid")->select();
+            $data = ["enroll" => $enroll];
+            $this->assign($data);
+            $htmls = $this->fetch('course');
+            return $htmls;
+        } else {
+            $this->error("没有信息", url("enroll/index"), null, 1);
+        }
+        return null;
+    }
+
+    public function attend(Request $request)
+    {
         return null;
     }
 }

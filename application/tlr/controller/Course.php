@@ -9,6 +9,8 @@ use app\tlr\model\TeacherModel;
 use think\Controller;
 use think\Request;
 
+import("Org.Util.PHPExcel.IOFactory", '', '.php');
+
 class Course extends Controller
 {
     public function index(Request $request)
@@ -32,8 +34,8 @@ class Course extends Controller
     {
         $Course = new CourseModel();
         $name = $request->param('name');
-        $semester = $request->param('semester');
-        $query = ["name" => $name, "semester" => $semester];
+        $semester = $request->param('seme');
+        $query = ["name" => $name, "seme" => $semester];
         $course = $Course->alias("c")->where("c.delflag", "=", 0);
         if ($name)
             $course = $course->where('cname', 'like', "%$name%");
@@ -41,9 +43,13 @@ class Course extends Controller
             $course = $course->where('semester', '=', $semester);
         $course = $course->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         if ($course->count() > 0) {
+            $Semester = new SemesterModel();
+            $semester = $Semester->select();
+            $Teacher = new TeacherModel();
+            $teacher = $Teacher->where("delflag", "=", "0")->select();
             $page = $course->render();
 
-            $data = array_merge(["course" => $course, "page" => $page], $query);
+            $data = array_merge(["course" => $course, "page" => $page, "semester" => $semester, "teacher" => $teacher], $query);
             $this->assign($data);
 
             $htmls = $this->fetch("index");
@@ -114,7 +120,66 @@ class Course extends Controller
         if ($course = $Course->where('semester', '=', "$_POST[seme]")->where('memo', '=', "$_POST[memo]")->select()) {
             echo json_encode(array("course" => $course, "success" => true));
         } else {
-            echo json_encode(array("msg" => "查无此人", "success" => false));
+            echo json_encode(array("msg" => "无此课程", "success" => false));
         }
+    }
+
+
+    public function upload()
+    {
+        $file = request()->file('files');
+        if (empty($file)) {
+            $this->error('请选择上传文件');
+        }
+        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
+        if ($info) {
+            $this->success('文件上传成功');
+        } else {
+            $this->error($file->getError());
+        }
+    }
+
+    public function addFromFile()
+    {
+        $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\20180626\test.csv';
+        $file = fopen($filename, 'r');
+        //读取内容
+        $count = 0;
+        while (!feof($file)) {
+            $line = fgetcsv($file);
+            $cname = 2;
+
+            $data['cid'] = null;
+            $data['delflag'] = 0;
+            $data['cname'] = $line[$cname++];
+            $data['time'] = $line[$cname++];
+            $data['date'] = $line[$cname++];
+            $data['semester'] = (int)$line[$cname++];
+            $data['campus'] = (int)$line[$cname++];
+            $data['room'] = $line[$cname++];
+            $data['price'] = (float)$line[$cname++];
+            $data['unit'] = (int)$line[$cname++];
+            $data['tid'] = (int)$line[$cname++];
+            $data['fee'] = (float)$line[$cname++];
+            $data['memo'] = $line[$cname];
+
+            $count++;
+            if ($count == 1) {
+                continue;
+            }
+//            TODO 去掉最后一条记录
+            $courses[$count - 2] = $data;
+        }
+        fclose($file);
+
+        unset($courses[$count - 2]);
+
+//批量添加
+        $Course = new CourseModel();
+        $Log = new LogModel();
+        $Course->saveAll($courses);
+        $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("添加成功", "Course/index", null, 1);
+
     }
 }
