@@ -2,6 +2,8 @@
 
 namespace app\tlr\controller;
 
+use app\tlr\model\CourseModel;
+use app\tlr\model\SemesterModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
@@ -15,17 +17,30 @@ class Refund extends Controller
     {
         $Refund = new RefundModel();
         $state = $request->param('state');
-        if ($state) {
+        $seme = $request->param('seme');
+        $Semester = new SemesterModel();
+        $semester = $Semester->select();
+        if ($state and $seme) {
+            $query = ["state" => $state, "seme" => $seme];
+            $refund = $Refund->where("delflag", "=", 0)->where("state", "=", "$state")->where("semester", "=", $seme)->paginate(10, false, ['type' => 'bootstrap']);
+        }
+        if($state and !$seme){
             $query = ["state" => $state];
             $refund = $Refund->where("delflag", "=", 0)->where("state", "=", "$state")->paginate(10, false, ['type' => 'bootstrap']);
-        } else {
-            $query = ["state" => 0];
+        }
+        if(!$state and $seme){
+            $query = ["seme" => $seme];
+            $refund = $Refund->where("delflag", "=", 0)->where("semester", "=", $seme)->paginate(10, false, ['type' => 'bootstrap']);
+        }
+        if(!$state and !$seme) {
+            $query = ["state" => 0, "seme" => 0];
             $refund = $Refund->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
         }
+
         if ($refund->count() > 0) {
             $page = $refund->render();
 
-            $data = array_merge(["refund" => $refund, "page" => $page], $query);
+            $data = array_merge(["refund" => $refund, "page" => $page,  "semester" => $semester, "state" => $state, "seme" => $seme], $query);
             $this->assign($data);
 
             $htmls = $this->fetch("index");
@@ -42,6 +57,7 @@ class Refund extends Controller
         $Refund = new RefundModel();
         echo json_encode(array('ref'=>$Refund->where('rid', $_POST['rid'])->find(),'success'=>true));
     }
+
 
 //    public function search(Request $request)
 //    {
