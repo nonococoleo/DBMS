@@ -158,7 +158,9 @@ class Enroll extends Controller
         if ($cid) {
             $Enroll = new EnrollModel();
             $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->where("e.cid", "=", $cid)->join("course c", "c.cid=e.cid")->join("student s", "s.sid=e.sid")->select();
-            $data = ["enroll" => $enroll];
+            $Course = new CourseModel();
+            $course = $Course->alias("c")->join("semester s", "s.id=c.semester")->join("teacher t", "t.tid=c.tid")->where("cid", "=", $cid)->select();
+            $data = ["enroll" => $enroll, "course" => $course[0]];
             $this->assign($data);
             $htmls = $this->fetch('course');
             return $htmls;

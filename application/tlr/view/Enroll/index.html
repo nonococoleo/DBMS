@@ -84,7 +84,7 @@
                 </select>
                 <select class="form-control" id="course">
                     {volist id="cou" name="course"}
-                    <option value="{$sem->id}">{$cou->cname}</option>
+                    <option value="{$cou->cid}">{$cou->cname}</option>
                     {/volist}
                 </select>
                 <div class="input-group" style="margin-top: 17px">
@@ -120,7 +120,9 @@
                 <td class="text-center">{$en->sname}</td>
                 <td class="text-center">{$en->cname}</td>
                 <td class="text-center">{$en->attend}</td>
-                <td class="text-center"><div style="cursor:pointer" onclick="payInfo({$en->pid})">{$en->pid}</div></td>
+                <td class="text-center">
+                    <div style="cursor:pointer" onclick="payInfo({$en;->pid;})">{$en->pid}</div>
+                </td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-success"
                             onclick="mod('{:url(\'enroll/mod\',[\'eid\'=>$en.eid])}','{$en.sid}','{$en.cid}','{$en.attend}','{$en.pid}','{$en.memo}')">
