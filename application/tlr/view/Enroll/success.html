@@ -28,61 +28,22 @@
     };
 </script>
 <body>
-<!--导航条-->
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <img src="/static/logo.png" height="50" width="50">
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li><a href="{:url('index/index')}">同路人教育</a></li>
-                <li class="active"><a href="#">报名管理<span class="sr-only">(current)</span></a></li>
-                <li><a href="{:url('student/index')}">学生管理</a></li>
-                <li><a href="{:url('teacher/index')}">教师管理</a></li>
-                <li><a href="{:url('course/index')}">课程管理</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">财务管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{:url('pay/index')}">缴费管理</a></li>
-                        <li><a href="{:url('refund/index')}">退费管理</a></li>
-                        <li><a href="{:url('invoice/index')}">发票管理</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">系统管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{:url('user/index')}">用户管理</a></li>
-                        <li><a href="{:url('role/index')}">角色管理</a></li>
-                        <li><a href="{:url('permission/index')}">权限管理</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li id="login"><a href="{:url('index/login')}">登录</a></li>
-                <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
 <div id="app" class="container">
     <!--页眉-->
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>报名成功</h3>
-            <h3>{$pay.sname}</h3>
-            <h3>{$pay.fee}</h3>
-            <h3>{$pay.semester}</h3>
-            <h3>{switch name="$pay.method"}
+            <h3>学生姓名：{$pay.sname}</h3>
+            <h3>实际金额：{$pay.fee}</h3>
+            <h3>报名学期：{$pay.semester}</h3>
+            <h3>缴费方式：{switch name="$pay.method"}
                 {case value="1"}现金{/case}
                 {case value="2"}银行卡{/case}
                 {case value="3"}其他{/case}
                 {default}{/default}
                 {/switch}</h3>
-            <h3>{$pay.date}</h3>
-            <h3>{$pay.detail}</h3>
+            <h3>缴费日期：{$pay.date}</h3>
+            <h3>备注：{$pay.detail}</h3>
         </div>
     </div>
     <!--列表-->
@@ -128,7 +89,22 @@
             </tbody>
         </table>
     </div>
-    <a href="{:url('enroll/choose')}?semester={$pay.semester}">继续报名</a>
+    <div>
+        <button class="btn btn-success" id="enroll" onclick='nextone("{$pay.semester}")'>继续报名</button>
+        <!--<a href={$pay.semester}"></a>-->
+        <button class="btn btn-success" id="print" onclick="toprint()">打印</button>
+    </div>
 </div>
 </body>
+<script>
+    function toprint() {
+        $('#enroll').hide();
+        $('#print').hide();
+        window.print();
+    }
+
+    function nextone(seme) {
+        window.location.href = "{:url('enroll/choose')}?seme=" + seme;
+    }
+</script>
 </html>

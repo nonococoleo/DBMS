@@ -12,6 +12,7 @@ use think\Request;
 
 class Enroll extends Controller
 {
+    //首页显示全部报名信息
     public function index(Request $request)
     {
         $seme = $request->param('seme');
@@ -37,6 +38,7 @@ class Enroll extends Controller
         return $htmls;
     }
 
+    //报名流程
     public function choose(Request $request)
     {
         $seme = $request->param('seme');
@@ -56,6 +58,7 @@ class Enroll extends Controller
         }
     }
 
+    //修改报名信息接口
     public function mod(Request $request)
     {
         if (session('uid')) {
@@ -73,6 +76,7 @@ class Enroll extends Controller
         return null;
     }
 
+    //删除报名信息接口
     public function del(Request $request)
     {
         if (session('uid')) {
@@ -87,13 +91,9 @@ class Enroll extends Controller
         return null;
     }
 
+    //添加报名信息接口
     public function add(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
-        //     exit();
-        // }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Enroll/index", null, 1);
             exit();
@@ -131,6 +131,7 @@ class Enroll extends Controller
         }
     }
 
+    //查询单次缴费（报名）情况
     public function succ(Request $request)
     {
         $pid = $request->param('pid');
@@ -152,6 +153,7 @@ class Enroll extends Controller
         return null;
     }
 
+    //查询单个课程班级情况
     public function course(Request $request)
     {
         $cid = $request->param('cid');
@@ -170,6 +172,7 @@ class Enroll extends Controller
         return null;
     }
 
+    //修改班级参加情况
     public function attend(Request $request)
     {
         $eid = input('post.eid/a');
@@ -184,6 +187,5 @@ class Enroll extends Controller
         }
         return null;
     }
-
 
 }

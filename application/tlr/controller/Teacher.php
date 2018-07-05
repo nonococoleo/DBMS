@@ -9,6 +9,7 @@ use think\Request;
 
 class Teacher extends Controller
 {
+    //首页显示所有教师情况
     public function index(Request $request)
     {
         $Teacher = new TeacherModel();
@@ -21,6 +22,7 @@ class Teacher extends Controller
         return $htmls;
     }
 
+    //搜索部分教师情况
     public function search(Request $request)
     {
         $Teacher = new TeacherModel();
@@ -41,6 +43,7 @@ class Teacher extends Controller
         }
     }
 
+    //修改教师信息接口
     public function mod(Request $request)
     {
         if (session('uid')) {
@@ -58,6 +61,7 @@ class Teacher extends Controller
         return null;
     }
 
+    //删除教师信息接口
     public function del(Request $request)
     {
         if (session('uid')) {
@@ -72,6 +76,7 @@ class Teacher extends Controller
         return null;
     }
 
+    //添加教师信息接口
     public function add(Request $request)
     {
         if (session('uid')) {

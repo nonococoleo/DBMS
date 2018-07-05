@@ -2,7 +2,7 @@
 <html lang="zh-Hans">
 <head>
     <meta charset="UTF-8">
-    <title>报名信息</title>
+    <title>课程信息</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
@@ -25,6 +25,7 @@
             $('#login').hide();
         else
             $('#logout').hide();
+        $('#send').hide();
     };
 </script>
 <body>
@@ -75,7 +76,22 @@
 </nav>
 <!--页面主体-->
 <div id="app" class="container">
-    {$course}
+    <div>课程信息
+        <li>课程编号：{$course->cid}</li>
+        <li>课程名称：{$course->cname}</li>
+        <li>课程日期：{$course->date}</li>
+        <li>课程时间：{$course->time}</li>
+        <li>课程学期：{$course->name}</li>
+        <li>校区{switch name="$course->campus"}
+            {case value="1"}杨浦{/case}
+            {case value="2"}徐汇{/case}
+            {default}{/default}
+            {/switch}
+        </li>
+        <li>教室：{$course->room}</li>
+        <li>教师姓名：{$course->tname}</li>
+        <li>教师电话：{$course->phone}</li>
+    </div>
     <!--列表-->
     <div>
         <form action="{:url('enroll/attend')}" method="POST" id="form">
@@ -123,8 +139,11 @@
                 </tbody>
             </table>
         </form>
+    </div>
+    <div>
         <button class="btn btn-success" id="mod" onclick="mod()">修改</button>
-        <button class="btn btn-success" id="send" onclick="send()">提交</button>
+        <button class="btn btn-success" id="send" onclick="$('form').submit();">提交</button>
+        <button class="btn btn-success" id="print" onclick="toprint()">打印</button>
     </div>
 </div>
 </body>
@@ -136,8 +155,11 @@
         $('#send').show();
     }
 
-    function send() {
-        $('form').submit();
+    function toprint() {
+        $('#mod').hide();
+        $('#send').hide();
+        $('#print').hide();
+        window.print();
     }
 </script>
 </html>

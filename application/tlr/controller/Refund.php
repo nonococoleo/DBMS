@@ -2,11 +2,10 @@
 
 namespace app\tlr\controller;
 
-use app\tlr\model\CourseModel;
-use app\tlr\model\SemesterModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
+use app\tlr\model\SemesterModel;
 use think\Controller;
 use think\Request;
 
@@ -20,27 +19,21 @@ class Refund extends Controller
         $seme = $request->param('seme');
         $Semester = new SemesterModel();
         $semester = $Semester->select();
-        if ($state and $seme) {
-            $query = ["state" => $state, "seme" => $seme];
-            $refund = $Refund->where("delflag", "=", 0)->where("state", "=", "$state")->where("semester", "=", $seme)->paginate(10, false, ['type' => 'bootstrap']);
-        }
-        if($state and !$seme){
-            $query = ["state" => $state];
-            $refund = $Refund->where("delflag", "=", 0)->where("state", "=", "$state")->paginate(10, false, ['type' => 'bootstrap']);
-        }
-        if(!$state and $seme){
-            $query = ["seme" => $seme];
-            $refund = $Refund->where("delflag", "=", 0)->where("semester", "=", $seme)->paginate(10, false, ['type' => 'bootstrap']);
-        }
-        if(!$state and !$seme) {
-            $query = ["state" => 0, "seme" => 0];
-            $refund = $Refund->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
-        }
+        $refund = $Refund->where("delflag", "=", 0);
+        if (!$state)
+            $state = 0;
+        else
+            $refund = $refund->where("state", "=", "$state");
+        if (!$seme)
+            $seme = 0;
+        else
+            $refund = $refund->where("semester", "=", $seme);
+        $refund = $refund->paginate(10, false, ['type' => 'bootstrap']);
 
         if ($refund->count() > 0) {
             $page = $refund->render();
 
-            $data = array_merge(["refund" => $refund, "page" => $page,  "semester" => $semester, "state" => $state, "seme" => $seme], $query);
+            $data = ["refund" => $refund, "page" => $page, "semester" => $semester, "state" => $state, "seme" => $seme];
             $this->assign($data);
 
             $htmls = $this->fetch("index");
@@ -57,27 +50,6 @@ class Refund extends Controller
         $Refund = new RefundModel();
         echo json_encode(array('ref'=>$Refund->where('rid', $_POST['rid'])->find(),'success'=>true));
     }
-
-
-//    public function search(Request $request)
-//    {
-//        $Refund = new RefundModel();
-//        $stuid = $request->param('stuid');
-//        $query = ["stuid" => $stuid];
-//        $refund = $Refund->table('refund')->where(refund.sid ,eq,"%$stuid%")->where("delflag", "=", 0)->order('rid', 'asc')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
-//        if ($refund->count() > 0) {
-//            $page = $refund->render();
-//
-//            $data = array_merge(["refund" => $refund, "page" => $page], $query);
-//            $this->assign($data);
-//
-//            $htmls = $this->fetch("index");
-//            return $htmls;
-//        } else {
-//            $this->error("此人未退款", $_SERVER["HTTP_REFERER"], null, 1);
-//            return null;
-//        }
-//    }
 
     public function add(Request $request)
     {
