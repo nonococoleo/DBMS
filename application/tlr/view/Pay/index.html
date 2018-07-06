@@ -75,7 +75,7 @@
             <h3>缴费信息</h3>
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4">
-            <div class="input-group" style="margin-top: 6px">
+            <div class="input-group" style="margin-top: 17px">
                 <input type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2"
                        v-model="searchSname">
                 <span class="input-group-addon" style="cursor:pointer" id="basic-addon2"
@@ -96,8 +96,8 @@
                 <td class="text-center">姓名</td>
                 <td class="text-center">学期</td>
                 <td class="text-center">费用</td>
-                <td class="text-center">发票</td>
-                <td class="text-center">退费</td>
+                <!--<td class="text-center">发票</td>-->
+                <!--<td class="text-center">退费</td>-->
                 <td class="text-center">日期</td>
                 <td class="text-center">操作</td>
             </tr>
@@ -110,20 +110,19 @@
                 <td class="text-center">{{pay.sname}}</td>
                 <td class="text-center">{{pay.semester}}</td>
                 <td class="text-center">{{pay.fee}}</td>
-                <td class="text-center">
-                    <div style="cursor: pointer;" @click="invInfo(pay.iid)">{{pay.iid}}</div>
-                </td>
-                <td class="text-center">
-                    <div style="cursor: pointer;" @click="refInfo(pay.rid)">{{pay.rid}}</div>
-                </td>
+                <!--<td class="text-center">-->
+                <!--<div style="cursor: pointer;" @click="invInfo(pay.iid)">{{pay.iid}}</div>-->
+                <!--</td>-->
+                <!--<td class="text-center">-->
+                <!--<div style="cursor: pointer;" @click="refInfo(pay.rid)">{{pay.rid}}</div>-->
+                <!--</td>-->
                 <td class="text-center">{{pay.date}}</td>
                 <td class="text-center">
-                    <!--TODO 根据情况显示-->
-                    <button :disabled="pay.iid" class="btn btn-xs btn-success" @click="invoice(index)">
-                        申请发票
+                    <button class="btn btn-xs btn-success" @click="invoice(index,pay.iid)">
+                        发票
                     </button>
-                    <button :disabled="pay.rid" class="btn btn-xs btn-success" @click="refund(index)">
-                        申请退费
+                    <button class="btn btn-xs btn-success" @click="refund(index,pay.rid)">
+                        退费
                     </button>
                     <button class="btn btn-xs btn-success" @click="open(index)" title="编辑">
                         <span class="glyphicon glyphicon-edit"></span>
@@ -220,7 +219,7 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-        <!--退费-->
+        <!--申请退费-->
         <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -328,7 +327,7 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-        <!--发票-->
+        <!--增开发票-->
         <div class="modal fade" tabindex="-1" id="myModal3" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -378,12 +377,12 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
+        <!--发票查询-->
         <div class="modal fade" tabindex="-1" id="myModal5" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" style="display: inline;"></h4>
+                        <h4 class="modal-title" style="display: inline;">发票详情</h4>
                         <button type="button" class="close" style="display: inline;" data-dismiss="modal"
                                 aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
@@ -424,12 +423,12 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
+        <!--退费查询-->
         <div class="modal fade" tabindex="-1" id="myModal6" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" style="display: inline;" id="modal-title"></h4>
+                        <h4 class="modal-title" style="display: inline;" id="modal-title">退费详情</h4>
                         <button type="button" class="close" style="display: inline;" data-dismiss="modal"
                                 aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
@@ -493,7 +492,6 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
     </div>
 </div>
 </body>
@@ -721,14 +719,22 @@
                     }
                 });
             },
-            invoice(index) {
+            invoice(index, iid) {
                 let tvm = this;
+                if (iid != null) {
+                    tvm.invInfo(iid);
+                    return;
+                }
                 $('#in-pid').val(tvm.pays[index].pid);
                 $('#in-fee').val(tvm.pays[index].fee);
                 $('#myModal3').modal('show');
             },
-            refund(index) {
+            refund(index, rid) {
                 let tvm = this;
+                if (rid != null) {
+                    tvm.refInfo(rid);
+                    return;
+                }
                 $('#re-pid').val(tvm.pays[index].pid);
                 $('#re-fee').val(tvm.pays[index].fee);
                 $('#re-semester').val(tvm.pays[index].semester);

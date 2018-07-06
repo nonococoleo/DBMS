@@ -75,12 +75,15 @@
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>发票信息</h3>
         </div>
-        <select id="status" onchange="sel()">
+        <div class="col-sm-4 col-md-4 col-lg-4" style="margin-top: 17px">
+            状态
+            <select id="status" onchange="sel()" class="form-control">
             <option value="0">全部</option>
             <option value="1">申请</option>
             <option value="2">处理</option>
             <option value="3">成功</option>
         </select>
+        </div>
     </div>
     <!--列表-->
     <div>
@@ -101,7 +104,9 @@
             {volist id="inv" name="invoice"}
             <tr>
                 <td class="text-center">{$inv->iid}</td>
-                <td class="text-center"><div style="cursor:pointer" onclick="payInfo({$inv->pid})">{$inv->pid}</div></td>
+                <td class="text-center">
+                    <div style="cursor:pointer" onclick="payInfo('{$inv->pid}')">{$inv->pid}</div>
+                </td>
                 <td class="text-center">{$inv->fee}</td>
                 <td class="text-center">{$inv->title}</td>
                 <td class="text-center">{$inv->number}</td>
@@ -135,6 +140,7 @@
     </div>
     <!-- 用户信息的modal -->
     <div>
+        <!--修改发票-->
         <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -185,7 +191,7 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
+        <!--缴费信息-->
         <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
