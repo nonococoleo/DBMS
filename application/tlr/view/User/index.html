@@ -2,7 +2,7 @@
 <html lang="zh-Hans">
 <head>
     <meta charset="UTF-8">
-    <title>首页</title>
+    <title>用户管理</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
@@ -27,10 +27,11 @@
     };
 </script>
 <body>
+<!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <img src="/static/logo.png" height="50" width="50">
+            <img src="/static/logo.png" height="50">
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -113,7 +114,8 @@
                     <td class="text-center">
                         <div id="name{$item->uid}" style="display: inline;">{$item->name}
                         </div>&nbsp;&nbsp;
-                        <span class="glyphicon glyphicon-pencil" style="cursor:pointer" onclick="changeName({$item->uid},'{$item->name}')"></span>
+                        <span class="glyphicon glyphicon-pencil" style="cursor:pointer"
+                              onclick="changeName('{$item->uid}','{$item->name}')"></span>
                     </td>
                     <td class="text-center">
                         {volist id="role" name="roles"}
@@ -251,7 +253,7 @@
         let data = {
             name: name,
             uid: uid
-        }
+        };
         $.ajax({
             type: "POST",
             url: "{:URL('tlr/user/changeName','','')}",
