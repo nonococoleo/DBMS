@@ -79,11 +79,20 @@
 <div class="container">
     <!--页眉-->
     <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="col-sm-4 col-md-4 col-lg-4">
             <h3>报名信息</h3>
         </div>
         <form method="get" id="ser" action="{:url('enroll/index')}">
             <div class="col-sm-4 col-md-4 col-lg-4">
+                <label for="name">搜索学生</label>
+                <div class="input-group">
+                    <input type="text" id="name" class="form-control" placeholder="请输入学生姓名"
+                           aria-describedby="basic-addon2" value="">
+                    <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
+                </div>
+            </div>
+            <input type="hidden" name="sid" id="ser_sid" value="{$sid}">
+            <div class="col-sm-3 col-md-3 col-lg-3">
                 <select class="form-control" name="seme" id="sel_semester" onchange="sel()">
                     {volist id="sem" name="semester"}
                     <option value="{$sem->id}">{$sem->name}</option>
@@ -94,19 +103,14 @@
                     <option value="{$cou->cid}">{$cou->cname}</option>
                     {/volist}
                 </select>
-                <div class="input-group" style="margin-top: 17px">
-                    <input type="text" id="name" class="form-control" placeholder="请输入学生姓名"
-                           aria-describedby="basic-addon2" value="">
-                    <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
-                </div>
             </div>
-            <input type="hidden" name="sid" id="ser_sid" value="{$sid}">
         </form>
-        <div style="margin-top: 17px">
+        <div class="col-sm-1 col-md-1 col-lg-1">
             <button class="btn btn-success" onclick="enroll()">报名</button>
             <button class="btn btn-success" onclick="namelist()">名单</button>
         </div>
     </div>
+    <br>
     <!--列表-->
     <div>
         <table class="table table-striped table-hover table-condensed">
@@ -116,7 +120,6 @@
                 <td class="text-center">姓名</td>
                 <td class="text-center">课程</td>
                 <td class="text-center">参加次数</td>
-                <td class="text-center">缴费</td>
                 <td class="text-center">操作</td>
             </tr>
             </thead>
@@ -128,12 +131,12 @@
                 <td class="text-center">{$en->cname}</td>
                 <td class="text-center">{$en->attend}</td>
                 <td class="text-center">
-                    <div style="cursor:pointer" onclick="payInfo('{$en->pid}')">{$en->pid}</div>
-                </td>
-                <td class="text-center">
-                    <button class="btn btn-xs btn-success"
-                            onclick="mod('{:url(\'enroll/mod\',[\'eid\'=>$en.eid])}','{$en.sid}','{$en.cid}','{$en.attend}','{$en.pid}','{$en.memo}')">
-                        <span class="glyphicon glyphicon-edit"></span>
+                    <!--<button class="btn btn-xs btn-success"-->
+                    <!--onclick="mod('{:url(\'enroll/mod\',[\'eid\'=>$en.eid])}','{$en.sid}','{$en.cid}','{$en.attend}','{$en.pid}','{$en.memo}')">-->
+                    <!--<span class="glyphicon glyphicon-edit"></span>-->
+                    <!--</button>-->
+                    <button class="btn btn-xs btn-success" onclick="payInfo('{$en->pid}')">
+                        缴费情况
                     </button>
                     <button class="btn btn-xs btn-danger"
                             onclick="del('{:url(\'enroll/del\',[\'eid\'=>$en.eid])}','{$en.cid}')">
@@ -151,6 +154,7 @@
     </div>
     <!-- 用户信息的modal -->
     <div>
+        <!--修改信息-->
         <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -193,7 +197,6 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
         <!--查询学生-->
         <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
@@ -238,7 +241,7 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
+        <!--缴费信息-->
         <div class="modal fade" tabindex="-1" id="myModal3" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -250,15 +253,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                学号 * :
-                                <input type="number" disabled v-model="payDetailInShow.sid" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                学期:
-                                <input type="text" disabled v-model="payDetailInShow.semester" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                费用 *:
+                                费用:
                                 <input type="number" disabled v-model="payDetailInShow.fee" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
@@ -275,22 +270,9 @@
                                 </select>
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                发票:
-                                <input type="number" disabled v-model="payDetailInShow.iid" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                日期:
-                                <input type="date" disabled v-model="payDetailInShow.date" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
                                 员工:
-                                <input type="number" disabled v-model="payDetailInShow.uid" class="form-control">
+                                <input type="text" disabled v-model="payDetailInShow.user" class="form-control">
                             </div>
-                        </div>
-                        <div>
-                            备注:
-                            <textarea disabled v-model="payDetailInShow.memo" class="form-control">
-                            </textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -366,16 +348,6 @@
         });
     }
 
-    function enroll() {
-        let temp = $('#sel_semester').val();
-        window.location.href = "{:url('enroll/choose')}?seme=" + temp;
-    }
-
-    function namelist() {
-        let temp = $('#course').val();
-        window.location.href = "{:url('enroll/course')}?cid=" + temp;
-    }
-
     function payInfo(pid) {
         $.ajax({
             type: "POST",
@@ -391,7 +363,16 @@
             }
         }
     });
-        // body...
+    }
+
+    function enroll() {
+        let temp = $('#sel_semester').val();
+        window.location.href = "{:url('enroll/choose')}?seme=" + temp;
+    }
+
+    function namelist() {
+        let temp = $('#course').val();
+        window.location.href = "{:url('enroll/course')}?cid=" + temp;
     }
 </script>
 </html>

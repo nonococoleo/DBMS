@@ -81,15 +81,6 @@
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>系统信息</h3>
         </div>
-        <!--<form method="get" id="ser" action="{:url('teacher/search')}">-->
-        <!--<div class="col-sm-4 col-md-4 col-lg-4">-->
-        <!--<div class="input-group" style="margin-top: 17px">-->
-        <!--<input type="text" id="name" name="name" class="form-control" placeholder="请输入教师姓名"-->
-        <!--aria-describedby="basic-addon2" value="">-->
-        <!--<span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</form>-->
         <div class="col-sm-4 col-md-4 col-lg-4">
             <div style="margin-top: 17px">
                 <select class="form-control" name="seme" id="sel_semester" onchange="ser()">
@@ -107,11 +98,40 @@
     </div>
 
     <!--列表-->
-    {volist id="enroll" name="enroll"}
-    <li>{$enroll}</li>
-    {/volist}
-    {$pay}
-    {$refund}
+    <div>
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+            <tr>
+                <td class="text-center">课程</td>
+                <td class="text-center">人数</td>
+                <td class="text-center">收入</td>
+            </tr>
+            </thead>
+            <tbody>
+            {volist id="enroll" name="enroll"}
+            <tr>
+                <td class="text-center">{$enroll->cname}</td>
+                <td class="text-center">{$enroll->sum}</td>
+                <td class="text-center">{$enroll->price}</td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+    </div>
+    <!--分页-->
+    <div style="text-align:center;">
+        {$page}
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>缴费总计 {$pay->price}</h3>
+            <button class="btn btn-success" onclick="enroll()">缴费明细</button>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>退费总计 {$refund->price}</h3>
+            <button class="btn btn-success" onclick="namelist()">退费明细</button>
+        </div>
+    </div>
 </div>
 </body>
 <!--业务逻辑-->

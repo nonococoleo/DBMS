@@ -13,12 +13,10 @@ class Index extends Controller
 {
     public function index(Request $request)
     {
-        // $name = 'index';
-        // $stu = "./" . url("tlr/student");
-        // $this->assign(['name' => $name, 'stu' => $stu]);
-        // $htmls = $this->fetch('index');
-        // return $htmls;
-        return $this->fetch('login');
+        if (!session("uid"))
+            return $this->fetch('login');
+        else
+            return $this->fetch('index');
     }
 
     public function login(Request $request)
@@ -48,7 +46,7 @@ class Index extends Controller
             Session::set('uname', $user['uname']);
             $this->success("登录成功", "Index/index", null, 1);
         } else{
-            $this->error("用户名或密码错误");
+            $this->error("用户名或密码错误", "Index/login", null, 1);
         }
     }
 
@@ -56,9 +54,9 @@ class Index extends Controller
     {
         if(Session::get('uid')){
             session_destroy();
-            $this->success('安全退出',url('Index/login'));
+            $this->success('安全退出', 'Index/login', null, 1);
         }else{
-            $this->error('操作无效');
+            $this->error('操作无效', "Index/index", null, 1);
         }
     }
 }

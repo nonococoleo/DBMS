@@ -131,7 +131,7 @@
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center
-"><span class="attend">{$en->attend}</span><input class="form-control" value="{$en->attend}" type="hidden"
+"><span class="attend">{$en->attend}</span><input value="{$en->attend}" type="hidden"
                                                   name="eid[{$en->eid}]">
                     </td>
                 </tr>
@@ -152,6 +152,7 @@
         $('.attend').text(null);
         $(':input').attr("type", "number");
         $('#mod').hide();
+        $('#print').hide();
         $('#send').show();
     }
 

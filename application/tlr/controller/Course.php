@@ -13,38 +13,43 @@ import("Org.Util.PHPExcel.IOFactory", '', '.php');
 
 class Course extends Controller
 {
+//    public function index(Request $request)
+//    {
+//        $Course = new CourseModel();
+//        $course = $Course->alias("c")->where("c.delflag", "=", 0)->where("semester", "=", session('cur_semester'))->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->order("campus")->paginate(10, false, ['type' => 'bootstrap']);
+//        $Teacher = new TeacherModel();
+//        $teacher = $Teacher->where("delflag", "=", "0")->select();
+//        $Semester = new SemesterModel();
+//        $semester = $Semester->select();
+//        $page = $course->render();
+//
+//        $data = ["course" => $course, "page" => $page, "name" => null, "teacher" => $teacher, "semester" => $semester, "seme" => session('cur_semester')];
+//        $this->assign($data);
+//        $htmls = $this->fetch('index');
+//        return $htmls;
+//    }
+
+
     public function index(Request $request)
     {
-        $Course = new CourseModel();
-        $course = $Course->alias("c")->where("c.delflag", "=", 0)->where("semester", "=", session('cur_semester'))->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->order("campus")->paginate(10, false, ['type' => 'bootstrap']);
-        $Teacher = new TeacherModel();
-        $teacher = $Teacher->where("delflag", "=", "0")->select();
-        $Semester = new SemesterModel();
-        $semester = $Semester->select();
-        $page = $course->render();
-
-        $data = ["course" => $course, "page" => $page, "name" => null, "teacher" => $teacher, "semester" => $semester, "seme" => session('cur_semester')];
-        $this->assign($data);
-        $htmls = $this->fetch('index');
-        return $htmls;
-    }
-
-
-    public function search(Request $request)
-    {
-        $Course = new CourseModel();
         $name = $request->param('name');
         $semester = $request->param('seme');
-        $query = ["name" => $name, "seme" => $semester];
+
+        $Course = new CourseModel();
         $course = $Course->alias("c")->where("c.delflag", "=", 0);
         if ($name)
             $course = $course->where('cname', 'like', "%$name%");
+        else
+            $name = null;
         if ($semester)
             $course = $course->where('semester', '=', $semester);
-        $course = $course->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        else
+            $semester = 0;
+        $query = ["name" => $name, "seme" => $semester];
+        $course = $course->join("teacher t", "c.tid=t.tid")->join("semester s", "c.semester=s.id")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname,s.name')->order("campus")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         if ($course->count() > 0) {
             $Semester = new SemesterModel();
-            $semester = $Semester->select();
+            $semester = $Semester->where("id", ">", 0)->select();
             $Teacher = new TeacherModel();
             $teacher = $Teacher->where("delflag", "=", "0")->select();
             $page = $course->render();
@@ -84,7 +89,7 @@ class Course extends Controller
         if (session('uid')) {
             $Course = new CourseModel();
             $Log = new LogModel();
-            $Course->allowField(['delflag'])->save(['delflag' => 1], ['cid' => $request->param("cid")]);
+            $Course->save(['delflag' => 1], ['cid' => $request->param("cid")]);
             $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
         } else {

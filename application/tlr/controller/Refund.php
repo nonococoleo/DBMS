@@ -75,7 +75,7 @@ class Refund extends Controller
         if (session('uid')) {
             $Refund = new RefundModel();
             $Log = new LogModel();
-            $Refund->allowField(['delflag'])->save(["delflag" => 1], ['rid' => $request->param("rid")]);
+            $Refund->save(["delflag" => 1], ['rid' => $request->param("rid")]);
             $Log->save(["uid" => session('uid'), "action" => $Refund->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
         } else {

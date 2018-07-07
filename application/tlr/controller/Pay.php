@@ -61,7 +61,7 @@ class Pay extends Controller
         //     exit();
         // }
         $Pay = new PayModel;
-        $pay = $Pay->where('pid', $_POST['pid'])->find();
+        $pay = $Pay->alias("p")->join("user u", "u.uid=p.uid")->where('pid', $_POST['pid'])->field("fee,detail,method,date,u.name user")->find();
         echo json_encode(array("pay" => $pay, "success" => true));
     }
 

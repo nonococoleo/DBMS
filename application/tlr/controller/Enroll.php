@@ -21,7 +21,7 @@ class Enroll extends Controller
             $seme = session('cur_semester');
 
         $Semester = new SemesterModel();
-        $semester = $Semester->select();
+        $semester = $Semester->where("id", ">", 0)->select();
         $Course = new CourseModel();
         $course = $Course->where("semester", "=", $seme)->select();
 
@@ -141,7 +141,7 @@ class Enroll extends Controller
             $Class = new CourseModel();
             $Enroll = new EnrollModel();
             $course = $Enroll->where("delflag", "=", 0)->where("pid", "=", $pid)->column("cid");
-            $pay = $Pay->join("student s", "pay.sid=s.sid")->where("pid", "=", $pid)->select();
+            $pay = $Pay->join("student s", "pay.sid=s.sid")->join("semester se", "se.id=pay.semester")->where("pid", "=", $pid)->select();
             $class = $Class->wherein("cid", $course)->select();
             $data = ["course" => $class, "name" => $name, "pay" => $pay[0]];
             $this->assign($data);

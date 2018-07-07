@@ -13,26 +13,17 @@ class Teacher extends Controller
     public function index(Request $request)
     {
         $Teacher = new TeacherModel();
-        $teacher = $Teacher->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
-        $page = $teacher->render();
-
-        $data = ["teacher" => $teacher, "page" => $page, "name" => null];
-        $this->assign($data);
-        $htmls = $this->fetch('index');
-        return $htmls;
-    }
-
-    //搜索部分教师情况
-    public function search(Request $request)
-    {
-        $Teacher = new TeacherModel();
+        $teacher = $Teacher->where("delflag", "=", 0);
         $name = $request->param('name');
-        $query = ["name" => $name];
-        $teacher = $Teacher->where('tname', 'like', "%$name%")->where("delflag", "=", 0)->order('tid', 'asc')->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        if (!$name)
+            $name = null;
+        else
+            $teacher = $teacher->where('tname', 'like', "%$name%");
+        $teacher = $teacher->paginate(10, false, ['type' => 'bootstrap']);
         if ($teacher->count() > 0) {
             $page = $teacher->render();
 
-            $data = array_merge(["teacher" => $teacher, "page" => $page], $query);
+            $data = ["teacher" => $teacher, "page" => $page, "name" => $name];
             $this->assign($data);
 
             $htmls = $this->fetch("index");
@@ -42,6 +33,7 @@ class Teacher extends Controller
             return null;
         }
     }
+
 
     //修改教师信息接口
     public function mod(Request $request)

@@ -78,7 +78,7 @@ class Invoice extends Controller
         if (session('uid')) {
             $Invoice = new InvoiceModel();
             $Log = new LogModel();
-            $Invoice->allowField(['delflag'])->save(["delflag" => 1], ['iid' => $request->param("iid")]);
+            $Invoice->save(["delflag" => 1], ['iid' => $request->param("iid")]);
             $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
         } else {

@@ -18,14 +18,15 @@ class System extends Controller
         if (!$seme)
             $seme = session("cur_semester");
         $Enroll = new EnrollModel();
-        $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->join("course c", "c.cid=e.cid")->where("semester", "=", $seme)->field("count(*),cname")->group("e.cid")->select();
+        $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->join("course c", "c.cid=e.cid")->where("semester", "=", $seme)->field("count(*) sum,cname,price*unit*count(*) price")->group("e.cid")->paginate(10, false, ['type' => 'bootstrap']);
+        $page = $enroll->render();
         $Pay = new PayModel();
-        $pay = $Pay->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) 缴费总计")->select();
+        $pay = $Pay->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) price")->select();
         $Refund = new RefundModel();
-        $refund = $Refund->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) 退费总计")->select();
+        $refund = $Refund->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) price")->select();
         $Semester = new SemesterModel();
         $semester = $Semester->where("id", ">", 0)->select();
-        $data = ["enroll" => $enroll, "semester" => $semester, "seme" => $seme, "pay" => $pay[0], "refund" => $refund[0]];
+        $data = ["enroll" => $enroll, "semester" => $semester, "seme" => $seme, "pay" => $pay[0], "refund" => $refund[0], "page" => $page];
         $this->assign($data);
         $htmls = $this->fetch('index');
         return $htmls;
