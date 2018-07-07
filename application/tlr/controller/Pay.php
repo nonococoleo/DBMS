@@ -4,6 +4,7 @@ namespace app\tlr\controller;
 
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
+use app\tlr\model\SemesterModel;
 use think\Controller;
 use think\Request;
 
@@ -17,6 +18,10 @@ class Pay extends Controller
         //     $this->error("没有权限");
         //     exit();
         // }
+        $Semester = new SemesterModel();
+        $semester = $Semester->select();
+        $data = ["semester" => $semester];
+        $this->assign($data);
         return $this->fetch('index');
     }
     // 获取缴费列表
@@ -32,10 +37,19 @@ class Pay extends Controller
             exit();
         }
         $page = (isset($_POST['page'])) ? $_POST['page'] : 1;
+        $semester = $_POST['sem'];
         $pay = new PayModel;
-        $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where('p.delflag', '0')->page($page, 10)->select();
+        if($semester == 0)
+            $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where('p.delflag', '0')->page($page, 10)->select();
+        else
+            $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where(array('p.delflag'=>'0','semester'=>$semester))->page($page, 10)->select();
         $totalPage = ceil(db('pay')->where('delflag', '0')->count() / 10);
-        echo json_encode(array("pays" => $pays, "totalPage" => $totalPage, "success" => true));
+        $Semester = new SemesterModel();
+        $semester = $Semester->select();
+        echo json_encode(array("pays" => $pays, 
+            "semester" => $semester,
+            "totalPage" => $totalPage, 
+            "success" => true));
     }
 
     // 根据Id获取缴费信息
