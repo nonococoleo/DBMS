@@ -22,6 +22,7 @@ class Invoice extends Controller
 //        return $htmls;
 //    }
 
+    //首页显示所有发票情况
     public function index(Request $request)
     {
         $Invoice = new InvoiceModel();
@@ -47,13 +48,14 @@ class Invoice extends Controller
         }
     }
 
-    // 根据ID获取发票
+    //根据ID获取发票
     public function invById(Request $request)
     {
         $Invoice = new InvoiceModel();
         echo json_encode(array('inv'=>$Invoice->where('iid', $_POST['iid'])->find(),'success'=>true));
     }
 
+    //添加发票信息接口
     public function add(Request $request)
     {
         if (session('uid')) {
@@ -73,6 +75,7 @@ class Invoice extends Controller
         return null;
     }
 
+    //删除发票信息接口
     public function del(Request $request)
     {
         if (session('uid')) {
@@ -87,6 +90,7 @@ class Invoice extends Controller
         return null;
     }
 
+    //修改发票信息接口
     public function mod(Request $request)
     {
         if (session('uid')) {

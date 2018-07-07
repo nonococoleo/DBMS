@@ -15,6 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-hover-dropdown/2.2.1/bootstrap-hover-dropdown.js"></script>
 </head>
 <!--初始化脚本-->
 <script>
@@ -34,28 +35,34 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <img src="/static/logo.png" height="50" width="50">
+            <img src="/static/logo.png" height="50">
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="{:url('index/index')}">同路人教育</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
-                <li><a href="{:url('student/index')}">学生管理</a></li>
-                <li><a href="{:url('student/index')}">教师管理</a></li>
-                <li><a href="{:url('course/index')}">课程管理</a></li>
-                <li class="dropdown active">
+                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">财务管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                       aria-expanded="false" data-hover="dropdown">教务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="min-width:0">
+                        <li><a href="{:url('student/index')}">学生管理</a></li>
+                        <li><a href="{:url('teacher/index')}">教师管理</a></li>
+                        <li><a href="{:url('course/index')}">课程管理</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false" data-hover="dropdown">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('pay/index')}">缴费管理</a></li>
-                        <li><a href="#">退费管理</a></li>
+                        <li><a href="{:url('refund/index')}">退费管理</a></li>
                         <li><a href="{:url('invoice/index')}">发票管理</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">系统管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                       aria-expanded="false" data-hover="dropdown">系统管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('user/index')}">用户管理</a></li>
                         <li><a href="{:url('role/index')}">角色管理</a></li>
                         <li><a href="{:url('permission/index')}">权限管理</a></li>
