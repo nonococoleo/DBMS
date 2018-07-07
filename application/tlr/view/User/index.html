@@ -2,7 +2,7 @@
 <html lang="zh-Hans">
 <head>
     <meta charset="UTF-8">
-    <title>首页</title>
+    <title>用户管理</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
@@ -27,10 +27,11 @@
     };
 </script>
 <body>
+<!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <img src="/static/logo.png" height="50" width="50">
+            <img src="/static/logo.png" height="50">
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -47,8 +48,8 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">财务管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                       aria-expanded="false" data-hover="dropdown">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('pay/index')}">缴费管理</a></li>
                         <li><a href="{:url('refund/index')}">退费管理</a></li>
                         <li><a href="{:url('invoice/index')}">发票管理</a></li>
@@ -79,7 +80,7 @@
         <form method="get" id="ser" action="{:url('user/search')}">
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="input-group" style="margin-top: 17px">
-                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入员工姓名"
+                    <input type="text" id="name1" name="name" class="form-control" placeholder="请输入员工姓名"
                            aria-describedby="basic-addon2" value="{$name}">
                     <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
                 </div>
@@ -113,7 +114,8 @@
                     <td class="text-center">
                         <div id="name{$item->uid}" style="display: inline;">{$item->name}
                         </div>&nbsp;&nbsp;
-                        <span class="glyphicon glyphicon-pencil" style="cursor:pointer" onclick="changeName({$item->uid},'{$item->name}')"></span>
+                        <span class="glyphicon glyphicon-pencil" style="cursor:pointer"
+                              onclick="changeName('{$item->uid}','{$item->name}')"></span>
                     </td>
                     <td class="text-center">
                         {volist id="role" name="roles"}
@@ -163,9 +165,9 @@
                         用户名:
                         <input type="text" class="form-control" name="uname" id="uname" placeholder="用户名">
                     </div>
-                    <div id="uname_check">
+                    <div id="name_check">
                         姓名:
-                        <input type="text" class="form-control" name="name" id="name" placeholder="姓名">
+                        <input type="text" class="form-control" name="name" id="name2" placeholder="姓名">
                     </div>
                     <div id="passwd_check">
                         密码:
@@ -210,23 +212,27 @@
 </body>
 <script type="text/javascript">
     function ser() {
-        if ($('#name').val())
+        if ($('#name1').val())
             $('#ser').submit();
         else
             window.location.href = "{:url('user/index')}";
     }
     function check() {
         $('#uname_check').removeClass("has-error");
+        $('#name_check').removeClass("has-error");
         $('#passwd_check').removeClass("has-error");
         $('#passwd2_check').removeClass("has-error");
         var uname = $('#uname').val();
+        var name = $('#name2').val();
         var passwd = $('#passwd').val();
         var passwd2 = $('#passwd2').val();
-        if (uname && passwd && (passwd == passwd2))
+        if (name & uname && passwd && (passwd == passwd2))
             $('#add-user-form').submit();
         else {
             if (!uname)
                 $('#uname_check').addClass("has-error");
+            if (!name)
+                $('#name_check').addClass("has-error");
             if (!(passwd && (passwd == passwd2))) {
                 $('#passwd_check').addClass("has-error");
                 $('#passwd2_check').addClass("has-error");
@@ -247,7 +253,7 @@
         let data = {
             name: name,
             uid: uid
-        }
+        };
         $.ajax({
             type: "POST",
             url: "{:URL('tlr/user/changeName','','')}",

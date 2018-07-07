@@ -28,10 +28,11 @@
             $('#logout').hide();
     };
 </script>
+<!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <img src="/static/logo.png" height="50" width="50">
+            <img src="/static/logo.png" height="50">
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -48,8 +49,8 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">财务管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                       aria-expanded="false" data-hover="dropdown">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('pay/index')}">缴费管理</a></li>
                         <li><a href="{:url('refund/index')}">退费管理</a></li>
                         <li><a href="{:url('invoice/index')}">发票管理</a></li>
@@ -72,7 +73,6 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-
 <div class="container">
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
@@ -102,7 +102,10 @@
             <tr>
                 <td class="text-center">{$item->id}</td>
                 <td class="text-center">
-                    <div style="cursor: pointer;" onclick="window.location.href = '{:url('role/setPermission'),'?id='.$item->id.'&name='.$item.name}'">{$item->name}</div>
+                    <div style="cursor: pointer;"
+                         onclick="window.location.href = '{:url(';role/setPermission;'),'?id='.$item->id.'&name='.$item.name}'">
+                        {$item->name}
+                    </div>
                 </td>
                 <td class="text-center">{$item->description}</td>
                 <td class="text-center">

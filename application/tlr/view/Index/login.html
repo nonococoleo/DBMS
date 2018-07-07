@@ -30,19 +30,25 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <img src="/static/logo.png" height="50" width="50">
+            <img src="/static/logo.png" height="50">
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">同路人教育<span class="sr-only">(current)</span></a></li>
+                <li><a href="{:url('index/index')}">同路人教育</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
-                <li><a href="{:url('student/index')}">学生管理</a></li>
-                <li><a href="{:url('teacher/index')}">教师管理</a></li>
-                <li><a href="{:url('course/index')}">课程管理</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">财务管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                       aria-expanded="false" data-hover="dropdown">教务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="min-width:0">
+                        <li><a href="{:url('student/index')}">学生管理</a></li>
+                        <li><a href="{:url('teacher/index')}">教师管理</a></li>
+                        <li><a href="{:url('course/index')}">课程管理</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false" data-hover="dropdown">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('pay/index')}">缴费管理</a></li>
                         <li><a href="{:url('refund/index')}">退费管理</a></li>
                         <li><a href="{:url('invoice/index')}">发票管理</a></li>
@@ -50,8 +56,8 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">系统管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                       aria-expanded="false" data-hover="dropdown">系统管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('user/index')}">用户管理</a></li>
                         <li><a href="{:url('role/index')}">角色管理</a></li>
                         <li><a href="{:url('permission/index')}">权限管理</a></li>
@@ -65,15 +71,23 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<div class="container">
-    <h3>登录</h3>
-    <form class="form-group" action="{:url('index/loginHandle')}" method="post" required>
-        <input type="text" name="uname" class="form-control" placeholder="用户名" required>
-        <input type="password" name="passwd" class="form-control" placeholder="密码">
-        <!--TODO 两次输入密码进行验证-->
-        <!-- <input type="password" name="password2" class="form-control" placeholder="再次输入密码" onchange="check2pwd()" > -->
-        <input type="submit" value="登录" class="btn btn-primary">
-    </form>
+<div class="container" style="width: 450px;margin-top: 100;">
+    <div class="text-center">
+        <img src="/static/logo.png" style="width:64px; height:64px; border-radius:50%;-webkit-border-radius:50%;-moz-border-radius:50%;">
+    </div>
+    <h3 class="text-center">欢迎您，请登录</h3>
+    <br>
+    <div style="padding: 20px;border: 1px solid #ddd;border-radius:10px;">
+        <form class="form-group" action="{:url('index/loginHandle')}" method="post" required>
+            用户名:
+            <input type="text" name="uname" class="form-control" placeholder="用户名" required>
+            <br>
+            密码:
+            <input type="password" name="passwd" class="form-control" placeholder="密码">
+            <br>
+            <input type="submit" value="登录" class="btn btn-success" style="width: 100%">
+        </form>
+    </div>
 </div>
 
 </body>

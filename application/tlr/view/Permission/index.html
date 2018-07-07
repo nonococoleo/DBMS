@@ -27,10 +27,11 @@
             $('#logout').hide();
     };
 </script>
+<!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <img src="/static/logo.png" height="50" width="50">
+            <img src="/static/logo.png" height="50">
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -47,8 +48,8 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">财务管理<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                       aria-expanded="false" data-hover="dropdown">财务管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('pay/index')}">缴费管理</a></li>
                         <li><a href="{:url('refund/index')}">退费管理</a></li>
                         <li><a href="{:url('invoice/index')}">发票管理</a></li>

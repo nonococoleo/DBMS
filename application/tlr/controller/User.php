@@ -107,7 +107,7 @@ class User extends Controller
         echo json_encode(array('success'=>true));
     }
 
-    //删除用户
+    //锁定和解锁用户
 	public function lockOne(Request $reques)
     {
       	// 假删除

@@ -111,7 +111,9 @@
             {volist id="ref" name="refund"}
             <tr>
                 <td class="text-center">{$ref->rid}</td>
-                <td class="text-center"><div style="cursor:pointer" onclick="payInfo({$ref->pid})">{$ref->pid}</div></td>
+                <td class="text-center">
+                    <div style="cursor:pointer" onclick="payInfo('{$ref->pid}')">{$ref->pid}</div>
+                </td>
                 <td class="text-center">{$semester["$ref->semester"]->name}</td>
                 <td class="text-center">{$ref->fee}</td>
                 <td class="text-center">
@@ -151,6 +153,7 @@
     </div>
     <!-- 用户信息的modal -->
     <div>
+        <!--修改信息-->
         <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -221,7 +224,7 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
+        <!--缴费信息-->
         <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
