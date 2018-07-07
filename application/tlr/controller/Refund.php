@@ -12,6 +12,7 @@ use think\Request;
 
 class Refund extends Controller
 {
+    //首页显示所有退费情况
     public function index(Request $request)
     {
         $Refund = new RefundModel();
@@ -44,13 +45,14 @@ class Refund extends Controller
         }
     }
 
-    // 根据ID获取退费
+    //根据ID获取退费
     public function refById(Request $request)
     {
         $Refund = new RefundModel();
         echo json_encode(array('ref'=>$Refund->where('rid', $_POST['rid'])->find(),'success'=>true));
     }
 
+    //添加退费信息接口
     public function add(Request $request)
     {
         if (session('uid')) {
@@ -70,6 +72,7 @@ class Refund extends Controller
         return null;
     }
 
+    //删除退费信息接口
     public function del(Request $request)
     {
         if (session('uid')) {
@@ -84,6 +87,7 @@ class Refund extends Controller
         return null;
     }
 
+    //修改退费信息接口
     public function mod(Request $request)
     {
         if (session('uid')) {
