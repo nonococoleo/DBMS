@@ -79,7 +79,7 @@
         <form method="get" id="ser" action="{:url('user/search')}">
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="input-group" style="margin-top: 17px">
-                    <input type="text" id="name" name="name" class="form-control" placeholder="请输入员工姓名"
+                    <input type="text" id="name1" name="name" class="form-control" placeholder="请输入员工姓名"
                            aria-describedby="basic-addon2" value="{$name}">
                     <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
                 </div>
@@ -163,9 +163,9 @@
                         用户名:
                         <input type="text" class="form-control" name="uname" id="uname" placeholder="用户名">
                     </div>
-                    <div id="uname_check">
+                    <div id="name_check">
                         姓名:
-                        <input type="text" class="form-control" name="name" id="name" placeholder="姓名">
+                        <input type="text" class="form-control" name="name" id="name2" placeholder="姓名">
                     </div>
                     <div id="passwd_check">
                         密码:
@@ -210,23 +210,27 @@
 </body>
 <script type="text/javascript">
     function ser() {
-        if ($('#name').val())
+        if ($('#name1').val())
             $('#ser').submit();
         else
             window.location.href = "{:url('user/index')}";
     }
     function check() {
         $('#uname_check').removeClass("has-error");
+        $('#name_check').removeClass("has-error");
         $('#passwd_check').removeClass("has-error");
         $('#passwd2_check').removeClass("has-error");
         var uname = $('#uname').val();
+        var name = $('#uname').val();
         var passwd = $('#passwd').val();
         var passwd2 = $('#passwd2').val();
-        if (uname && passwd && (passwd == passwd2))
+        if (name & uname && passwd && (passwd == passwd2))
             $('#add-user-form').submit();
         else {
             if (!uname)
                 $('#uname_check').addClass("has-error");
+            if (!name)
+                $('#name_check').addClass("has-error");
             if (!(passwd && (passwd == passwd2))) {
                 $('#passwd_check').addClass("has-error");
                 $('#passwd2_check').addClass("has-error");
@@ -237,7 +241,7 @@
     }
     function changeName(uid, name) {
         $('#myModal2').modal();
-        $('#newname').val(name);
+        $('#newname').val(name2);
         $('#olduid').val(uid);
     }
     function submit() {
