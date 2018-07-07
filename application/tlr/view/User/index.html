@@ -223,7 +223,7 @@
         $('#passwd_check').removeClass("has-error");
         $('#passwd2_check').removeClass("has-error");
         var uname = $('#uname').val();
-        var name = $('#uname').val();
+        var name = $('#name2').val();
         var passwd = $('#passwd').val();
         var passwd2 = $('#passwd2').val();
         if (name & uname && passwd && (passwd == passwd2))
@@ -243,7 +243,7 @@
     }
     function changeName(uid, name) {
         $('#myModal2').modal();
-        $('#newname').val(name2);
+        $('#newname').val(name);
         $('#olduid').val(uid);
     }
     function submit() {
