@@ -3,6 +3,7 @@
 namespace app\tlr\controller;
 
 use app\tlr\model\EnrollModel;
+use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
 use app\tlr\model\SemesterModel;
@@ -30,4 +31,19 @@ class System extends Controller
         return $htmls;
     }
 
+    public function setseme(Request $request)
+    {
+        $seme = $request->param("seme");
+        if ($seme) {
+            $Semester = new SemesterModel();
+            $Semester->where("id", "=", $seme)->setField("current", 1);
+            $Log = new LogModel();
+            $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+            $Semester->where("id", "<>", $seme)->setField("current", 0);
+            session("cur_semester", $seme);
+            $this->success("更改成功", $_SERVER["HTTP_REFERER"], null, 1);
+        } else {
+            $this->error("确定学期", url('system/index'), null, 2);
+        }
+    }
 }

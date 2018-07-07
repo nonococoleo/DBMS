@@ -90,12 +90,19 @@
         <!--</div>-->
         <!--</div>-->
         <!--</form>-->
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <div style="margin-top: 17px">
+                <select class="form-control" name="seme" id="sel_semester" onchange="ser()">
+                    {volist id="sem" name="semester"}
+                    <option value="{$sem->id}">{$sem->name}</option>
+                    {/volist}
+                </select>
+
+            </div>
+        </div>
         <div style="margin-top: 17px">
-            <select class="form-control" name="seme" id="sel_semester" onchange="ser()">
-                {volist id="sem" name="semester"}
-                <option value="{$sem->id}">{$sem->name}</option>
-                {/volist}
-            </select>
+            &nbsp;
+            <button class="btn btn-success" onclick="set()">设定学期</button>
         </div>
     </div>
 
@@ -112,6 +119,11 @@
     function ser() {
         let seme = $('#sel_semester').val();
         window.location.href = "{:url('system/index')}?seme=" + seme;
+    }
+
+    function set() {
+        let seme = $('#sel_semester').val();
+        window.location.href = "{:url('system/setseme')}?seme=" + seme;
     }
 </script>
 </html>
