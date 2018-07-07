@@ -35,7 +35,7 @@ class Index extends Controller
         );
         $user = $User->where('uname', $_POST['uname'])->find();
         if($user->delflag != 0) {
-            $this->error("帐号被锁定，请联系管理员");
+            $this->error("帐号被锁定，请联系管理员", null, null, 1);
         }
         if ($user['passwd'] == md5($_POST['passwd'])) {
             $rbacObj = new Rbac();

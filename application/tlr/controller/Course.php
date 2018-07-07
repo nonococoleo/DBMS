@@ -60,7 +60,7 @@ class Course extends Controller
             $htmls = $this->fetch("index");
             return $htmls;
         } else {
-            $this->error("无此课程", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("无此课程", null, null, 1);
             return null;
         }
     }
@@ -79,7 +79,7 @@ class Course extends Controller
                 $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
             }
         } else {
-            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("没有权限", null, null, 1);
         }
         return null;
     }
@@ -91,9 +91,9 @@ class Course extends Controller
             $Log = new LogModel();
             $Course->save(['delflag' => 1], ['cid' => $request->param("cid")]);
             $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->success("删除成功", null, null, 1);
         } else {
-            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("没有权限", null, null, 1);
         }
         return null;
     }
@@ -108,9 +108,9 @@ class Course extends Controller
                     $_POST[$key] = null;
             $Course->save($_POST);
             $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("添加成功", "Course/index", null, 1);
+            $this->success("添加成功", null, null, 1);
         } else {
-            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("没有权限", null, null, 1);
         }
         return null;
     }
@@ -213,7 +213,7 @@ class Course extends Controller
         $Log = new LogModel();
         $Course->saveAll($courses);
         $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
-        $this->success("添加成功", "Course/index", null, 1);
+        $this->success("添加成功", null, null, 1);
 
     }
 }

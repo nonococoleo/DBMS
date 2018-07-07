@@ -128,7 +128,7 @@
                     <td class="text-center">
                         <a href="{:url('user/lockOne')}?uid={$item->uid}" method="post">
                             <input type="hidden" name="uid" value="{$item->uid}">
-                            <button type="button" class="btn btn-xs btn-default"">
+                            <button type="button" class="btn btn-xs btn-default">
                             <?php if($item->delflag==0) echo '锁定'; else echo '解锁'; ?>
                             </button>
                         </a>

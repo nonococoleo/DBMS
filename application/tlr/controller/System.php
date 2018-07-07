@@ -42,9 +42,9 @@ class System extends Controller
             $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $Semester->where("id", "<>", $seme)->setField("current", 0);
             session("cur_semester", $seme);
-            $this->success("更改成功", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->success("更改成功", null, null, 1);
         } else {
-            $this->error("确定学期", url('system/index'), null, 2);
+            $this->error("确定学期", 'system/index', null, 2);
         }
     }
 }

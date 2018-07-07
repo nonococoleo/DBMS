@@ -1,16 +1,15 @@
 <?php
 
 namespace app\tlr\controller;
-use app\tlr\model\UserModel;
-use app\tlr\model\RoleModel;
-use app\tlr\model\UserRoleModel;
-use app\tlr\model\PermissionModel;
-use app\tlr\model\RolePermissionModel;
+
 use app\tlr\model\ControllerModel;
 use app\tlr\model\LogModel;
+use app\tlr\model\PermissionModel;
+use app\tlr\model\RoleModel;
+use app\tlr\model\RolePermissionModel;
+use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
-use gmars\rbac\Rbac;
 
 class Role extends Controller
 {
@@ -42,7 +41,7 @@ class Role extends Controller
 		$Role = new RoleModel();
         $Log = new LogModel();
         $Log->save(["uid" => session('uid'), "action" => $Role->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-		$this->success("操作成功");
+        $this->success("操作成功", "role/index", null, 1);
 	}
 
 	//删除角色
@@ -57,7 +56,7 @@ class Role extends Controller
 		$Role->where('id', $_GET['id'])->delete();
         $Log = new LogModel();
         $Log->save(["uid" => session('uid'), "action" => $Role->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-		$this->success("操作成功");
+        $this->success("操作成功", "role/index", null, 1);
 	}
 
 	// 角色权限列表
@@ -108,14 +107,14 @@ class Role extends Controller
             exit();
         }
 		$RolePermission = new RolePermissionModel;
-		$rolePermissions = $RolePermission->where('role_id', $_POST['role_id'])->delete();
+        $RolePermission->where('role_id', $_POST['role_id'])->delete();
         if(isset($_POST['permissions'])){
         	$rbacObj = new Rbac();
 			$rbacObj->assignRolePermission($_POST['role_id'], $_POST['permissions']);
-			$RolePermission = new RolePermissionModel();
-	        $Log = new LogModel();
-	        $Log->save(["uid" => session('uid'), "action" => $RolePermission->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+//			$RolePermission = new RolePermissionModel();
+//	        $Log = new LogModel();
+//	        $Log->save(["uid" => session('uid'), "action" => $RolePermission->getlastsql(), "time" => date("Y-m-d H:i:s")]);
         }
-		$this->success("操作成功");
+        $this->success("操作成功", null, null, 1);
 	}
 }

@@ -29,7 +29,7 @@ class Teacher extends Controller
             $htmls = $this->fetch("index");
             return $htmls;
         } else {
-            $this->error("查无此人", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("查无此人", null, null, 1);
             return null;
         }
     }
@@ -46,9 +46,9 @@ class Teacher extends Controller
                     $_POST[$key] = null;
             $Teacher->allowField(['tname', 'school', 'phone', 'price', 'memo'])->save($_POST, ['tid' => $request->param("tid")]);
             $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->success("修改成功", null, null, 1);
         } else {
-            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("没有权限", null, null, 1);
         }
         return null;
     }
@@ -61,9 +61,9 @@ class Teacher extends Controller
             $Log = new LogModel();
             $Teacher->save(["delflag" => 1], ['tid' => $request->param("tid")]);
             $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->success("删除成功", null, null, 1);
         } else {
-            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("没有权限", null, null, 1);
         }
         return null;
     }
@@ -79,9 +79,9 @@ class Teacher extends Controller
                     $_POST[$key] = null;
             $Teacher->save($_POST);
             $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("添加成功", "Teacher/index", null, 1);
+            $this->success("添加成功", null, null, 1);
         } else {
-            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("没有权限", null, null, 1);
         }
         return null;
     }

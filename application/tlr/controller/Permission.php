@@ -1,16 +1,12 @@
 <?php
 
 namespace app\tlr\controller;
-use app\tlr\model\UserModel;
-use app\tlr\model\RoleModel;
-use app\tlr\model\UserRoleModel;
-use app\tlr\model\PermissionModel;
-use app\tlr\model\RolePermissionModel;
 use app\tlr\model\ControllerModel;
 use app\tlr\model\LogModel;
+use app\tlr\model\PermissionModel;
+use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
-use gmars\rbac\Rbac;
 
 class Permission extends Controller
 {
@@ -53,7 +49,7 @@ class Permission extends Controller
 		$Permission = new PermissionModel();
         $Log = new LogModel();
         $Log->save(["uid" => session('uid'), "action" => $Permission->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-		$this->success("操作成功");
+        $this->success("操作成功", "permission/index", null, 1);
 	}
 
 	//删除权限
@@ -68,7 +64,7 @@ class Permission extends Controller
 		$Permission->where('id', $_GET['id'])->delete();
         $Log = new LogModel();
         $Log->save(["uid" => session('uid'), "action" => $Permission->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-		$this->success("操作成功");
+        $this->success("操作成功", "permission/index", null, 1);
 	}
 
 	// 添加控制器（权限控制的一个粒度）
@@ -79,7 +75,7 @@ class Permission extends Controller
 	        $Controller->save($_POST);
 	        $Log = new LogModel();
 	        $Log->save(["uid" => session('uid'), "action" => $Controller->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-	        $this->success("添加成功");
+            $this->success("添加成功", "permission/index", null, 1);
 		}
 	    else{
 	    	$this->error("控制器已存在，请勿重复添加");
@@ -98,6 +94,6 @@ class Permission extends Controller
 		$Controller->where('cid', $_GET['cid'])->delete();
         $Log = new LogModel();
         $Log->save(["uid" => session('uid'), "action" => $Controller->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-		$this->success("操作成功");
+        $this->success("操作成功", "permission/index", null, 1);
 	}
 }

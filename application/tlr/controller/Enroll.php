@@ -69,9 +69,9 @@ class Enroll extends Controller
                     $_POST[$key] = null;
             $Enroll->allowField(['sid', 'cid', 'attend', 'pid', 'memo'])->save($_POST, ['eid' => $request->param("eid")]);
             $Log->save(["uid" => session('uid'), "action" => $Enroll->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->success("修改成功", null, null, 1);
         } else {
-            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("没有权限", null, null, 1);
         }
         return null;
     }
@@ -84,9 +84,9 @@ class Enroll extends Controller
             $Log = new LogModel();
             $Enroll->save(["delflag" => 1], ['eid' => $request->param("eid")]);
             $Log->save(["uid" => session('uid'), "action" => $Enroll->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("删除成功", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->success("删除成功", null, null, 1);
         } else {
-            $this->error("没有权限", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("没有权限", null, null, 1);
         }
         return null;
     }
@@ -148,7 +148,7 @@ class Enroll extends Controller
             $htmls = $this->fetch('success');
             return $htmls;
         } else {
-            $this->error("没有信息", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->error("没有信息", null, null, 1);
         }
         return null;
     }
@@ -167,7 +167,7 @@ class Enroll extends Controller
             $htmls = $this->fetch('course');
             return $htmls;
         } else {
-            $this->error("没有信息", url("enroll/index"), null, 1);
+            $this->error("没有信息", null, null, 1);
         }
         return null;
     }
@@ -183,7 +183,7 @@ class Enroll extends Controller
                 $Enroll->save(["attend" => $value], ["eid" => $key]);
                 $Log->save(["uid" => session('uid'), "action" => $Enroll->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             }
-            $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
+            $this->success("修改成功", null, null, 1);
         }
         return null;
     }
