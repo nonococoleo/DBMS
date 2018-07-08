@@ -84,6 +84,7 @@
         <form>
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <select class="form-control" name="seme" id="sel_semester" @change="search3()">
+                    <option value="0">全部</option>
                     {volist id="sem" name="semester"}
                     <option value="{$sem->id}">{$sem->name}</option>
                     {/volist}
@@ -134,11 +135,13 @@
                 <!--</td>-->
                 <td class="text-center">{{pay.date}}</td>
                 <td class="text-center">
-                    <button class="btn btn-xs btn-success" @click="invoice(index,pay.iid)">
-                        发票
+                    <button class="btn btn-xs" :class="(pay.iid)?'btn-info':'btn-primary'"
+                            @click="invoice(index,pay.iid)">
+                        {{(pay.iid)?'查看':'申请'}}发票
                     </button>
-                    <button class="btn btn-xs btn-success" @click="refund(index,pay.rid)">
-                        退费
+                    <button class="btn btn-xs" :class="(pay.rid)?'btn-info':'btn-primary'"
+                            @click="refund(index,pay.rid)">
+                        {{(pay.rid)?'查看':'申请'}}退费
                     </button>
                     <button class="btn btn-xs btn-success" @click="open(index)" title="编辑">
                         <span class="glyphicon glyphicon-edit"></span>
@@ -603,7 +606,7 @@
             },
             search3(){
                 let id = $('#sel_semester').val();
-                this.sem = id
+                this.sem = id;
                 this.getPays(1, id)
             },
             page(newPage) {

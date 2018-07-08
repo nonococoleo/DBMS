@@ -19,7 +19,7 @@ class Enroll extends Controller
         $sid = $request->param('sid');
         if (!$seme)
             $seme = session('cur_semester');
-
+        $query = ["seme" => $seme, "sid" => $sid];
         $Semester = new SemesterModel();
         $semester = $Semester->where("id", ">", 0)->select();
         $Course = new CourseModel();
@@ -30,7 +30,7 @@ class Enroll extends Controller
         if ($sid)
             $enroll = $enroll->where("e.sid", "=", $sid);
 
-        $enroll = $enroll->paginate(10, false, ['type' => 'bootstrap']);
+        $enroll = $enroll->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         $page = $enroll->render();
         $data = ["semester" => $semester, "enroll" => $enroll, "page" => $page, "seme" => $seme, "course" => $course, "sid" => $sid];
         $this->assign($data);

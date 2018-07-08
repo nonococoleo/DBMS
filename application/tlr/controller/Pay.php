@@ -19,7 +19,7 @@ class Pay extends Controller
         //     exit();
         // }
         $Semester = new SemesterModel();
-        $semester = $Semester->select();
+        $semester = $Semester->where("id", ">", 0)->select();
         $data = ["semester" => $semester];
         $this->assign($data);
         return $this->fetch('index');
@@ -45,7 +45,7 @@ class Pay extends Controller
             $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where(array('p.delflag'=>'0','semester'=>$semester))->page($page, 10)->select();
         $totalPage = ceil(db('pay')->where('delflag', '0')->count() / 10);
         $Semester = new SemesterModel();
-        $semester = $Semester->select();
+        $semester = $Semester->where("id", ">", 0)->select();
         echo json_encode(array("pays" => $pays, 
             "semester" => $semester,
             "totalPage" => $totalPage, 
@@ -61,7 +61,7 @@ class Pay extends Controller
         //     exit();
         // }
         $Pay = new PayModel;
-        $pay = $Pay->alias("p")->join("user u", "u.uid=p.uid")->where('pid', $_POST['pid'])->field("fee,detail,method,date,u.name user")->find();
+        $pay = $Pay->alias("p")->join("user u", "u.uid=p.uid")->where('pid', $_POST['pid'])->field("pid,fee,detail,method,date,u.name user")->find();
         echo json_encode(array("pay" => $pay, "success" => true));
     }
 

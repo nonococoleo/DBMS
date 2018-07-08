@@ -43,7 +43,7 @@ class Index extends Controller
             $rbacObj->cacheRole($user['uid']);
             Session::set('cur_semester', $semester[0]->id);
             Session::set('uid', $user['uid']);
-            Session::set('uname', $user['uname']);
+            Session::set('name', $user['name']);
             $this->success("登录成功", "Index/index", null, 1);
         } else{
             $this->error("用户名或密码错误", "Index/login", null, 1);

@@ -7,6 +7,7 @@ use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
 use app\tlr\model\SemesterModel;
+use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
 
@@ -14,11 +15,17 @@ class System extends Controller
 {
     public function index(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "index/index", null, 1);
+            exit();
+        }
         $seme = $request->param("seme");
         if (!$seme)
             $seme = session("cur_semester");
+        $query = ["seme" => $seme];
         $Enroll = new EnrollModel();
-        $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->join("course c", "c.cid=e.cid")->where("semester", "=", $seme)->field("count(*) sum,cname,price*unit*count(*) price")->group("e.cid")->paginate(10, false, ['type' => 'bootstrap']);
+        $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->join("course c", "c.cid=e.cid")->where("semester", "=", $seme)->field("count(*) sum,cname,price*unit*count(*) price")->group("e.cid")->order("sum", "desc")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         $page = $enroll->render();
         $Pay = new PayModel();
         $pay = $Pay->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) price")->select();
@@ -34,6 +41,11 @@ class System extends Controller
 
     public function setseme(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", null, null, 3);
+            exit();
+        }
         $seme = $request->param("seme");
         if ($seme) {
             $Semester = new SemesterModel();

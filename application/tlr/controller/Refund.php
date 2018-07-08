@@ -2,6 +2,7 @@
 
 namespace app\tlr\controller;
 
+use app\tlr\model\EnrollModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
@@ -19,8 +20,8 @@ class Refund extends Controller
         $state = $request->param('state');
         $seme = $request->param('seme');
         $Semester = new SemesterModel();
-        $semester = $Semester->select();
-        $refund = $Refund->where("delflag", "=", 0);
+        $semester = $Semester->where("id", ">", 0)->select();
+        $refund = $Refund->where("delflag", "=", 0)->join("semester s", "s.id=refund.semester");
         if (!$state)
             $state = 0;
         else
@@ -29,7 +30,8 @@ class Refund extends Controller
             $seme = 0;
         else
             $refund = $refund->where("semester", "=", $seme);
-        $refund = $refund->paginate(10, false, ['type' => 'bootstrap']);
+        $query = ["seme" => $seme, "state" => $state];
+        $refund = $refund->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
 
         if ($refund->count() > 0) {
             $page = $refund->render();
@@ -59,12 +61,15 @@ class Refund extends Controller
             $Refund = new RefundModel();
             $Log = new LogModel();
             $Pay = new PayModel();
+            $Enroll = new EnrollModel();
             foreach ($_POST as $key => $value)
                 if ($value == "")
                     $_POST[$key] = null;
+            $pid = $request->param("pid");
             $Refund->save($_POST);
-            $Pay->save(["rid" => $Refund->getLastInsID()], ['pid' => $request->param("pid")]);
+            $Pay->save(["rid" => $Refund->getLastInsID()], ['pid' => $pid]);
             $Log->save(["uid" => session('uid'), "action" => $Refund->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+            $Enroll->save(["delflag" => 1], ['pid' => $pid]);
             $this->success("添加成功", null, null, 1);
         } else {
             $this->error("没有权限", null, null, 1);

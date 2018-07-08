@@ -21,9 +21,13 @@
     toastr.options.positionClass = 'toast-top-center';
     toastr.options.timeOut = 2000;
     window.onload = function () {
-        if ("{:session('uid')}")
+        if ("{:session('uid')}") {
             $('#login').hide();
-        else
+            $('#username').text("{:session('name')}");
+            let roles = "{:json_encode(session('user_roles'))}";
+            if (roles.indexOf(9) == -1)
+                $('#sys').hide();
+        } else
             $('#logout').hide();
     };
 </script>
@@ -38,8 +42,8 @@
             <ul class="nav navbar-nav">
                 <li><a href="{:url('index/index')}">同路人教育</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <li class="dropdown" id="edu">
+                    <a href="#" class="dropdown-toggle" role="button" aria-haspopup="true"
                        aria-expanded="false" data-hover="dropdown">教务管理<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('student/index')}">学生管理</a></li>
@@ -47,8 +51,8 @@
                         <li><a href="{:url('course/index')}">课程管理</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <li class="dropdown" id="fin">
+                    <a href="#" class="dropdown-toggle" role="button" aria-haspopup="true"
                        aria-expanded="false" data-hover="dropdown">财务管理<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('pay/index')}">缴费管理</a></li>
@@ -56,7 +60,7 @@
                         <li><a href="{:url('invoice/index')}">发票管理</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
+                <li class="dropdown" id="sys">
                     <a href="{:url('system/index')}" class="dropdown-toggle" role="button" aria-haspopup="true"
                        aria-expanded="false" data-hover="dropdown">系统管理<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="min-width:0">
@@ -67,6 +71,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" id="username"></a></li>
                 <li id="login"><a href="{:url('index/login')}">登录</a></li>
                 <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
             </ul>

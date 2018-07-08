@@ -44,7 +44,7 @@ class Course extends Controller
         if ($semester)
             $course = $course->where('semester', '=', $semester);
         else
-            $semester = 0;
+            $semester = session("cur_semester");
         $query = ["name" => $name, "seme" => $semester];
         $course = $course->join("teacher t", "c.tid=t.tid")->join("semester s", "c.semester=s.id")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname,s.name')->order("campus")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         if ($course->count() > 0) {

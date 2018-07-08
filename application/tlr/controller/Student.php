@@ -2,8 +2,9 @@
 
 namespace app\tlr\controller;
 
-use app\tlr\model\StudentModel;
 use app\tlr\model\LogModel;
+use app\tlr\model\StudentModel;
+use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
 
@@ -12,22 +13,22 @@ class Student extends Controller
     // 学生页面
     public function index(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限");
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "index/index", null, 3);
+            exit();
+        }
         return $this->fetch('index');
     }
 
     // 获取学生列表
     public function students(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Student/index", null, 1);
+            exit();
+        }
         if (request()->isGet()) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();
@@ -42,11 +43,11 @@ class Student extends Controller
     // 修改学生信息
     public function update(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Student/index", null, 1);
+            exit();
+        }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();
@@ -74,11 +75,11 @@ class Student extends Controller
     //新增学生
     public function add(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Student/index", null, 1);
+            exit();
+        }
         foreach ($_POST as $key => $value)
                 if ($value == "")
                     $_POST[$key] = null;
@@ -116,11 +117,11 @@ class Student extends Controller
     //删除学生
     public function deleteone(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Student/index", null, 1);
+            exit();
+        }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();
@@ -138,11 +139,11 @@ class Student extends Controller
     //搜索学生
     public function search(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Student/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Student/index", null, 1);
+            exit();
+        }
         if (request()->isGet()) {
             $this->error("404 not found", "Student/index", null, 1);
             exit();

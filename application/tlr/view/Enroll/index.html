@@ -93,12 +93,12 @@
             </div>
             <input type="hidden" name="sid" id="ser_sid" value="{$sid}">
             <div class="col-sm-3 col-md-3 col-lg-3">
-                <select class="form-control" name="seme" id="sel_semester" onchange="sel()">
+                <select class="form-control input-sm" name="seme" id="sel_semester" onchange="sel()">
                     {volist id="sem" name="semester"}
                     <option value="{$sem->id}">{$sem->name}</option>
                     {/volist}
                 </select>
-                <select class="form-control" id="course">
+                <select class="form-control input-sm" id="course">
                     {volist id="cou" name="course"}
                     <option value="{$cou->cid}">{$cou->cname}</option>
                     {/volist}
@@ -106,8 +106,8 @@
             </div>
         </form>
         <div class="col-sm-1 col-md-1 col-lg-1">
-            <button class="btn btn-success" onclick="enroll()">报名</button>
-            <button class="btn btn-success" onclick="namelist()">名单</button>
+            <button class="btn btn-primary btn-sm" onclick="enroll()">报名</button>
+            <button class="btn btn-info btn-sm" onclick="namelist()">名单</button>
         </div>
     </div>
     <br>
@@ -252,6 +252,14 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                编号:
+                                <input type="number" disabled v-model="payDetailInShow.pid" class="form-control">
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                日期:
+                                <input type="date" disabled v-model="payDetailInShow.date" class="form-control">
+                            </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                 费用:
                                 <input type="number" disabled v-model="payDetailInShow.fee" class="form-control">

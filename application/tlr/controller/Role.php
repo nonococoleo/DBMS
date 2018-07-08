@@ -64,7 +64,7 @@ class Role extends Controller
 	{
 		$rbacObj = new Rbac();
         if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
+            $this->error("没有权");
             exit();
         }
 		$Permission = new PermissionModel;
