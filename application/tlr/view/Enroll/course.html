@@ -105,7 +105,7 @@
                     <td class="text-center" width="15%">电话</td>
                     <td class="text-center" width="5%">1</td>
                     <td class="text-center" width="5%">2</td>
-                    <td class="text-center" width="5%">5</td>
+                    <td class="text-center" width="5%">3</td>
                     <td class="text-center" width="5%">4</td>
                     <td class="text-center" width="5%">5</td>
                     <td class="text-center" width="5%">6</td>
@@ -113,7 +113,7 @@
                     <td class="text-center" width="5%">8</td>
                     <td class="text-center" width="5%">9</td>
                     <td class="text-center" width="5%">10</td>
-                    <td class="text-center">参加次数</td>
+                    <td class="text-center hi">参加次数</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -133,8 +133,8 @@
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center
-"><span class="attend">{$en->attend}</span><input value="{$en->attend}" type="hidden"
-                                                  name="eid[{$en->eid}]">
+ hi"><span class="attend">{$en->attend}</span><input value="{$en->attend}" type="hidden"
+                                                     name="eid[{$en->eid}]">
                     </td>
                 </tr>
                 {/volist}
@@ -165,9 +165,11 @@
         $('#send').hide();
         $('#print').hide();
         $('#ret').hide();
+        $('.hi').hide();
         window.print();
         $('#mod').show();
         $('#print').show();
+        $('.hi').show();
     }
 
     function ret() {

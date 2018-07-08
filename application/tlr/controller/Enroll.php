@@ -7,6 +7,7 @@ use app\tlr\model\EnrollModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\SemesterModel;
+use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
 
@@ -15,6 +16,11 @@ class Enroll extends Controller
     //首页显示全部报名信息
     public function index(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "index/index", null, 3);
+            exit();
+        }
         $seme = $request->param('seme');
         $sid = $request->param('sid');
         if (!$seme)
@@ -41,6 +47,11 @@ class Enroll extends Controller
     //报名流程
     public function choose(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", null, null, 1);
+            exit();
+        }
         $seme = $request->param('seme');
         if (!$seme) {
             $this->error("确定学期", "Enroll/index", null, 1);
@@ -61,7 +72,11 @@ class Enroll extends Controller
     //修改报名信息接口
     public function mod(Request $request)
     {
-        if (session('uid')) {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", null, null, 1);
+            exit();
+        } else {
             $Enroll = new EnrollModel();
             $Log = new LogModel();
             foreach ($_POST as $key => $value)
@@ -70,8 +85,6 @@ class Enroll extends Controller
             $Enroll->allowField(['sid', 'cid', 'attend', 'pid', 'memo'])->save($_POST, ['eid' => $request->param("eid")]);
             $Log->save(["uid" => session('uid'), "action" => $Enroll->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("修改成功", null, null, 1);
-        } else {
-            $this->error("没有权限", null, null, 1);
         }
         return null;
     }
@@ -79,14 +92,16 @@ class Enroll extends Controller
     //删除报名信息接口
     public function del(Request $request)
     {
-        if (session('uid')) {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", null, null, 1);
+            exit();
+        } else {
             $Enroll = new EnrollModel();
             $Log = new LogModel();
             $Enroll->save(["delflag" => 1], ['eid' => $request->param("eid")]);
             $Log->save(["uid" => session('uid'), "action" => $Enroll->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("删除成功", null, null, 1);
-        } else {
-            $this->error("没有权限", null, null, 1);
         }
         return null;
     }
@@ -94,6 +109,11 @@ class Enroll extends Controller
     //添加报名信息接口
     public function add(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", null, null, 1);
+            exit();
+        }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Enroll/index", null, 1);
             exit();
@@ -134,6 +154,11 @@ class Enroll extends Controller
     //查询单次缴费（报名）情况
     public function succ(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", null, null, 1);
+            exit();
+        }
         $pid = $request->param('pid');
         if ($pid) {
             $name = "text";
@@ -156,10 +181,15 @@ class Enroll extends Controller
     //查询单个课程班级情况
     public function course(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", null, null, 1);
+            exit();
+        }
         $cid = $request->param('cid');
         if ($cid) {
             $Enroll = new EnrollModel();
-            $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->where("e.cid", "=", $cid)->join("course c", "c.cid=e.cid")->join("student s", "s.sid=e.sid")->select();
+            $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->where("e.cid", "=", $cid)->join("course c", "c.cid=e.cid")->join("student s", "s.sid=e.sid")->order("e.sid")->select();
             $Course = new CourseModel();
             $course = $Course->alias("c")->join("semester s", "s.id=c.semester")->join("teacher t", "t.tid=c.tid")->where("cid", "=", $cid)->select();
             $data = ["enroll" => $enroll, "course" => $course[0]];
@@ -175,6 +205,11 @@ class Enroll extends Controller
     //修改班级参加情况
     public function attend(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", null, null, 1);
+            exit();
+        }
         $eid = input('post.eid/a');
         if ($eid) {
             $Enroll = new EnrollModel();
@@ -184,6 +219,8 @@ class Enroll extends Controller
                 $Log->save(["uid" => session('uid'), "action" => $Enroll->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             }
             $this->success("修改成功", null, null, 1);
+        } else {
+            $this->error("班级错误", null, null, 1);
         }
         return null;
     }

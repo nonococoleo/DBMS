@@ -91,7 +91,6 @@
     </div>
     <div>
         <button class="btn btn-success" id="enroll" onclick='nextone("{$pay.semester}")'>继续报名</button>
-        <!--<a href={$pay.semester}"></a>-->
         <button class="btn btn-success" id="print" onclick="toprint()">打印</button>
     </div>
 </div>
@@ -101,6 +100,7 @@
         $('#enroll').hide();
         $('#print').hide();
         window.print();
+        $('#enroll').show();
     }
 
     function nextone(seme) {

@@ -50,14 +50,14 @@ class Teacher extends Controller
             exit();
         }
 
-            $Teacher = new TeacherModel();
-            $Log = new LogModel();
-            foreach ($_POST as $key => $value)
-                if ($value == "")
-                    $_POST[$key] = null;
-            $Teacher->allowField(['tname', 'school', 'phone', 'price', 'memo'])->save($_POST, ['tid' => $request->param("tid")]);
-            $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("修改成功", null, null, 1);
+        $Teacher = new TeacherModel();
+        $Log = new LogModel();
+        foreach ($_POST as $key => $value)
+            if ($value == "")
+                $_POST[$key] = null;
+        $Teacher->allowField(['tname', 'school', 'phone', 'price', 'memo'])->save($_POST, ['tid' => $request->param("tid")]);
+        $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("修改成功", null, null, 1);
         return null;
     }
 
@@ -69,11 +69,11 @@ class Teacher extends Controller
             $this->error("没有权限", null, null, 1);
             exit();
         }
-            $Teacher = new TeacherModel();
-            $Log = new LogModel();
-            $Teacher->save(["delflag" => 1], ['tid' => $request->param("tid")]);
-            $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("删除成功", null, null, 1);
+        $Teacher = new TeacherModel();
+        $Log = new LogModel();
+        $Teacher->save(["delflag" => 1], ['tid' => $request->param("tid")]);
+        $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("删除成功", null, null, 1);
         return null;
     }
 
@@ -85,14 +85,14 @@ class Teacher extends Controller
             $this->error("没有权限", null, null, 1);
             exit();
         }
-            $Teacher = new TeacherModel();
-            $Log = new LogModel();
-            foreach ($_POST as $key => $value)
-                if ($value == "")
-                    $_POST[$key] = null;
-            $Teacher->save($_POST);
-            $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("添加成功", null, null, 1);
+        $Teacher = new TeacherModel();
+        $Log = new LogModel();
+        foreach ($_POST as $key => $value)
+            if ($value == "")
+                $_POST[$key] = null;
+        $Teacher->save($_POST);
+        $Log->save(["uid" => session('uid'), "action" => $Teacher->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("添加成功", null, null, 1);
 
         return null;
     }

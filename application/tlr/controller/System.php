@@ -13,6 +13,7 @@ use think\Request;
 
 class System extends Controller
 {
+    //首页 统计信息
     public function index(Request $request)
     {
         $rbacObj = new Rbac();
@@ -39,6 +40,7 @@ class System extends Controller
         return $htmls;
     }
 
+    //设置当前学期 接口
     public function setseme(Request $request)
     {
         $rbacObj = new Rbac();
