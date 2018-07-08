@@ -399,7 +399,7 @@ class Rbac
         if (!empty($permission)) {
             foreach ($permission as $k=>$v)
             {
-                $newPermission[$v['path']] = $v;
+                $newPermission[strtolower($v['path'])] = $v;
             }
         }
         Session::set('permission', $newPermission);
