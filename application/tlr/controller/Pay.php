@@ -39,11 +39,14 @@ class Pay extends Controller
         $page = (isset($_POST['page'])) ? $_POST['page'] : 1;
         $semester = $_POST['sem'];
         $pay = new PayModel;
-        if($semester == 0)
+        if($semester == 0) {
             $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where('p.delflag', '0')->page($page, 10)->select();
-        else
+            $totalPage = ceil(db('pay')->where('delflag', '0')->count() / 10);
+        }
+        else{
             $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where(array('p.delflag'=>'0','semester'=>$semester))->page($page, 10)->select();
-        $totalPage = ceil(db('pay')->where('delflag', '0')->count() / 10);
+            $totalPage = ceil(db('pay')->where(array('delflag'=>'0','semester'=>$semester))->count() / 10);
+        }
         $Semester = new SemesterModel();
         $semester = $Semester->where("id", ">", 0)->select();
         echo json_encode(array("pays" => $pays, 
