@@ -4,6 +4,7 @@ namespace app\tlr\controller;
 
 use app\tlr\model\EnrollModel;
 use app\tlr\model\LogModel;
+use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
 use app\tlr\model\SemesterModel;
 use think\Controller;
@@ -59,7 +60,7 @@ class Refund extends Controller
         if (session('uid')) {
             $Refund = new RefundModel();
             $Log = new LogModel();
-            $Pay = new RefundModel();
+            $Pay = new PayModel();
             $Enroll = new EnrollModel();
             foreach ($_POST as $key => $value)
                 if ($value == "")
@@ -100,7 +101,7 @@ class Refund extends Controller
             foreach ($_POST as $key => $value)
                 if ($value == "")
                     $_POST[$key] = null;
-            $Refund->allowField(['pid', 'semster', 'fee', 'method', 'card', 'bank', 'person', 'date', 'state', 'memo'])->save($_POST, ['rid' => $request->param("rid")]);
+            $Refund->allowField(['fee', 'method', 'card', 'bank', 'person', 'state', 'memo', 'uid'])->save($_POST, ['rid' => $request->param("rid")]);
             $Log->save(["uid" => session('uid'), "action" => $Refund->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("修改成功", null, null, 1);
         } else {

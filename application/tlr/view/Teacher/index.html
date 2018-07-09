@@ -25,7 +25,7 @@
             $('#login').hide();
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
-            if (roles.indexOf(9) == -1)
+            if (roles.indexOf(1) == -1)
                 $('#sys').hide();
         } else
             $('#logout').hide();

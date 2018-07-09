@@ -6,36 +6,14 @@ use app\tlr\model\CourseModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\SemesterModel;
 use app\tlr\model\TeacherModel;
+use PHPExcel;
 use think\Controller;
 use think\Request;
-use PHPExcel;
 
 //use PHPExcel\PHPExcel_IOFactory;
 
 class Course extends Controller
 {
-
-
-//    导出csv
-    public function csv()
-    {
-        $Course = new CourseModel();
-        $data = $Course->field('cid,delflag,cname,time,date,semester,campus,room,price,unit,tid,fee,memo')->select();
-
-        $str = 'cid' . ',' . 'delflag' . ',' . 'cname' . ',' . 'time' . ',' . 'date' . ',' . 'semester' . ',' . 'campus' . ',' . 'room' . ',' . 'price' . ',' . 'unit' . ',' . 'tid' . ',' . 'fee' . ',' . 'memo' . "\n";
-        foreach ($data as $key => $value) {
-            $str .= $value['cid'] . ',' . $value['delflag'] . ',' . $value['cname'] . ',' . $value['time'] . ',' . $value['date'] . ',' . $value['semester'] . ',' . $value['campus'] . ',' . $value['room'] . ',' . $value['price'] . ',' . $value['unit'] . ',' . $value['tid'] . ',' . $value['fee'] . ',' . $value['memo'] . "\n";
-        };
-        $filename = './output.csv';
-        header('Content-type:text/csv');
-        header("Content-Disposition:attachment;filename=" . $filename);
-        header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
-        header('Expires:0');
-        header('Pragma:public');
-        echo $str;
-    }
-
-
     //首页显示全部报名信息
     public function index(Request $request)
     {
@@ -48,12 +26,10 @@ class Course extends Controller
             $course = $course->where('cname', 'like', "%$name%");
         else
             $name = null;
-        if ($semester)
-            $course = $course->where('semester', '=', $semester);
-        else
+        if (!$semester)
             $semester = session("cur_semester");
         $query = ["name" => $name, "seme" => $semester];
-        $course = $course->join("teacher t", "c.tid=t.tid")->join("semester s", "c.semester=s.id")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname,s.name')->order("campus")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        $course = $course->where('semester', '=', $semester)->join("teacher t", "c.tid=t.tid")->join("semester s", "c.semester=s.id")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname,s.name')->order("campus")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         if ($course->count() > 0) {
             $Semester = new SemesterModel();
             $semester = $Semester->where("id", ">", 0)->select();
@@ -150,6 +126,7 @@ class Course extends Controller
         }
         $replacename = session('uid') . '_' . time() . '_' . $_FILES["file"]['name'];
         $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
+//        TODO 地址？
         $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\\' . $replacename;
         $this->addFromFile($filename);
 
@@ -196,6 +173,24 @@ class Course extends Controller
         $Course->saveAll($courses);
         $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
         $this->success("添加成功", null, null, 1);
-
     }
+
+//    //    导出csv
+//    public function csv()
+//    {
+//        $Course = new CourseModel();
+//        $data = $Course->field('cid,delflag,cname,time,date,semester,campus,room,price,unit,tid,fee,memo')->select();
+//
+//        $str = 'cid' . ',' . 'delflag' . ',' . 'cname' . ',' . 'time' . ',' . 'date' . ',' . 'semester' . ',' . 'campus' . ',' . 'room' . ',' . 'price' . ',' . 'unit' . ',' . 'tid' . ',' . 'fee' . ',' . 'memo' . "\n";
+//        foreach ($data as $key => $value) {
+//            $str .= $value['cid'] . ',' . $value['delflag'] . ',' . $value['cname'] . ',' . $value['time'] . ',' . $value['date'] . ',' . $value['semester'] . ',' . $value['campus'] . ',' . $value['room'] . ',' . $value['price'] . ',' . $value['unit'] . ',' . $value['tid'] . ',' . $value['fee'] . ',' . $value['memo'] . "\n";
+//        };
+//        $filename = './output.csv';
+//        header('Content-type:text/csv');
+//        header("Content-Disposition:attachment;filename=" . $filename);
+//        header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
+//        header('Expires:0');
+//        header('Pragma:public');
+//        echo $str;
+//    }
 }

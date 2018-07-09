@@ -184,15 +184,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                学号 * :
-                                <input type="number" v-model="payDetailInShow.sid" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                学期:
-                                <input type="text" v-model="payDetailInShow.semester" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                费用 *:
+                                费用:
                                 <input type="number" v-model="payDetailInShow.fee" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
@@ -209,22 +201,16 @@
                                 </select>
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                发票:
-                                <input type="number" v-model="payDetailInShow.iid" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
                                 日期:
                                 <input type="date" v-model="payDetailInShow.date" class="form-control">
                             </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                员工:
-                                <input type="number" v-model="payDetailInShow.uid" class="form-control">
-                            </div>
-                        </div>
-                        <div>
-                            备注:
-                            <textarea v-model="payDetailInShow.memo" class="form-control">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                备注:
+                                <textarea v-model="payDetailInShow.memo" class="form-control">
                             </textarea>
+                            </div>
+                            <!--TODO 员工ID-->
+                            <input type="hidden" value="{:session('uid')}" v-model="payDetailInShow.uid">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -234,6 +220,51 @@
                         <button v-if="!add" type="button" class="btn btn-primary"
                                 @click="savePay(payDetailInShow)">保存修改
                         </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <!--搜索学生-->
+        <div class="modal fade" tabindex="-1" id="myModal4" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="display: inline;">搜索结果</h4>
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div v-if="students.length>0">
+                            <table class="table table-striped table-hover table-condensed">
+                                <thead>
+                                <tr>
+                                    <td class="text-center">编号</td>
+                                    <td class="text-center">姓名</td>
+                                    <td class="text-center">性别</td>
+                                    <td class="text-center">年级</td>
+                                    <td class="text-center">学校</td>
+                                    <td class="text-center">余额</td>
+                                    <td class="text-center">操作</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(student,index) in students">
+                                    <td class="text-center">{{student.sid}}</td>
+                                    <td class="text-center">{{student.sname}}</td>
+                                    <td class="text-center">{{(student.sex==1)?'男':'女'}}</td>
+                                    <td class="text-center">{{student.grade}}</td>
+                                    <td class="text-center">{{student.school}}</td>
+                                    <td class="text-center">{{student.balance}}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-xs btn-success" @click="search1(student.sid)">缴费记录
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -298,51 +329,6 @@
                         <input type="hidden" name="date" value="{:date('Y-m-d')}">
                         <input type="hidden" name="uid" value="{:session('uid')}">
                     </form>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-        <!--添加搜索页-->
-        <div class="modal fade" tabindex="-1" id="myModal4" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" style="display: inline;">搜索结果</h4>
-                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
-                                aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    </div>
-                        <div class="modal-body">
-                            
-                            <div v-if="students.length>0">
-                                <table class="table table-striped table-hover table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <td class="text-center">编号</td>
-                                        <td class="text-center">姓名</td>
-                                        <td class="text-center">性别</td>
-                                        <td class="text-center">年级</td>
-                                        <td class="text-center">学校</td>
-                                        <td class="text-center">余额</td>
-                                        <td class="text-center">操作</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <!-- 用js做循环我目前只想到这种方式 -->
-                                    <tr v-for="(student,index) in students">
-                                        <td class="text-center">{{student.sid}}</td>
-                                        <td class="text-center">{{student.sname}}</td>
-                                        <td class="text-center">{{(student.sex==1)?'男':'女'}}</td>
-                                        <td class="text-center">{{student.grade}}</td>
-                                        <td class="text-center">{{student.school}}</td>
-                                        <td class="text-center">{{student.balance}}</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-xs btn-success" @click="search1(student.sid)">缴费记录</button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -516,11 +502,6 @@
 </body>
 <!--业务逻辑-->
 <script type="text/javascript">
-    function ser() {
-        let seme = $('#sel_semester').val();
-        let temp = $('#status').val();
-        window.location.href = "{:url('pay/index')}?state=" + temp + "&seme=" + seme;
-    }
     var app = new Vue({
         el: '#app',
         data: {
@@ -714,8 +695,6 @@
                     success: function (data) {
                         if (data.success) {
                             toastr.success("操作成功");
-                            //TODO 跳转到最新页
-                            //setTimeout("window.location.reload()", "500");
                             tvm.getPays(data.totalPage,tvm.sem);
                             $('#myModal').modal("hide");
                         } else {

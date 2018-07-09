@@ -40,11 +40,11 @@ class Pay extends Controller
         $semester = $_POST['sem'];
         $pay = new PayModel;
         if($semester == 0) {
-            $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where('p.delflag', '0')->page($page, 10)->select();
+            $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where('p.delflag', '0')->field("pid,p.sid,semester,p.fee,detail,method,iid,rid,date,uid,p.memo,sname")->page($page, 10)->select();
             $totalPage = ceil(db('pay')->where('delflag', '0')->count() / 10);
         }
         else{
-            $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where(array('p.delflag'=>'0','semester'=>$semester))->page($page, 10)->select();
+            $pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where(array('p.delflag' => '0', 'semester' => $semester))->field("pid,p.sid,semester,p.fee,detail,method,iid,rid,date,uid,p.memo,sname")->page($page, 10)->select();
             $totalPage = ceil(db('pay')->where(array('delflag'=>'0','semester'=>$semester))->count() / 10);
         }
         $Semester = new SemesterModel();
@@ -64,7 +64,7 @@ class Pay extends Controller
         //     exit();
         // }
         $Pay = new PayModel;
-        $pay = $Pay->alias("p")->join("user u", "u.uid=p.uid")->where('pid', $_POST['pid'])->field("pid,fee,detail,method,date,u.name user")->find();
+        $pay = $Pay->alias("p")->join("user u", "u.uid=p.uid")->where('pid', $_POST['pid'])->field("pid,fee,detail,method,date,u.name user,p.memo")->find();
         echo json_encode(array("pay" => $pay, "success" => true));
     }
 
@@ -81,14 +81,6 @@ class Pay extends Controller
             exit();
         }
 
-        if ($_POST['sid'] == '' || !isset($_POST['sid'])) {
-            echo json_encode(array("success" => false, 'msg' => "缴费学号不能为空"));
-            exit();
-        }
-        if ($_POST['semester'] == '' || $_POST['semester'] == null) {
-            echo json_encode(array("success" => false, 'msg' => "学期不能为空"));
-            exit();
-        }
         if ($_POST['fee'] == '' || $_POST['fee'] == null) {
             echo json_encode(array("success" => false, 'msg' => "费用不能为空"));
             exit();
@@ -103,7 +95,7 @@ class Pay extends Controller
         }
 
         $pay = new PayModel;
-        if ($pay->allowField(['sid', 'semester', 'fee', 'detail', 'method', 'iid', 'rid', 'date', 'uid', 'memo'])->save($_POST, ['pid' => $_POST['pid']])) {
+        if ($pay->allowField(['fee', 'detail', 'method', 'date', 'uid', 'memo'])->save($_POST, ['pid' => $_POST['pid']])) {
             echo json_encode(array("success" => true));
             exit();
         } else {

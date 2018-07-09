@@ -25,7 +25,7 @@
             $('#login').hide();
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
-            if (roles.indexOf(9) == -1)
+            if (roles.indexOf(1) == -1)
                 $('#sys').hide();
         } else
             $('#logout').hide();
@@ -94,7 +94,6 @@
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <label for="sel_semester">选择学期</label>
                 <select class="form-control" name="seme" id="sel_semester" onchange="ser()">
-                    <option value="0">全部</option>
                     {volist id="sem" name="semester"}
                     <option value="{$sem->id}">{$sem->name}</option>
                     {/volist}

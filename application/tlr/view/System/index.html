@@ -147,11 +147,13 @@
     }
 
     function csv1() {
-        window.location.href = "{:url('system/csv_pay')}";
+        let temp = $('#sel_semester').val();
+        window.location.href = "{:url('system/csv_pay')}?seme=" + temp;
     }
 
     function csv2() {
-        window.location.href = "{:url('system/csv_refund')}";
+        let temp = $('#sel_semester').val();
+        window.location.href = "{:url('system/csv_refund')}?seme=" + temp;
     }
 
 

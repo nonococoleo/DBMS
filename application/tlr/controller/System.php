@@ -30,7 +30,7 @@ class System extends Controller
         $page = $enroll->render();
         $Pay = new PayModel();
         $pay = $Pay->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) price")->select();
-        $Refund = new PayModel();
+        $Refund = new RefundModel();
         $refund = $Refund->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) price")->select();
         $Semester = new SemesterModel();
         $semester = $Semester->where("id", ">", 0)->select();
@@ -63,10 +63,11 @@ class System extends Controller
     }
 
 //导出缴费csv
-    public function csv_pay()
+    public function csv_pay(Request $request)
     {
+        $seme = $request->param("seme");
         $Pay = new PayModel();
-        $data = $Pay->field('pid,delflag,sid,semester,fee,detail,method,iid,rid,date,uid,memo')->select();
+        $data = $Pay->where("semester", $seme)->select();
         $str = 'pid' . ',' . 'delflag' . ',' . 'sid' . ',' . 'semester' . ',' . 'fee' . ',' . 'detail' . ',' . 'method' . ',' . 'iid' . ',' . 'rid' . ',' . 'date' . ',' . 'uid' . ',' . 'memo' . "\n";
         foreach ($data as $key => $value) {
             $str .= $value['pid'] . ',' . $value['delflag'] . ',' . $value['sid'] . ',' . $value['semester'] . ',' . $value['fee'] . ',' . $value['detail'] . ',' . $value['method'] . ',' . $value['iid'] . ',' . $value['rid'] . ',' . $value['date'] . ',' . $value['uid'] . ',' . $value['memo'] . "\n";
@@ -81,11 +82,11 @@ class System extends Controller
     }
 
 //    导出退费csv
-    public function csv_refund()
+    public function csv_refund(Request $request)
     {
-
+        $seme = $request->param("seme");
         $Refund = new RefundModel();
-        $data = $Refund->field(' rid,delflag,pid,semester,fee,detail,method,card,bank,person,date,state,uid,memo')->select();
+        $data = $Refund->where("semester", $seme)->select();
         $str = 'rid' . ',' . 'delflag' . ',' . 'pid' . ',' . 'semester' . ',' . 'fee' . ',' . 'detail' . ',' . 'method' . ',' . 'card' . ',' . 'bank' . ',' . 'person' . ',' . 'date' . ',' . 'state' . ',' . 'uid' . ',' . 'memo' . "\n";
         foreach ($data as $key => $value) {
             $str .= $value['rid'] . ',' . $value['delflag'] . ',' . $value['pid'] . ',' . $value['semester'] . ',' . $value['fee'] . ',' . $value['detail'] . ',' . $value['method'] . ',' . $value['card'] . ',' . $value['bank'] . ',' . $value['person'] . ',' . $value['date'] . ',' . $value['state'] . ',' . $value['uid'] . ',' . $value['memo'] . "\n";

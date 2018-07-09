@@ -172,10 +172,6 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-6">
-                                    学期:
-                                    <input type="text" name="semester" id="semester" class="form-control">
-                                </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     费用:
                                     <input type="text" name="fee" id="fee" class="form-control">
                                 </div>
@@ -200,10 +196,6 @@
                                     <input type="text" name="person" id="person" class="form-control">
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
-                                    日期:
-                                    <input type="date" name="date" id="date" class="form-control">
-                                </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     状态:
                                     <select class="form-control" name="state" id="state">
                                         <option value="0">请选择...</option>
@@ -224,7 +216,6 @@
                             <button type="button" class="btn btn-primary" id="add" onclick="check()">退费处理</button>
                         </div>
                         <input type="hidden" name="uid" value="{:session('uid')}">
-                        <input type="hidden" name="pid" id="pid">
                     </form>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -269,7 +260,11 @@
                                 员工:
                                 <input type="text" disabled v-model="payDetailInShow.user" class="form-control">
                             </div>
-                        </div>
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                备注:
+                                <textarea disabled v-model="payDetailInShow.memo" class="form-control">
+                            </textarea>
+                            </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -291,14 +286,11 @@
         }
     });
     function mod(url, pid, semester, fee, method, card, bank, person, date, state, uid, memo) {
-        $('#pid').val(pid);
-        $('#semester').val(semester);
         $('#fee').val(fee);
         $('#method').val(method);
         $('#card').val(card);
         $('#bank').val(bank);
         $('#person').val(person);
-        $('#date').val(date);
         $('#state').val(state);
         $('#uid').val(uid);
         $('#memo').text(memo);
@@ -344,10 +336,6 @@
         $('#modal-form').submit();
     }
 
-    function sel() {
-        let temp = $('#status').val();
-        window.location.href = "{:url('refund/index')}?state=" + temp;
-    }
 
     function payInfo(pid) {
         $.ajax({
@@ -364,7 +352,6 @@
                 }
             }
         });
-        // body...
     }
 </script>
 </html>

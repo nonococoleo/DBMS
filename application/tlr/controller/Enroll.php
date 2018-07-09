@@ -60,7 +60,6 @@ class Enroll extends Controller
             $Class = new CourseModel();
             $Semester = new SemesterModel();
             $semester = $Semester->where("id", "=", $seme)->select();
-//            $semester = $Semester->select();
             $class = $Class->where("semester", "=", $seme)->distinct("true")->column("memo");
             $data = ["seme" => $semester[0]->name, "classes" => $class, "semester" => $seme];
             $this->assign($data);
