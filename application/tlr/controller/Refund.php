@@ -4,7 +4,6 @@ namespace app\tlr\controller;
 
 use app\tlr\model\EnrollModel;
 use app\tlr\model\LogModel;
-use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
 use app\tlr\model\SemesterModel;
 use think\Controller;
@@ -60,7 +59,7 @@ class Refund extends Controller
         if (session('uid')) {
             $Refund = new RefundModel();
             $Log = new LogModel();
-            $Pay = new PayModel();
+            $Pay = new RefundModel();
             $Enroll = new EnrollModel();
             foreach ($_POST as $key => $value)
                 if ($value == "")

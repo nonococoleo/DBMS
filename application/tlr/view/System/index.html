@@ -125,11 +125,11 @@
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>缴费总计 {$pay->price}</h3>
-            <button class="btn btn-success" onclick="enroll()">缴费明细</button>
+            <button class="btn btn-success" onclick="csv1()">缴费明细</button>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>退费总计 {$refund->price}</h3>
-            <button class="btn btn-success" onclick="namelist()">退费明细</button>
+            <button class="btn btn-success" onclick="csv2()">退费明细</button>
         </div>
     </div>
 </div>
@@ -145,6 +145,16 @@
         let seme = $('#sel_semester').val();
         window.location.href = "{:url('system/setseme')}?seme=" + seme;
     }
+
+    function csv1() {
+        window.location.href = "{:url('system/csv_pay')}";
+    }
+
+    function csv2() {
+        window.location.href = "{:url('system/csv_refund')}";
+    }
+
+
 </script>
 </html>
 

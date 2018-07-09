@@ -21,14 +21,19 @@
     toastr.options.positionClass = 'toast-top-center';
     toastr.options.timeOut = 2000;
     window.onload = function () {
-        if ("{:session('uid')}")
+        if ("{:session('uid')}") {
             $('#login').hide();
-        else
+            $('#username').text("{:session('name')}");
+            let roles = "{:json_encode(session('user_roles'))}";
+            if (roles.indexOf(9) == -1)
+                $('#sys').hide();
+        } else
             $('#logout').hide();
-        $('#sel_semester').val("{$seme}");
     };
 </script>
 <body>
+
+
 <!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -39,8 +44,8 @@
             <ul class="nav navbar-nav">
                 <li><a href="{:url('index/index')}">同路人教育</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <li class="dropdown" id="edu">
+                    <a href="#" class="dropdown-toggle" role="button" aria-haspopup="true"
                        aria-expanded="false" data-hover="dropdown">教务管理<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('student/index')}">学生管理</a></li>
@@ -48,8 +53,8 @@
                         <li><a href="{:url('course/index')}">课程管理</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <li class="dropdown" id="fin">
+                    <a href="#" class="dropdown-toggle" role="button" aria-haspopup="true"
                        aria-expanded="false" data-hover="dropdown">财务管理<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('pay/index')}">缴费管理</a></li>
@@ -57,23 +62,26 @@
                         <li><a href="{:url('invoice/index')}">发票管理</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <li class="dropdown" id="sys">
+                    <a href="{:url('system/index')}" class="dropdown-toggle" role="button" aria-haspopup="true"
                        aria-expanded="false" data-hover="dropdown">系统管理<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('user/index')}">用户管理</a></li>
-                        <li><a href="{:url('role/index')}">角色管理</a></li>
                         <li><a href="{:url('permission/index')}">权限管理</a></li>
+                        <li><a href="{:url('role/index')}">角色管理</a></li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" id="username"></a></li>
                 <li id="login"><a href="{:url('index/login')}">登录</a></li>
                 <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+
+
 <!--页面主体-->
 <div id="app" class="container">
     <!--页眉-->
@@ -164,12 +172,18 @@
     <div style="text-align:center;">
         {$page}
     </div>
-    <!--TODO upload files-->
+
+    <!--上传文件-->
     <div>
         <form method="post" enctype="multipart/form-data" class="form" action="{:url('upload')}">
             <INPUT type="file" class="file" name="file">
+            请导入utf8编码的csv文件 <br>
             <INPUT type="submit" class="btn btn-success" value="批量导入">
         </form>
+
+        <!--<form method="post" enctype="multipart/form-data" class="form" action="{:url('csv')}">-->
+        <!--<INPUT type="submit" class="btn btn-success" value="批量导出">-->
+        <!--</form>-->
     </div>
     <!-- 用户信息的modal -->
     <div>

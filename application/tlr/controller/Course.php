@@ -8,28 +8,35 @@ use app\tlr\model\SemesterModel;
 use app\tlr\model\TeacherModel;
 use think\Controller;
 use think\Request;
+use PHPExcel;
 
-import("Org.Util.PHPExcel.IOFactory", '', '.php');
+//use PHPExcel\PHPExcel_IOFactory;
 
 class Course extends Controller
 {
-//    public function index(Request $request)
-//    {
-//        $Course = new CourseModel();
-//        $course = $Course->alias("c")->where("c.delflag", "=", 0)->where("semester", "=", session('cur_semester'))->join("teacher t", "c.tid=t.tid")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname')->order("campus")->paginate(10, false, ['type' => 'bootstrap']);
-//        $Teacher = new TeacherModel();
-//        $teacher = $Teacher->where("delflag", "=", "0")->select();
-//        $Semester = new SemesterModel();
-//        $semester = $Semester->select();
-//        $page = $course->render();
-//
-//        $data = ["course" => $course, "page" => $page, "name" => null, "teacher" => $teacher, "semester" => $semester, "seme" => session('cur_semester')];
-//        $this->assign($data);
-//        $htmls = $this->fetch('index');
-//        return $htmls;
-//    }
 
 
+//    导出csv
+    public function csv()
+    {
+        $Course = new CourseModel();
+        $data = $Course->field('cid,delflag,cname,time,date,semester,campus,room,price,unit,tid,fee,memo')->select();
+
+        $str = 'cid' . ',' . 'delflag' . ',' . 'cname' . ',' . 'time' . ',' . 'date' . ',' . 'semester' . ',' . 'campus' . ',' . 'room' . ',' . 'price' . ',' . 'unit' . ',' . 'tid' . ',' . 'fee' . ',' . 'memo' . "\n";
+        foreach ($data as $key => $value) {
+            $str .= $value['cid'] . ',' . $value['delflag'] . ',' . $value['cname'] . ',' . $value['time'] . ',' . $value['date'] . ',' . $value['semester'] . ',' . $value['campus'] . ',' . $value['room'] . ',' . $value['price'] . ',' . $value['unit'] . ',' . $value['tid'] . ',' . $value['fee'] . ',' . $value['memo'] . "\n";
+        };
+        $filename = './output.csv';
+        header('Content-type:text/csv');
+        header("Content-Disposition:attachment;filename=" . $filename);
+        header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
+        header('Expires:0');
+        header('Pragma:public');
+        echo $str;
+    }
+
+
+    //首页显示全部报名信息
     public function index(Request $request)
     {
         $name = $request->param('name');
@@ -56,7 +63,6 @@ class Course extends Controller
 
             $data = array_merge(["course" => $course, "page" => $page, "semester" => $semester, "teacher" => $teacher], $query);
             $this->assign($data);
-
             $htmls = $this->fetch("index");
             return $htmls;
         } else {
@@ -65,6 +71,7 @@ class Course extends Controller
         }
     }
 
+    //修改课程信息
     public function mod(Request $request)
     {
         if (session('uid')) {
@@ -84,6 +91,8 @@ class Course extends Controller
         return null;
     }
 
+
+    //删除课程
     public function del(Request $request)
     {
         if (session('uid')) {
@@ -98,6 +107,7 @@ class Course extends Controller
         return null;
     }
 
+//    新增课程
     public function add(Request $request)
     {
         if (session('uid')) {
@@ -115,6 +125,7 @@ class Course extends Controller
         return null;
     }
 
+//    查找课程
     public function ser(Request $request)
     {
         $Course = new CourseModel();
@@ -130,6 +141,7 @@ class Course extends Controller
     }
 
 
+//    上传csv文件批量导入课程
     public function upload()
     {
         $file = request()->file('file');
@@ -138,42 +150,12 @@ class Course extends Controller
         }
         $replacename = session('uid') . '_' . time() . '_' . $_FILES["file"]['name'];
         $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
-//TODO 转码
-        foreach ($info as $key => $value) {
-//            echo mb_detect_encoding($key);
-//            echo mb_detect_encoding($value);
-//            echo '<br>';
-//            echo '<br>';
-//            echo '<br>';
-//            echo mb_detect_encoding($info);
-
-            echo $key;
-            echo '<br>';
-            echo $value;
-            $value = eval('return ' . iconv('ascii', 'utf-8', var_export($value, true)) . ';');
-
-////            $value = mb_convert_encoding($value, "UTF-8", "GBK");
-//            iconv('GBK','UTF-8//IGNORE',$value);
-//            iconv('GBK','UTF-8//TRANSLIT//IGNORE',$value);
-            echo $value;
-            echo '<br>';
-            echo '<br>';
-            echo '<br>';
-            echo '------------------------<br>';
-        }
-//        print_r(iconv_get_encoding());//得到当前页面编码信息 
-
-
         $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\\' . $replacename;
         $this->addFromFile($filename);
 
-//        if ($this->addFromFile($filename)) {
-//            $this->success('文件上传成功');
-//        } else {
-//            $this->error($file->getError());
-//        }
     }
 
+//    从上传的csv文件中批量添加课程
     public function addFromFile($filename = '')
     {
         $file = fopen($filename, 'r');

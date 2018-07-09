@@ -30,7 +30,7 @@ class System extends Controller
         $page = $enroll->render();
         $Pay = new PayModel();
         $pay = $Pay->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) price")->select();
-        $Refund = new RefundModel();
+        $Refund = new PayModel();
         $refund = $Refund->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) price")->select();
         $Semester = new SemesterModel();
         $semester = $Semester->where("id", ">", 0)->select();
@@ -61,4 +61,43 @@ class System extends Controller
             $this->error("确定学期", 'system/index', null, 2);
         }
     }
+
+//导出缴费csv
+    public function csv_pay()
+    {
+        $Pay = new PayModel();
+        $data = $Pay->field('pid,delflag,sid,semester,fee,detail,method,iid,rid,date,uid,memo')->select();
+        $str = 'pid' . ',' . 'delflag' . ',' . 'sid' . ',' . 'semester' . ',' . 'fee' . ',' . 'detail' . ',' . 'method' . ',' . 'iid' . ',' . 'rid' . ',' . 'date' . ',' . 'uid' . ',' . 'memo' . "\n";
+        foreach ($data as $key => $value) {
+            $str .= $value['pid'] . ',' . $value['delflag'] . ',' . $value['sid'] . ',' . $value['semester'] . ',' . $value['fee'] . ',' . $value['detail'] . ',' . $value['method'] . ',' . $value['iid'] . ',' . $value['rid'] . ',' . $value['date'] . ',' . $value['uid'] . ',' . $value['memo'] . "\n";
+        }
+        $filename = './缴费明细.csv';
+        header('Content-type:text/csv');
+        header("Content-Disposition:attachment;filename=" . $filename);
+        header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
+        header('Expires:0');
+        header('Pragma:public');
+        echo $str;
+    }
+
+//    导出退费csv
+    public function csv_refund()
+    {
+
+        $Refund = new RefundModel();
+        $data = $Refund->field(' rid,delflag,pid,semester,fee,detail,method,card,bank,person,date,state,uid,memo')->select();
+        $str = 'rid' . ',' . 'delflag' . ',' . 'pid' . ',' . 'semester' . ',' . 'fee' . ',' . 'detail' . ',' . 'method' . ',' . 'card' . ',' . 'bank' . ',' . 'person' . ',' . 'date' . ',' . 'state' . ',' . 'uid' . ',' . 'memo' . "\n";
+        foreach ($data as $key => $value) {
+            $str .= $value['rid'] . ',' . $value['delflag'] . ',' . $value['pid'] . ',' . $value['semester'] . ',' . $value['fee'] . ',' . $value['detail'] . ',' . $value['method'] . ',' . $value['card'] . ',' . $value['bank'] . ',' . $value['person'] . ',' . $value['date'] . ',' . $value['state'] . ',' . $value['uid'] . ',' . $value['memo'] . "\n";
+        }
+        $filename = './退费明细.csv';
+        header('Content-type:text/csv');
+        header("Content-Disposition:attachment;filename=" . $filename);
+        header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
+        header('Expires:0');
+        header('Pragma:public');
+        echo $str;
+    }
+
+
 }
