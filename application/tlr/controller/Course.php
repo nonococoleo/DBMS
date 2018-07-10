@@ -7,9 +7,10 @@ use app\tlr\model\LogModel;
 use app\tlr\model\SemesterModel;
 use app\tlr\model\TeacherModel;
 use gmars\rbac\Rbac;
-use PHPExcel;
 use think\Controller;
 use think\Request;
+
+//use PHPExcel;
 
 //use PHPExcel\PHPExcel_IOFactory;
 
@@ -132,39 +133,26 @@ class Course extends Controller
 
 
 //    上传csv文件批量导入课程
-    public function upload()
+    public function upload(Request $request)
     {
         $rbacObj = new Rbac();
         if(!$rbacObj->can($request->path())) {
             $this->error("没有权限", "Course/index", null, 1);
             exit();
         }
-        $file = request()->file('file');
-        if (empty($file)) {
+        $upload = request()->file('file');
+        if (empty($upload)) {
             $this->error('请选择上传文件');
         }
         $replacename = session('uid') . '_' . time() . '_' . $_FILES["file"]['name'];
-        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
-//        TODO 地址？
-        $filename = '\uploads\\' . $replacename;
-        $this->addFromFile($filename);
-    }
+        $file = $upload->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
 
-
-//    从上传的csv文件中批量添加课程
-    public function addFromFile($filename = '')
-    {
-        $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限", "Course/index", null, 1);
-            exit();
-        }
+        $filename = $file->getPath() . "/" . $replacename;
         $file = fopen($filename, 'r');
+
         //读取内容
         $count = 0;
         while (!feof($file)) {
-
-
             $line = fgetcsv($file);
             $cname = 2;
 

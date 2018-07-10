@@ -192,7 +192,7 @@
                         <div class="row">
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                 费用:
-                                <input type="number" v-model="payDetailInShow.fee" class="form-control">
+                                <input type="number" v-model="payDetailInShow.fee" class="form-control" readonly>
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                 费用明细:
@@ -216,8 +216,6 @@
                                 <textarea v-model="payDetailInShow.memo" class="form-control">
                             </textarea>
                             </div>
-                            <!--TODO 员工ID-->
-                            <input type="hidden" value="{:session('uid')}" v-model="payDetailInShow.uid">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -651,6 +649,8 @@
             savePay(payDetailInShow) {
                 let id = payDetailInShow.sid;
                 let fee = payDetailInShow.fee;
+                payDetailInShow.uid = "{:session('uid')}";
+                alert(payDetailInShow.uid);
                 if (!(id && fee)) {
                     if (!id)
                         $('#sid_check').addClass("has-error");

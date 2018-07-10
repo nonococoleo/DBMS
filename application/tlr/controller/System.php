@@ -40,6 +40,22 @@ class System extends Controller
         return $htmls;
     }
 
+    //设定学期、导入课程页面
+    public function semester(Request $request)
+    {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "index/index", null, 1);
+            exit();
+        }
+        $Semester = new SemesterModel();
+        $semester = $Semester->where("id", ">", 0)->select();
+        $data = ["semester" => $semester];
+        $this->assign($data);
+        $htmls = $this->fetch('semester');
+        return $htmls;
+    }
+
     //设置当前学期 接口
     public function setseme(Request $request)
     {
@@ -57,6 +73,25 @@ class System extends Controller
             $Semester->where("id", "<>", $seme)->setField("current", 0);
             session("cur_semester", $seme);
             $this->success("更改成功", null, null, 1);
+        } else {
+            $this->error("确定学期", 'system/index', null, 2);
+        }
+    }
+
+    public function addseme(Request $request)
+    {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", null, null, 3);
+            exit();
+        }
+        $seme = $request->param("name");
+        if ($seme) {
+            $Semester = new SemesterModel();
+            $Semester->save(["name" => $seme]);
+            $Log = new LogModel();
+            $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+            $this->success("添加成功", null, null, 1);
         } else {
             $this->error("确定学期", 'system/index', null, 2);
         }
