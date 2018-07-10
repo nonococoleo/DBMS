@@ -78,6 +78,7 @@ class System extends Controller
         }
     }
 
+    //添加学期
     public function addseme(Request $request)
     {
         $rbacObj = new Rbac();
@@ -129,8 +130,6 @@ class System extends Controller
         echo fread($file, filesize($filenametest));
         fclose($file);
         exit();
-
-
     }
 
 //    导出退费csv
@@ -164,8 +163,6 @@ class System extends Controller
         echo fread($file, filesize($filenametest));
         fclose($file);
         exit();
-
-
     }
 
 }

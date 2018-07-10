@@ -19,12 +19,6 @@
 <script>
     toastr.options.positionClass = 'toast-top-center';
     toastr.options.timeOut = 2000;
-    window.onload = function () {
-        if ("{:session('uid')}")
-            $('#login').hide();
-        else
-            $('#logout').hide();
-    };
 </script>
 <body>
 

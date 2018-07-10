@@ -25,8 +25,11 @@
             $('#login').hide();
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
+            roles = JSON.parse(roles);
             if (roles.indexOf(1) == -1)
                 $('#sys').hide();
+            if (roles.indexOf(12) == -1)
+                $('.jiaowu').hide();
         } else
             $('#logout').hide();
     };
@@ -110,7 +113,7 @@
                 <td class="text-center">学校</td>
                 <td class="text-center">电话</td>
                 <!--<td class="text-center">费用</td>-->
-                <td class="text-center">操作</td>
+                <td class="text-center jiaowu">操作</td>
             </tr>
             </thead>
             <tbody>
@@ -122,11 +125,11 @@
                 <td class="text-center">{$tea->phone}</td>
                 <!--<td class="text-center">{$tea->price}</td>-->
                 <td class="text-center">
-                    <button class="btn btn-xs btn-success"
+                    <button class="btn btn-xs btn-success jiaowu"
                             onclick="mod('{:url(\'teacher/mod\',[\'tid\'=>$tea.tid])}','{$tea.tname}','{$tea.school}','{$tea.phone}','{$tea.price}','{$tea.memo}')">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
-                    <button class="btn btn-xs btn-danger"
+                    <button class="btn btn-xs btn-danger jiaowu"
                             onclick="del('{:url(\'teacher/del\',[\'tid\'=>$tea.tid])}','{$tea.tname}')">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>

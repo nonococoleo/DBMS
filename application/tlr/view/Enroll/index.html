@@ -26,10 +26,16 @@
             $('#login').hide();
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
+            roles = JSON.parse(roles);
             if (roles.indexOf(1) == -1)
                 $('#sys').hide();
+            if (roles.indexOf(11) == -1)
+                $('.qiantai').hide();
+            if (roles.indexOf(12) == -1)
+                $('.jiaowu').hide();
         } else
             $('#logout').hide();
+        $('#sel_semester').val("{$seme}");
     };
 </script>
 <body>
@@ -102,7 +108,7 @@
                     <option value="{$sem->id}">{$sem->name}</option>
                     {/volist}
                 </select>
-                <select class="form-control input-sm" id="course">
+                <select class="form-control input-sm jiaowu" id="course">
                     {volist id="cou" name="course"}
                     <option value="{$cou->cid}">{$cou->cname}</option>
                     {/volist}
@@ -110,8 +116,8 @@
             </div>
         </form>
         <div class="col-sm-1 col-md-1 col-lg-1">
-            <button class="btn btn-primary btn-sm" onclick="enroll()">报名</button>
-            <button class="btn btn-info btn-sm" onclick="namelist()">名单</button>
+            <button class="btn btn-primary btn-sm qiantai" onclick="enroll()">报名</button>
+            <button class="btn btn-info btn-sm jiaowu" onclick="namelist()">名单</button>
         </div>
     </div>
     <br>
@@ -123,7 +129,7 @@
                 <td class="text-center">编号</td>
                 <td class="text-center">姓名</td>
                 <td class="text-center">课程</td>
-                <td class="text-center">参加次数</td>
+                <td class="text-center jiaowu">参加次数</td>
                 <td class="text-center">操作</td>
             </tr>
             </thead>
@@ -133,16 +139,16 @@
                 <td class="text-center">{$en->eid}</td>
                 <td class="text-center">{$en->sname}</td>
                 <td class="text-center">{$en->cname}</td>
-                <td class="text-center">{$en->attend}</td>
+                <td class="text-center jiaowu">{$en->attend}</td>
                 <td class="text-center">
                     <!--<button class="btn btn-xs btn-success"-->
                     <!--onclick="mod('{:url(\'enroll/mod\',[\'eid\'=>$en.eid])}','{$en.sid}','{$en.cid}','{$en.attend}','{$en.pid}','{$en.memo}')">-->
                     <!--<span class="glyphicon glyphicon-edit"></span>-->
                     <!--</button>-->
-                    <button class="btn btn-xs btn-success" onclick="payInfo('{$en->pid}')">
+                    <button class="btn btn-xs btn-success qiantai" onclick="payInfo('{$en->pid}')">
                         缴费情况
                     </button>
-                    <button class="btn btn-xs btn-danger"
+                    <button class="btn btn-xs btn-danger jiaowu"
                             onclick="del('{:url(\'enroll/del\',[\'eid\'=>$en.eid])}','{$en.cid}')">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
@@ -290,6 +296,7 @@
                                 <textarea disabled v-model="payDetailInShow.memo" class="form-control">
                             </textarea>
                             </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>

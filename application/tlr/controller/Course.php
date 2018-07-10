@@ -10,10 +10,6 @@ use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
 
-//use PHPExcel;
-
-//use PHPExcel\PHPExcel_IOFactory;
-
 class Course extends Controller
 {
     //首页显示全部报名信息
@@ -130,7 +126,6 @@ class Course extends Controller
             echo json_encode(array("msg" => "无此课程", "success" => false));
         }
     }
-
 
 //    上传csv文件批量导入课程
     public function upload(Request $request)

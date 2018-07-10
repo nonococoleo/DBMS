@@ -26,8 +26,11 @@
             $('#login').hide();
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
+            roles = JSON.parse(roles);
             if (roles.indexOf(1) == -1)
                 $('#sys').hide();
+            $('#sel_semester').val("{$seme}");
+            $('#status').val("{$state}");
         } else
             $('#logout').hide();
     };

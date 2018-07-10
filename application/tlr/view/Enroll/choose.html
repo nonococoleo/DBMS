@@ -22,9 +22,14 @@
     toastr.options.positionClass = 'toast-top-center';
     toastr.options.timeOut = 2000;
     window.onload = function () {
-        if ("{:session('uid')}")
+        if ("{:session('uid')}") {
             $('#login').hide();
-        else
+            $('#username').text("{:session('name')}");
+            let roles = "{:json_encode(session('user_roles'))}";
+            roles = JSON.parse(roles);
+            if (roles.indexOf(1) == -1)
+                $('#sys').hide();
+        } else
             $('#logout').hide();
     };
 </script>

@@ -26,6 +26,7 @@
             $('#login').hide();
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
+            roles = JSON.parse(roles);
             if (roles.indexOf(1) == -1)
                 $('#sys').hide();
         } else
@@ -134,12 +135,6 @@
                 <td class="text-center">{{pay.sname}}</td>
                 <td class="text-center">{{getsemname(pay.semester)}}</td>
                 <td class="text-center">{{pay.fee}}</td>
-                <!--<td class="text-center">-->
-                <!--<div style="cursor: pointer;" @click="invInfo(pay.iid)">{{pay.iid}}</div>-->
-                <!--</td>-->
-                <!--<td class="text-center">-->
-                <!--<div style="cursor: pointer;" @click="refInfo(pay.rid)">{{pay.rid}}</div>-->
-                <!--</td>-->
                 <td class="text-center">{{pay.date}}</td>
                 <td class="text-center">
                     <button class="btn btn-xs" :class="(pay.iid)?'btn-info':'btn-primary'"
@@ -650,7 +645,6 @@
                 let id = payDetailInShow.sid;
                 let fee = payDetailInShow.fee;
                 payDetailInShow.uid = "{:session('uid')}";
-                alert(payDetailInShow.uid);
                 if (!(id && fee)) {
                     if (!id)
                         $('#sid_check').addClass("has-error");

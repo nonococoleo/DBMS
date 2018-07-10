@@ -26,6 +26,7 @@
             $('#login').hide();
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
+            roles = JSON.parse(roles);
             if (roles.indexOf(1) == -1)
                 $('#sys').hide();
         } else
@@ -115,8 +116,7 @@
                 <td class="text-center">{$item->description}</td>
                 <td class="text-center">
                     <a href="{:url('role/setPermission'),'?id='.$item->id.'&name='.$item.name}">
-                        <button class="btn btn-xs btn-success" title="分配权限">
-                            <span class="glyphicon glyphicon-edit"></span>
+                        <button class="btn btn-xs btn-success" title="分配权限">分配权限
                         </button>
                     </a>
                     <a href="{:url('role/deleteRole'),'?id='.$item->id.'&name='.$item.name}">
