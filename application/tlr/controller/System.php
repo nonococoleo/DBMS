@@ -97,8 +97,27 @@ class System extends Controller
         header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
         header('Expires:0');
         header('Pragma:public');
+//
+//        $file = fopen($filename, 'w');
+//        fwrite($file, chr(OxEF) . chr(OxBB) . chr(OxBF));
+//        foreach ($str as $str) {
+//            fputcsv($file, $str);
+//        }
+//
+
+
         echo $str;
     }
+
+    public function test()
+    {
+        $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\test.csv';
+        $file = fopen($filename, 'w');
+        fwrite($file, chr(OxEF) . chr(OxBB) . chr(OxBF));
+//        foreach ()
+    }
+
+
 
 
 }

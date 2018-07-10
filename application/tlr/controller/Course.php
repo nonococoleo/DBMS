@@ -127,10 +127,11 @@ class Course extends Controller
         $replacename = session('uid') . '_' . time() . '_' . $_FILES["file"]['name'];
         $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
 //        TODO 地址？
-        $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\\' . $replacename;
+        $filename = '\uploads\\' . $replacename;
         $this->addFromFile($filename);
 
     }
+
 
 //    从上传的csv文件中批量添加课程
     public function addFromFile($filename = '')
