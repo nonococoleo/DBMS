@@ -34,8 +34,6 @@
     };
 </script>
 <body>
-
-
 <!--导航条-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -82,8 +80,6 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-
-
 <!--页面主体-->
 <div id="app" class="container">
     <!--页眉-->
@@ -171,6 +167,10 @@
     <!--分页-->
     <div style="text-align:center;">
         {$page}
+    </div>
+    <div style="margin-top: 17px">
+        &nbsp;
+        <button class="btn btn-success" onclick="set()">学期/课程</button>
     </div>
     <!-- 用户信息的modal -->
     <div>
@@ -291,8 +291,6 @@
         $('#myModal').modal();
     }
 
-
-
     function add() {
         $('#name_check').removeClass("has-error");
         $('#time_check').removeClass("has-error");
@@ -395,6 +393,10 @@
         else
             $('#modal-form').submit();
 
+    }
+
+    function set() {
+        window.location.href = "{:url('system/semester')}";
     }
 </script>
 </html>

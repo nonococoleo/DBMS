@@ -112,7 +112,6 @@
                 <td class="text-center">姓名</td>
                 <td class="text-center">学校</td>
                 <td class="text-center">电话</td>
-                <!--<td class="text-center">费用</td>-->
                 <td class="text-center jiaowu">操作</td>
             </tr>
             </thead>
@@ -123,14 +122,13 @@
                 <td class="text-center">{$tea->tname}</td>
                 <td class="text-center">{$tea->school}</td>
                 <td class="text-center">{$tea->phone}</td>
-                <!--<td class="text-center">{$tea->price}</td>-->
                 <td class="text-center">
                     <button class="btn btn-xs btn-success jiaowu"
-                            onclick="mod('{:url(\'teacher/mod\',[\'tid\'=>$tea.tid])}','{$tea.tname}','{$tea.school}','{$tea.phone}','{$tea.price}','{$tea.memo}')">
+                            onclick="mod('{:url(\'teacher/mod\')}','{$tea.tid}','{$tea.tname}','{$tea.school}','{$tea.phone}','{$tea.price}','{$tea.memo}')">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button class="btn btn-xs btn-danger jiaowu"
-                            onclick="del('{:url(\'teacher/del\',[\'tid\'=>$tea.tid])}','{$tea.tname}')">
+                            onclick="del('{:url(\'teacher/del\')}','{$tea.tid}','{$tea.tname}')">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </td>
@@ -193,7 +191,7 @@
 </body>
 <!--业务逻辑-->
 <script>
-    function mod(url, tname, school, phone, price, memo) {
+    function mod(url, tid, tname, school, phone, price, memo) {
         $('#name_check').removeClass("has-error");
         $('#phone_check').removeClass("has-error");
         $('#tname').val(tname);
@@ -202,7 +200,7 @@
         $('#price').val(price);
         $('#memo').text(memo);
         $('#modal-title').text("修改信息");
-        $('#modal-form').attr("action", url);
+        $('#modal-form').attr("action", url + "?tid=" + tid);
         $('#add').hide();
         $('#mod').show();
         $('#myModal').modal();
@@ -223,10 +221,10 @@
         $('#myModal').modal();
     }
 
-    function del(url, tname) {
+    function del(url, tname, tid) {
         let flag = confirm("确定要删除老师 " + tname + " 吗？");
         if (flag)
-            window.location.href = url;
+            window.location.href = url + "?tid=" + tid;
     }
 
     function ser() {

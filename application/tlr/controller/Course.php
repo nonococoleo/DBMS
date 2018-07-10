@@ -132,7 +132,7 @@ class Course extends Controller
     {
         $rbacObj = new Rbac();
         if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限", "Course/index", null, 1);
+            $this->error("没有权限", "System/semester", null, 1);
             exit();
         }
         $upload = request()->file('file');

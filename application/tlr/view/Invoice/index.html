@@ -131,11 +131,11 @@
                 <td class="text-center">
                     <button class="btn btn-xs btn-info" onclick="payInfo('{$inv->pid}')">缴费信息</button>
                     <button class="btn btn-xs btn-success"
-                            onclick="mod('{:url(\'invoice/mod\',[\'iid\'=>$inv.iid])}','{$inv.pid}','{$inv.fee}','{$inv.title}','{$inv.number}','{$inv.date}','{$inv.state}','{$inv.uid}','{$inv.memo}')">
+                            onclick="mod('{:url(\'invoice/mod\')}','{$inv.iid}','{$inv.pid}','{$inv.fee}','{$inv.title}','{$inv.number}','{$inv.date}','{$inv.state}','{$inv.uid}','{$inv.memo}')">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button class="btn btn-xs btn-danger"
-                            onclick="del('{:url(\'invoice/del\',[\'iid\'=>$inv.iid])}')">
+                            onclick="del('{:url(\'invoice/del\')}','{$inv.iid}')">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </td>
@@ -267,7 +267,8 @@
         methods: {
         }
     });
-    function mod(url, pid, fee, title, number, date, state, uid, memo) {
+
+    function mod(url, iid, pid, fee, title, number, date, state, uid, memo) {
         $('#fee_check').removeClass("has-error");
         $('#state_check').removeClass("has-error");
         $('#title_check').removeClass("has-error");
@@ -280,7 +281,7 @@
         $('#uid').val(uid);
         $('#memo').text(memo);
         $('#modal-title').text("修改信息");
-        $('#modal-form').attr("action", url);
+        $('#modal-form').attr("action", url + "?iid=" + iid);
         $('#add').hide();
         $('#mod').show();
         $('#myModal').modal();
@@ -310,10 +311,10 @@
         $('#myModal').modal();
     }
 
-    function del(url) {
+    function del(url, iid) {
         let flag = confirm("确定要删除该发票吗？");
         if (flag)
-            window.location.href = url;
+            window.location.href = url + "?iid=" + iid;
     }
 
     function check() {

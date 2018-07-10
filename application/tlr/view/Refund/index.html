@@ -149,11 +149,11 @@
                 <td class="text-center">
                     <button class="btn btn-xs btn-info" onclick="payInfo('{$ref->pid}')">缴费信息</button>
                     <button class="btn btn-xs btn-success"
-                            onclick="mod('{:url(\'refund/mod\',[\'rid\'=>$ref.rid])}','{$ref.pid}','{$ref.semester}','{$ref.fee}','{$ref.method}','{$ref.card}','{$ref.bank}','{$ref.person}','{$ref.date}','{$ref.state}','{$ref.uid}','{$ref.memo}')">
+                            onclick="mod('{:url(\'refund/mod\')}','{$ref.rid}','{$ref.pid}','{$ref.semester}','{$ref.fee}','{$ref.method}','{$ref.card}','{$ref.bank}','{$ref.person}','{$ref.date}','{$ref.state}','{$ref.uid}','{$ref.memo}')">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button class="btn btn-xs btn-danger"
-                            onclick="del('{:url(\'refund/del\',[\'rid\'=>$ref.rid])}')">
+                            onclick="del('{:url(\'refund/del\')}','{$ref.rid}')">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </td>
@@ -294,7 +294,8 @@
         methods: {
         }
     });
-    function mod(url, pid, semester, fee, method, card, bank, person, date, state, uid, memo) {
+
+    function mod(url, rid, pid, semester, fee, method, card, bank, person, date, state, uid, memo) {
         $('#fee_check').removeClass("has-error");
         $('#method_check').removeClass("has-error");
         $('#card_check').removeClass("has-error");
@@ -310,7 +311,7 @@
         $('#uid').val(uid);
         $('#memo').text(memo);
         $('#modal-title').text("修改信息");
-        $('#modal-form').attr("action", url);
+        $('#modal-form').attr("action", url + "?rid=" + rid);
         $('#add').hide();
         $('#mod').show();
         $('#myModal').modal();
@@ -335,10 +336,10 @@
         $('#myModal').modal();
     }
 
-    function del(url) {
+    function del(url, rid) {
         let flag = confirm("确定要删除该退费业务吗？");
         if (flag)
-            window.location.href = url;
+            window.location.href = url + "?rid=" + rid;
     }
 
     function ser() {

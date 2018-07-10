@@ -46,7 +46,7 @@ class Teacher extends Controller
     {
         $rbacObj = new Rbac();
         if (!$rbacObj->can($request->path())) {
-            $this->error("没有权限", null, null, 1);
+            $this->error("没有权限", "teacher/index", null, 1);
             exit();
         }
 
@@ -66,7 +66,7 @@ class Teacher extends Controller
     {
         $rbacObj = new Rbac();
         if (!$rbacObj->can($request->path())) {
-            $this->error("没有权限", null, null, 1);
+            $this->error("没有权限", "teacher/index", null, 1);
             exit();
         }
         $Teacher = new TeacherModel();
@@ -82,7 +82,7 @@ class Teacher extends Controller
     {
         $rbacObj = new Rbac();
         if (!$rbacObj->can($request->path())) {
-            $this->error("没有权限", null, null, 1);
+            $this->error("没有权限", "teacher/index", null, 1);
             exit();
         }
         $Teacher = new TeacherModel();
