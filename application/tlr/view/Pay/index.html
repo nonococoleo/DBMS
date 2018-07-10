@@ -12,7 +12,7 @@
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap-hover-dropdown/2.2.1/bootstrap-hover-dropdown.js"></script>
@@ -39,8 +39,8 @@
             <ul class="nav navbar-nav">
                 <li><a href="{:url('index/index')}">同路人教育</a></li>
                 <li><a href="{:url('enroll/index')}">报名管理</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <li class="dropdown" id="edu">
+                    <a href="#" class="dropdown-toggle" role="button" aria-haspopup="true"
                        aria-expanded="false" data-hover="dropdown">教务管理<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('student/index')}">学生管理</a></li>
@@ -48,8 +48,8 @@
                         <li><a href="{:url('course/index')}">课程管理</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <li class="dropdown" id="fin">
+                    <a href="#" class="dropdown-toggle" role="button" aria-haspopup="true"
                        aria-expanded="false" data-hover="dropdown">财务管理<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('pay/index')}">缴费管理</a></li>
@@ -57,17 +57,18 @@
                         <li><a href="{:url('invoice/index')}">发票管理</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <li class="dropdown" id="sys">
+                    <a href="{:url('system/index')}" class="dropdown-toggle" role="button" aria-haspopup="true"
                        aria-expanded="false" data-hover="dropdown">系统管理<span class="caret"></span></a>
                     <ul class="dropdown-menu" style="min-width:0">
                         <li><a href="{:url('user/index')}">用户管理</a></li>
-                        <li><a href="{:url('role/index')}">角色管理</a></li>
                         <li><a href="{:url('permission/index')}">权限管理</a></li>
+                        <li><a href="{:url('role/index')}">角色管理</a></li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" id="username"></a></li>
                 <li id="login"><a href="{:url('index/login')}">登录</a></li>
                 <li id="logout"><a href="{:url('index/logout')}">注销</a></li>
             </ul>
@@ -78,11 +79,12 @@
 <div id="app" class="container">
     <!--页眉-->
     <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="col-sm-4 col-md-4 col-lg-4">
             <h3>缴费信息</h3>
         </div>
         <form>
             <div class="col-sm-4 col-md-4 col-lg-4">
+                <label for="sel_semester">选择学期</label>
                 <select class="form-control" name="seme" id="sel_semester" @change="search3()">
                     <option value="0">全部</option>
                     {volist id="sem" name="semester"}
@@ -92,8 +94,9 @@
             </div>
         </form>
         <div class="col-sm-4 col-md-4 col-lg-4">
-            <div class="input-group" style="margin-top: 17px">
-                <input type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2"
+            <label for="name">搜索缴费信息</label>
+            <div class="input-group">
+                <input id="name" type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2"
                        v-model="searchSname">
                 <span class="input-group-addon" style="cursor:pointer" id="basic-addon2"
                       @click="search2(searchSname)">搜索</span>
@@ -282,11 +285,11 @@
                     <form action="{:url('refund/add')}" method="POST" id="modal-form">
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="re_fee_check">
                                     费用:
                                     <input type="text" name="fee" id="re-fee" class="form-control" readonly>
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="method_check">
                                     退费方式:
                                     <select class="form-control" name="method" id="re-method">
                                         <option value="0">请选择...</option>
@@ -294,19 +297,19 @@
                                         <option value="2">其他</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="card_check">
                                     银行卡号:
                                     <input type="text" name="card" id="re-card" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="bank_check">
                                     开户行:
                                     <input type="text" name="bank" id="re-bank" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="person_check">
                                     持卡人:
                                     <input type="text" name="person" id="re-person" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="re_state_check">
                                     状态:
                                     <select class="form-control" name="state" id="re-state">
                                         <option value="1">申请</option>
@@ -322,7 +325,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                            <input type="submit" class="btn btn-primary" value="提交"/>
+                            <button type="button" class="btn btn-primary" onclick="check_ref()">退费处理</button>
                         </div>
                         <input type="hidden" name="pid" id="re-pid">
                         <input type="hidden" name="semester" id="re-semester">
@@ -345,7 +348,7 @@
                     <form action="{:url('invoice/add')}" method="POST" id="modal3-form">
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="in_state_check">
                                     状态:
                                     <select class="form-control" name="state" id="in-state">
                                         <option value="1">申请</option>
@@ -353,11 +356,11 @@
                                         <option value="3">成功</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="in_fee_check">
                                     金额:
-                                    <input type="text" name="fee" id="in-fee" class="form-control" readonly>
+                                    <input type="number" step="0.01" name="fee" id="in-fee" class="form-control" readonly>
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="title_check">
                                     抬头:
                                     <input type="text" name="title" id="in-title" class="form-control">
                                 </div>
@@ -373,7 +376,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                            <input type="submit" class="btn btn-primary" value="提交"/>
+                            <button type="button" class="btn btn-primary" onclick="check_inv()">申请发票</button>
                         </div>
                         <input type="hidden" name="pid" id="in-pid">
                         <input type="hidden" name="date" value="{:date('Y-m-d')}">
@@ -442,10 +445,6 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-6">
-                                    学期:
-                                    <input disabled  type="text" name="semester" v-model="refDetailInShow.semester" class="form-control">
-                                </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
                                     费用:
                                     <input disabled  type="text" name="fee" v-model="refDetailInShow.fee" class="form-control">
                                 </div>
@@ -468,10 +467,6 @@
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     持卡人:
                                     <input disabled  type="text" name="person" v-model="refDetailInShow.person" class="form-control">
-                                </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    日期:
-                                    <input disabled  type="date" name="date" v-model="refDetailInShow.date" class="form-control">
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     状态:
@@ -767,7 +762,76 @@
                 window.location.href = "{:url('enroll/succ')}?pid=" + pid;
             }
         }
-    })
+    });
+    function check_inv() {
+        $('#in_fee_check').removeClass("has-error");
+        $('#in_state_check').removeClass("has-error");
+        $('#title_check').removeClass("has-error");
+        let flag = true;
+        let fee = $('#in-fee').val();
+        let state = $('#in-state').val();
+        let title = $('#in-title').val();
+        if(fee <= 0){
+            flag = false;
+            $('#in_fee_check').addClass("has-error");
+        }
+        if(!title){
+            flag = false;
+            $('#title_check').addClass("has-error");
+        }
+        if(state == 0){
+            flag = false;
+            $('#in_state_check').addClass("has-error");
+        }
+        if(flag)
+            $('#modal3-form').submit();
+        else
+            toastr.error('表单红色字段有误请确认后再提交');
+    }
+
+    function check_ref() {
+        $('#re_fee_check').removeClass("has-error");
+        $('#method_check').removeClass("has-error");
+        $('#card_check').removeClass("has-error");
+        $('#bank_check').removeClass("has-error");
+        $('#person_check').removeClass("has-error");
+        $('#re_state_check').removeClass("has-error");
+        let flag = true;
+        let fee = $('#re-fee').val();
+        let method = $('#re-method').val();
+        let card = $('#re-card').val();
+        let bank = $('#re-bank').val();
+        let person = $('#re-person').val();
+        let state = $('#re-state').val();
+        if(fee <= 0){
+            flag = false;
+            $('#re_fee_check').addClass("has-error");
+        }
+        if(method == 0){
+            flag = false;
+            $('#method_check').addClass("has-error");
+        }
+        if(!card){
+            flag = false;
+            $('#card_check').addClass("has-error");
+        }
+        if(!bank){
+            flag = false;
+            $('#bank_check').addClass("has-error");
+        }
+        if(!person){
+            flag = false;
+            $('#person_check').addClass("has-error");
+        }
+        if(state == 0){
+            flag = false;
+            $('#re_state_check').addClass("has-error");
+        }
+        if(flag)
+            $('#modal-form').submit();
+        else
+            toastr.error('表单红色字段有误请确认后再提交');
+    }
 
 </script>
 </html>

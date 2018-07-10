@@ -101,7 +101,7 @@ class Course extends Controller
         return null;
     }
 
-//    查找课程
+//    查找课程接口
     public function ser(Request $request)
     {
         $Course = new CourseModel();
@@ -129,7 +129,6 @@ class Course extends Controller
 //        TODO 地址？
         $filename = '\uploads\\' . $replacename;
         $this->addFromFile($filename);
-
     }
 
 

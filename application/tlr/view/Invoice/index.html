@@ -12,7 +12,7 @@
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap-hover-dropdown/2.2.1/bootstrap-hover-dropdown.js"></script>
@@ -79,11 +79,11 @@
 <div id="app" class="container">
     <!--页眉-->
     <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="col-sm-8 col-md-8 col-lg-8">
             <h3>发票信息</h3>
         </div>
-        <div class="col-sm-4 col-md-4 col-lg-4" style="margin-top: 17px">
-            状态
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <label for="status">状态</label>
             <select id="status" onchange="sel()" class="form-control">
             <option value="0">全部</option>
             <option value="1">申请</option>
@@ -98,7 +98,6 @@
             <thead>
             <tr>
                 <td class="text-center">发票号</td>
-                <td class="text-center">缴费号</td>
                 <td class="text-center">金额</td>
                 <td class="text-center">抬头</td>
                 <td class="text-center">税号</td>
@@ -111,9 +110,6 @@
             {volist id="inv" name="invoice"}
             <tr>
                 <td class="text-center">{$inv->iid}</td>
-                <td class="text-center">
-                    <div style="cursor:pointer" onclick="payInfo('{$inv->pid}')">{$inv->pid}</div>
-                </td>
                 <td class="text-center">{$inv->fee}</td>
                 <td class="text-center">{$inv->title}</td>
                 <td class="text-center">{$inv->number}</td>
@@ -123,10 +119,11 @@
                     {case value="1"}申请{/case}
                     {case value="2"}处理{/case}
                     {case value="3"}成功{/case}
-                    {default}{/default}
+                    {default}
                     {/switch}
                 </td>
                 <td class="text-center">
+                    <button class="btn btn-xs btn-info" onclick="payInfo('{$inv->pid}')">缴费信息</button>
                     <button class="btn btn-xs btn-success"
                             onclick="mod('{:url(\'invoice/mod\',[\'iid\'=>$inv.iid])}','{$inv.pid}','{$inv.fee}','{$inv.title}','{$inv.number}','{$inv.date}','{$inv.state}','{$inv.uid}','{$inv.memo}')">
                         <span class="glyphicon glyphicon-edit"></span>
@@ -160,7 +157,7 @@
                     <form action=" " method="POST" id="modal-form">
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="state_check">
                                     状态:
                                     <select class="form-control" name="state" id="state">
                                         <option value="1">申请</option>
@@ -168,11 +165,11 @@
                                         <option value="3">成功</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="fee_check">
                                     金额:
-                                    <input type="text" name="fee" id="fee" class="form-control">
+                                    <input type="number" step="0.01" name="fee" id="fee" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="title_check">
                                     抬头:
                                     <input type="text" name="title" id="title" class="form-control">
                                 </div>
@@ -210,15 +207,15 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                学号 * :
-                                <input type="number" disabled v-model="payDetailInShow.sid" class="form-control">
+                                编号:
+                                <input type="number" disabled v-model="payDetailInShow.pid" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                学期:
-                                <input type="text" disabled v-model="payDetailInShow.semester" class="form-control">
+                                日期:
+                                <input type="date" disabled v-model="payDetailInShow.date" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                费用 *:
+                                费用:
                                 <input type="number" disabled v-model="payDetailInShow.fee" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
@@ -235,16 +232,8 @@
                                 </select>
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                发票:
-                                <input type="number" disabled v-model="payDetailInShow.iid" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                日期:
-                                <input type="date" disabled v-model="payDetailInShow.date" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
                                 员工:
-                                <input type="number" disabled v-model="payDetailInShow.uid" class="form-control">
+                                <input type="text" disabled v-model="payDetailInShow.user" class="form-control">
                             </div>
                         </div>
                         <div>
@@ -273,6 +262,9 @@
         }
     });
     function mod(url, pid, fee, title, number, date, state, uid, memo) {
+        $('#fee_check').removeClass("has-error");
+        $('#state_check').removeClass("has-error");
+        $('#title_check').removeClass("has-error");
         $('#pid').val(pid);
         $('#fee').val(fee);
         $('#title').val(title);
@@ -319,7 +311,29 @@
     }
 
     function check() {
+        $('#fee_check').removeClass("has-error");
+        $('#state_check').removeClass("has-error");
+        $('#title_check').removeClass("has-error");
+        let flag = true;
+        let fee = $('#fee').val();
+        let state = $('#state').val();
+        let title = $('#title').val();
+        if(fee <= 0){
+            flag = false;
+            $('#fee_check').addClass("has-error");
+        }
+        if(!title){
+            flag = false;
+            $('#title_check').addClass("has-error");
+        }
+        if(state == 0){
+            flag = false;
+            $('#state_check').addClass("has-error");
+        }
+        if(flag)
             $('#modal-form').submit();
+        else
+            toastr.error('表单红色字段有误请确认后再提交');
     }
 
     function sel() {
@@ -342,7 +356,6 @@
                 }
             }
         });
-        // body...
     }
 </script>
 </html>
