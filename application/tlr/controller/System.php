@@ -104,8 +104,9 @@ class System extends Controller
         $Pay = new PayModel();
         $data = $Pay->where("semester", $seme)->select();
 
-        $filenametest = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\test.csv';
-        $filename = './退费明细.csv';
+        $RootDir = $_SERVER['DOCUMENT_ROOT'];
+        $filenametest = $RootDir . '/uploads/test.csv';
+        $filename = './缴费明细.csv';
         $file = fopen($filenametest, 'w');
         fwrite($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
         $head = ['pid', 'delflag', 'sid', 'semester', 'fee', 'detail', 'method', 'iid', 'rid', 'date', 'uid', 'memo'];
@@ -138,7 +139,8 @@ class System extends Controller
         $seme = $request->param("seme");
         $Refund = new RefundModel();
         $data = $Refund->where("semester", $seme)->select();
-        $filenametest = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\test.csv';
+        $RootDir = $_SERVER['DOCUMENT_ROOT'];
+        $filenametest = $RootDir . '/uploads/test.csv';
         $filename = './退费明细.csv';
         $file = fopen($filenametest, 'w');
         fwrite($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
