@@ -79,11 +79,11 @@
 <div id="app" class="container">
     <!--页眉-->
     <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="col-sm-8 col-md-8 col-lg-8">
             <h3>发票信息</h3>
         </div>
-        <div class="col-sm-4 col-md-4 col-lg-4" style="margin-top: 17px">
-            状态
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <label for="status">状态</label>
             <select id="status" onchange="sel()" class="form-control">
             <option value="0">全部</option>
             <option value="1">申请</option>
@@ -98,7 +98,6 @@
             <thead>
             <tr>
                 <td class="text-center">发票号</td>
-                <td class="text-center">缴费号</td>
                 <td class="text-center">金额</td>
                 <td class="text-center">抬头</td>
                 <td class="text-center">税号</td>
@@ -111,9 +110,6 @@
             {volist id="inv" name="invoice"}
             <tr>
                 <td class="text-center">{$inv->iid}</td>
-                <td class="text-center">
-                    <div style="cursor:pointer" onclick="payInfo('{$inv->pid}')">{$inv->pid}</div>
-                </td>
                 <td class="text-center">{$inv->fee}</td>
                 <td class="text-center">{$inv->title}</td>
                 <td class="text-center">{$inv->number}</td>
@@ -123,10 +119,11 @@
                     {case value="1"}申请{/case}
                     {case value="2"}处理{/case}
                     {case value="3"}成功{/case}
-                    {default}{/default}
+                    {default}
                     {/switch}
                 </td>
                 <td class="text-center">
+                    <button class="btn btn-xs btn-info" onclick="payInfo('{$inv->pid}')">缴费信息</button>
                     <button class="btn btn-xs btn-success"
                             onclick="mod('{:url(\'invoice/mod\',[\'iid\'=>$inv.iid])}','{$inv.pid}','{$inv.fee}','{$inv.title}','{$inv.number}','{$inv.date}','{$inv.state}','{$inv.uid}','{$inv.memo}')">
                         <span class="glyphicon glyphicon-edit"></span>
@@ -170,7 +167,7 @@
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     金额:
-                                    <input type="text" name="fee" id="fee" class="form-control">
+                                    <input type="number" step="0.01" name="fee" id="fee" class="form-control">
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     抬头:
@@ -210,15 +207,15 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                学号 * :
-                                <input type="number" disabled v-model="payDetailInShow.sid" class="form-control">
+                                编号:
+                                <input type="number" disabled v-model="payDetailInShow.pid" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                学期:
-                                <input type="text" disabled v-model="payDetailInShow.semester" class="form-control">
+                                日期:
+                                <input type="date" disabled v-model="payDetailInShow.date" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                费用 *:
+                                费用:
                                 <input type="number" disabled v-model="payDetailInShow.fee" class="form-control">
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
@@ -235,16 +232,8 @@
                                 </select>
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
-                                发票:
-                                <input type="number" disabled v-model="payDetailInShow.iid" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                日期:
-                                <input type="date" disabled v-model="payDetailInShow.date" class="form-control">
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-6">
                                 员工:
-                                <input type="number" disabled v-model="payDetailInShow.uid" class="form-control">
+                                <input type="text" disabled v-model="payDetailInShow.user" class="form-control">
                             </div>
                         </div>
                         <div>
@@ -342,7 +331,6 @@
                 }
             }
         });
-        // body...
     }
 </script>
 </html>

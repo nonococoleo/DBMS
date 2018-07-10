@@ -26,7 +26,7 @@ class System extends Controller
             $seme = session("cur_semester");
         $query = ["seme" => $seme];
         $Enroll = new EnrollModel();
-        $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->join("course c", "c.cid=e.cid")->where("semester", "=", $seme)->field("count(*) sum,cname,price*unit*count(*) price")->group("e.cid")->order("sum", "desc")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->join("course c", "c.cid=e.cid")->where("semester", "=", $seme)->field("count(*) sum,cname,price*unit price,price*unit*count(*) rev")->group("e.cid")->order("rev", "desc")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         $page = $enroll->render();
         $Pay = new PayModel();
         $pay = $Pay->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) price")->select();

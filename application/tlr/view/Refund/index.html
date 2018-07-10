@@ -80,7 +80,7 @@
 <div id="app" class="container">
     <!--页眉-->
     <div class="row">
-        <div class="col-sm-2 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-4 col-lg-4">
             <h3>退费信息</h3>
         </div>
         <form method="get" id="ser" action="{:url('refund/index')}">
@@ -128,7 +128,7 @@
                     {switch name="$ref->method"}
                     {case value="1"}银行卡{/case}
                     {case value="2"}其他{/case}
-                    {default}{/default}
+                    {default}
                     {/switch}
                 </td>
                 <td class="text-center">{$ref->date}</td>
@@ -137,7 +137,7 @@
                     {case value="1"}申请{/case}
                     {case value="2"}处理{/case}
                     {case value="3"}成功{/case}
-                    {default}{/default}
+                    {default}
                     {/switch}
                 </td>
                 <td class="text-center">
@@ -267,6 +267,7 @@
                                 <textarea disabled v-model="payDetailInShow.memo" class="form-control">
                             </textarea>
                             </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
