@@ -79,11 +79,12 @@
 <div id="app" class="container">
     <!--页眉-->
     <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="col-sm-2 col-md-2 col-lg-2">
             <h3>缴费信息</h3>
         </div>
         <form>
             <div class="col-sm-4 col-md-4 col-lg-4">
+                <label for="sel_semester">选择学期</label>
                 <select class="form-control" name="seme" id="sel_semester" @change="search3()">
                     <option value="0">全部</option>
                     {volist id="sem" name="semester"}
@@ -93,7 +94,8 @@
             </div>
         </form>
         <div class="col-sm-4 col-md-4 col-lg-4">
-            <div class="input-group" style="margin-top: 17px">
+            <label for="name">搜索缴费信息</label>
+            <div class="input-group">
                 <input type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2"
                        v-model="searchSname">
                 <span class="input-group-addon" style="cursor:pointer" id="basic-addon2"
@@ -532,7 +534,14 @@
                 }
                 return '全部'
             },
-            invInfo(iid) {
+            invInfo(invDetailInShow) {
+                let iid = invDetailInShow.id;
+                let title = invDetailInShow.title;
+                if (!title) {
+                    $('#title_check').addClass("has-error");
+                    toastr.error('表单红色字段有误请确认后再提交');
+                    return false;
+                }
                 $.ajax({
                     type: "POST",
                     url: "{:URL('tlr/invoice/invById','','')}",
@@ -746,7 +755,7 @@
             invoice(index, iid) {
                 let tvm = this;
                 if (iid != null) {
-                    tvm.invInfo(iid);
+                    tvm.invInfo(invDetailInShow);
                     return;
                 }
                 $('#in-pid').val(tvm.pays[index].pid);
