@@ -5,6 +5,7 @@ namespace app\tlr\controller;
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\SemesterModel;
+use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
 
@@ -13,11 +14,11 @@ class Pay extends Controller
     // 缴费页面
     public function index(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限");
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "index/index", null, 3);
+            exit();
+        }
         $Semester = new SemesterModel();
         $semester = $Semester->where("id", ">", 0)->select();
         $data = ["semester" => $semester];
@@ -27,11 +28,11 @@ class Pay extends Controller
     // 获取缴费列表
     public function pays(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Pay/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Pay/index", null, 1);
+            exit();
+        }
         if (request()->isGet()) {
             $this->error("404 not found", "Pay/index", null, 1);
             exit();
@@ -58,11 +59,11 @@ class Pay extends Controller
     // 根据Id获取缴费信息
     public function payById(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Pay/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Pay/index", null, 1);
+            exit();
+        }
         $Pay = new PayModel;
         $pay = $Pay->alias("p")->join("user u", "u.uid=p.uid")->where('pid', $_POST['pid'])->field("pid,fee,detail,method,date,u.name user,p.memo")->find();
         echo json_encode(array("pay" => $pay, "success" => true));
@@ -71,11 +72,11 @@ class Pay extends Controller
     // 修改缴费信息
     public function update(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Pay/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Pay/index", null, 1);
+            exit();
+        }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Pay/index", null, 1);
             exit();
@@ -107,11 +108,11 @@ class Pay extends Controller
     //新增缴费
     public function add(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Pay/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Pay/index", null, 1);
+            exit();
+        }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Pay/index", null, 1);
             exit();
@@ -162,11 +163,11 @@ class Pay extends Controller
     //删除缴费
     public function deleteone(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Pay/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Pay/index", null, 1);
+            exit();
+        }
         if (!request()->isPost() || empty($_POST)) {
             $this->error("404 not found", "Pay/index", null, 1);
             exit();
@@ -184,11 +185,11 @@ class Pay extends Controller
     //搜索缴费
     public function search(Request $request)
     {
-        // $rbacObj = new Rbac();
-        // if(!$rbacObj->can($request->path())) {
-        //     $this->error("没有权限", "Pay/index", null, 1);
-        //     exit();
-        // }
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Pay/index", null, 1);
+            exit();
+        }
         if (request()->isGet()) {
             $this->error("404 not found", "Pay/index", null, 1);
             exit();

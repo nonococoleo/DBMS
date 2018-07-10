@@ -6,6 +6,7 @@ use app\tlr\model\CourseModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\SemesterModel;
 use app\tlr\model\TeacherModel;
+use gmars\rbac\Rbac;
 use PHPExcel;
 use think\Controller;
 use think\Request;
@@ -17,6 +18,11 @@ class Course extends Controller
     //首页显示全部报名信息
     public function index(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "index/index", null, 3);
+            exit();
+        }
         $name = $request->param('name');
         $semester = $request->param('seme');
 
@@ -50,6 +56,11 @@ class Course extends Controller
     //修改课程信息
     public function mod(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Course/index", null, 1);
+            exit();
+        }
         if (session('uid')) {
             $Course = new CourseModel();
             $Log = new LogModel();
@@ -71,6 +82,11 @@ class Course extends Controller
     //删除课程
     public function del(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Course/index", null, 1);
+            exit();
+        }
         if (session('uid')) {
             $Course = new CourseModel();
             $Log = new LogModel();
@@ -86,6 +102,11 @@ class Course extends Controller
 //    新增课程
     public function add(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Course/index", null, 1);
+            exit();
+        }
         if (session('uid')) {
             $Course = new CourseModel();
             $Log = new LogModel();
@@ -104,6 +125,11 @@ class Course extends Controller
 //    查找课程
     public function ser(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Course/index", null, 1);
+            exit();
+        }
         $Course = new CourseModel();
         if (request()->isGet()) {
             $this->error("404 not found", "Student/index", null, 1);
@@ -120,6 +146,11 @@ class Course extends Controller
 //    上传csv文件批量导入课程
     public function upload()
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Course/index", null, 1);
+            exit();
+        }
         $file = request()->file('file');
         if (empty($file)) {
             $this->error('请选择上传文件');
@@ -135,6 +166,11 @@ class Course extends Controller
 //    从上传的csv文件中批量添加课程
     public function addFromFile($filename = '')
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Course/index", null, 1);
+            exit();
+        }
         $file = fopen($filename, 'r');
         //读取内容
         $count = 0;

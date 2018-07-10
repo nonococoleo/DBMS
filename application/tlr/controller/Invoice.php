@@ -5,6 +5,7 @@ namespace app\tlr\controller;
 use app\tlr\model\InvoiceModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
+use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
 
@@ -25,6 +26,11 @@ class Invoice extends Controller
     //首页显示所有发票情况
     public function index(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "index/index", null, 3);
+            exit();
+        }
         $Invoice = new InvoiceModel();
         $state = $request->param('state');
         if ($state) {
@@ -51,6 +57,11 @@ class Invoice extends Controller
     //根据ID获取发票
     public function invById(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Invoice/index", null, 1);
+            exit();
+        }
         $Invoice = new InvoiceModel();
         echo json_encode(array('inv'=>$Invoice->where('iid', $_POST['iid'])->find(),'success'=>true));
     }
@@ -58,6 +69,11 @@ class Invoice extends Controller
     //添加发票信息接口
     public function add(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Invoice/index", null, 1);
+            exit();
+        }
         if (session('uid')) {
             $Invoice = new InvoiceModel();
             $Log = new LogModel();
@@ -78,6 +94,11 @@ class Invoice extends Controller
     //删除发票信息接口
     public function del(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Invoice/index", null, 1);
+            exit();
+        }
         if (session('uid')) {
             $Invoice = new InvoiceModel();
             $Log = new LogModel();
@@ -93,6 +114,11 @@ class Invoice extends Controller
     //修改发票信息接口
     public function mod(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Invoice/index", null, 1);
+            exit();
+        }
         if (session('uid')) {
             $Invoice = new InvoiceModel();
             $Log = new LogModel();

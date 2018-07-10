@@ -7,6 +7,7 @@ use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
 use app\tlr\model\SemesterModel;
+use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
 
@@ -16,6 +17,11 @@ class Refund extends Controller
     //首页显示所有退费情况
     public function index(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "index/index", null, 3);
+            exit();
+        }
         $Refund = new RefundModel();
         $state = $request->param('state');
         $seme = $request->param('seme');
@@ -50,6 +56,11 @@ class Refund extends Controller
     //根据ID获取退费
     public function refById(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Refund/index", null, 1);
+            exit();
+        }
         $Refund = new RefundModel();
         echo json_encode(array('ref'=>$Refund->where('rid', $_POST['rid'])->find(),'success'=>true));
     }
@@ -57,6 +68,11 @@ class Refund extends Controller
     //添加退费信息接口
     public function add(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Refund/index", null, 1);
+            exit();
+        }
         if (session('uid')) {
             $Refund = new RefundModel();
             $Log = new LogModel();
@@ -80,6 +96,11 @@ class Refund extends Controller
     //删除退费信息接口
     public function del(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Refund/index", null, 1);
+            exit();
+        }
         if (session('uid')) {
             $Refund = new RefundModel();
             $Log = new LogModel();
@@ -95,6 +116,11 @@ class Refund extends Controller
     //修改退费信息接口
     public function mod(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Refund/index", null, 1);
+            exit();
+        }
         if (session('uid')) {
             $Refund = new RefundModel();
             $Log = new LogModel();
