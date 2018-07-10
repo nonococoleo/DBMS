@@ -74,20 +74,16 @@ class Invoice extends Controller
             $this->error("没有权限", "Invoice/index", null, 1);
             exit();
         }
-        if (session('uid')) {
-            $Invoice = new InvoiceModel();
-            $Log = new LogModel();
-            $Pay = new PayModel();
-            foreach ($_POST as $key => $value)
-                if ($value == "")
-                    $_POST[$key] = null;
-            $Invoice->save($_POST);
-            $Pay->save(["iid" => $Invoice->getLastInsID()], ['pid' => $request->param("pid")]);
-            $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("添加成功", null, null, 1);
-        } else {
-            $this->error("没有权限", null, null, 1);
-        }
+        $Invoice = new InvoiceModel();
+        $Log = new LogModel();
+        $Pay = new PayModel();
+        foreach ($_POST as $key => $value)
+            if ($value == "")
+                $_POST[$key] = null;
+        $Invoice->save($_POST);
+        $Pay->save(["iid" => $Invoice->getLastInsID()], ['pid' => $request->param("pid")]);
+        $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("添加成功", null, null, 1);
         return null;
     }
 
@@ -99,15 +95,11 @@ class Invoice extends Controller
             $this->error("没有权限", "Invoice/index", null, 1);
             exit();
         }
-        if (session('uid')) {
-            $Invoice = new InvoiceModel();
-            $Log = new LogModel();
-            $Invoice->save(["delflag" => 1], ['iid' => $request->param("iid")]);
-            $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("删除成功", null, null, 1);
-        } else {
-            $this->error("没有权限", null, null, 1);
-        }
+        $Invoice = new InvoiceModel();
+        $Log = new LogModel();
+        $Invoice->save(["delflag" => 1], ['iid' => $request->param("iid")]);
+        $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("删除成功", null, null, 1);
         return null;
     }
 
@@ -119,18 +111,14 @@ class Invoice extends Controller
             $this->error("没有权限", "Invoice/index", null, 1);
             exit();
         }
-        if (session('uid')) {
-            $Invoice = new InvoiceModel();
-            $Log = new LogModel();
-            foreach ($_POST as $key => $value)
-                if ($value == "")
-                    $_POST[$key] = null;
-            $Invoice->allowField(['pid', 'fee', 'title', 'number', 'date', 'state', 'memo'])->save($_POST, ['iid' => $request->param("iid")]);
-            $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("修改成功", null, null, 1);
-        } else {
-            $this->error("没有权限", null, null, 1);
-        }
+        $Invoice = new InvoiceModel();
+        $Log = new LogModel();
+        foreach ($_POST as $key => $value)
+            if ($value == "")
+                $_POST[$key] = null;
+        $Invoice->allowField(['pid', 'fee', 'title', 'number', 'date', 'state', 'memo'])->save($_POST, ['iid' => $request->param("iid")]);
+        $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("修改成功", null, null, 1);
         return null;
     }
 

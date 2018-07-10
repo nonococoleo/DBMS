@@ -61,19 +61,15 @@ class Course extends Controller
             $this->error("没有权限", "Course/index", null, 1);
             exit();
         }
-        if (session('uid')) {
-            $Course = new CourseModel();
-            $Log = new LogModel();
-            foreach ($_POST as $key => $value) {
-                if ($value == "") {
-                    $_POST[$key] = null;
-                }
-                $Course->allowField(['cname', 'time', 'date', 'semester', 'campus', 'room', 'price', 'unit', 'tid', 'fee', 'memo'])->save($_POST, ['cid' => $request->param("cid")]);
-                $Log->save(["uid" => session('uid'), "action" => $Course->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-                $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
+        $Course = new CourseModel();
+        $Log = new LogModel();
+        foreach ($_POST as $key => $value) {
+            if ($value == "") {
+                $_POST[$key] = null;
             }
-        } else {
-            $this->error("没有权限", null, null, 1);
+            $Course->allowField(['cname', 'time', 'date', 'semester', 'campus', 'room', 'price', 'unit', 'tid', 'fee', 'memo'])->save($_POST, ['cid' => $request->param("cid")]);
+            $Log->save(["uid" => session('uid'), "action" => $Course->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+            $this->success("修改成功", $_SERVER["HTTP_REFERER"], null, 1);
         }
         return null;
     }
@@ -87,15 +83,11 @@ class Course extends Controller
             $this->error("没有权限", "Course/index", null, 1);
             exit();
         }
-        if (session('uid')) {
-            $Course = new CourseModel();
-            $Log = new LogModel();
-            $Course->save(['delflag' => 1], ['cid' => $request->param("cid")]);
-            $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("删除成功", null, null, 1);
-        } else {
-            $this->error("没有权限", null, null, 1);
-        }
+        $Course = new CourseModel();
+        $Log = new LogModel();
+        $Course->save(['delflag' => 1], ['cid' => $request->param("cid")]);
+        $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("删除成功", null, null, 1);
         return null;
     }
 
@@ -107,18 +99,14 @@ class Course extends Controller
             $this->error("没有权限", "Course/index", null, 1);
             exit();
         }
-        if (session('uid')) {
-            $Course = new CourseModel();
-            $Log = new LogModel();
-            foreach ($_POST as $key => $value)
-                if ($value == "")
-                    $_POST[$key] = null;
-            $Course->save($_POST);
-            $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
-            $this->success("添加成功", null, null, 1);
-        } else {
-            $this->error("没有权限", null, null, 1);
-        }
+        $Course = new CourseModel();
+        $Log = new LogModel();
+        foreach ($_POST as $key => $value)
+            if ($value == "")
+                $_POST[$key] = null;
+        $Course->save($_POST);
+        $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("添加成功", null, null, 1);
         return null;
     }
 
