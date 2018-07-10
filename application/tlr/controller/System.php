@@ -103,17 +103,33 @@ class System extends Controller
         $seme = $request->param("seme");
         $Pay = new PayModel();
         $data = $Pay->where("semester", $seme)->select();
-        $str = 'pid' . ',' . 'delflag' . ',' . 'sid' . ',' . 'semester' . ',' . 'fee' . ',' . 'detail' . ',' . 'method' . ',' . 'iid' . ',' . 'rid' . ',' . 'date' . ',' . 'uid' . ',' . 'memo' . "\n";
-        foreach ($data as $key => $value) {
-            $str .= $value['pid'] . ',' . $value['delflag'] . ',' . $value['sid'] . ',' . $value['semester'] . ',' . $value['fee'] . ',' . $value['detail'] . ',' . $value['method'] . ',' . $value['iid'] . ',' . $value['rid'] . ',' . $value['date'] . ',' . $value['uid'] . ',' . $value['memo'] . "\n";
+
+        $filenametest = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\test.csv';
+        $filename = './退费明细.csv';
+        $file = fopen($filenametest, 'w');
+        fwrite($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+        $head = ['pid', 'delflag', 'sid', 'semester', 'fee', 'detail', 'method', 'iid', 'rid', 'date', 'uid', 'memo'];
+        fputcsv($file, $head);
+        foreach ($data as $line) {
+            fputcsv($file, $line->toArray());
         }
-        $filename = './缴费明细.csv';
-        header('Content-type:text/csv');
-        header("Content-Disposition:attachment;filename=" . $filename);
-        header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
-        header('Expires:0');
-        header('Pragma:public');
-        echo $str;
+        fclose($file);
+
+        //告诉浏览器这是一个文件流格式的文件
+        Header("Content-type: application/octet-stream");
+        //请求范围的度量单位
+        Header("Accept-Ranges: bytes");
+        //Content-Length是指定包含于请求或响应中数据的字节长度
+        Header("Accept-Length: " . filesize($filenametest));
+        //用来告诉浏览器，文件是可以当做附件被下载，下载后的文件名称为$file_name该变量的值。
+        Header("Content-Disposition: attachment; filename=" . $filename);
+
+        $file = fopen($filenametest, 'r');
+        echo fread($file, filesize($filenametest));
+        fclose($file);
+        exit();
+
+
     }
 
 //    导出退费csv
@@ -122,37 +138,32 @@ class System extends Controller
         $seme = $request->param("seme");
         $Refund = new RefundModel();
         $data = $Refund->where("semester", $seme)->select();
-        $str = 'rid' . ',' . 'delflag' . ',' . 'pid' . ',' . 'semester' . ',' . 'fee' . ',' . 'detail' . ',' . 'method' . ',' . 'card' . ',' . 'bank' . ',' . 'person' . ',' . 'date' . ',' . 'state' . ',' . 'uid' . ',' . 'memo' . "\n";
-        foreach ($data as $key => $value) {
-            $str .= $value['rid'] . ',' . $value['delflag'] . ',' . $value['pid'] . ',' . $value['semester'] . ',' . $value['fee'] . ',' . $value['detail'] . ',' . $value['method'] . ',' . $value['card'] . ',' . $value['bank'] . ',' . $value['person'] . ',' . $value['date'] . ',' . $value['state'] . ',' . $value['uid'] . ',' . $value['memo'] . "\n";
-        }
+        $filenametest = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\test.csv';
         $filename = './退费明细.csv';
-        header('Content-type:text/csv');
-        header("Content-Disposition:attachment;filename=" . $filename);
-        header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
-        header('Expires:0');
-        header('Pragma:public');
-//
-//        $file = fopen($filename, 'w');
-//        fwrite($file, chr(OxEF) . chr(OxBB) . chr(OxBF));
-//        foreach ($str as $str) {
-//            fputcsv($file, $str);
-//        }
-//
+        $file = fopen($filenametest, 'w');
+        fwrite($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+        $head = ['rid', 'delflag', 'pid', 'semester', 'fee', 'detail', 'method', 'card', 'bank', 'person', 'date', 'state', 'uid', 'memo'];
+        fputcsv($file, $head);
+        foreach ($data as $line) {
+            fputcsv($file, $line->toArray());
+        }
+        fclose($file);
+
+        //告诉浏览器这是一个文件流格式的文件
+        Header("Content-type: application/octet-stream");
+        //请求范围的度量单位
+        Header("Accept-Ranges: bytes");
+        //Content-Length是指定包含于请求或响应中数据的字节长度
+        Header("Accept-Length: " . filesize($filenametest));
+        //用来告诉浏览器，文件是可以当做附件被下载，下载后的文件名称为$file_name该变量的值。
+        Header("Content-Disposition: attachment; filename=" . $filename);
+
+        $file = fopen($filenametest, 'r');
+        echo fread($file, filesize($filenametest));
+        fclose($file);
+        exit();
 
 
-        echo $str;
     }
-
-    public function test()
-    {
-        $filename = 'G:\Users\HP\PhpstormProjects\thinkphp\public\uploads\test.csv';
-        $file = fopen($filename, 'w');
-        fwrite($file, chr(OxEF) . chr(OxBB) . chr(OxBF));
-//        foreach ()
-    }
-
-
-
 
 }
