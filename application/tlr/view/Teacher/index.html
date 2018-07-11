@@ -26,10 +26,11 @@
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
             roles = JSON.parse(roles);
-            if (roles.indexOf(1) == -1)
+            if (roles.indexOf(1) == -1) {
                 $('#sys').hide();
-            if (roles.indexOf(12) == -1)
-                $('.jiaowu').hide();
+                if (roles.indexOf(12) == -1)
+                    $('.jiaowu').hide();
+            }
         } else
             $('#logout').hide();
     };
