@@ -29,10 +29,6 @@ class Index extends Controller
         $User = new UserModel();
         $Semester = new SemesterModel();
         $semester = $Semester->where("current", '=', 1)->order("id", "desc")->limit(1)->select();
-        $data = array(
-            'uname' => $_POST['uname'],
-            'passwd' => md5($_POST['passwd'])
-        );
         $user = $User->where('uname', $_POST['uname'])->find();
         if($user->delflag != 0) {
             $this->error("帐号被锁定，请联系管理员", null, null, 1);

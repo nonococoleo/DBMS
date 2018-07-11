@@ -17,7 +17,7 @@ class User extends Controller
     {
         $rbacObj = new Rbac();
         if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
+            $this->error("没有权限", "index/index", null, 3);
             exit();
         }
         $User = new UserModel;
@@ -27,7 +27,6 @@ class User extends Controller
         $roles = $Role->select();
         $UserRole = new UserRoleModel;
         foreach ($users as $key => $user) {
-            $uid = $user['uid'];
             $userRoles = $UserRole->where('user_id', $user['uid'])->select();
             $t = array();
             for($i = 0; $i < sizeof($userRoles); $i++) {
@@ -45,7 +44,7 @@ class User extends Controller
     {
         $rbacObj = new Rbac();
         if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
+            $this->error("没有权限", "user/index", null, 1);
             exit();
         }
         $name = $_GET['name'];
@@ -56,7 +55,6 @@ class User extends Controller
         $roles = $Role->select();
         $UserRole = new UserRoleModel;
         foreach ($users as $key => $user) {
-            $uid = $user['uid'];
             $userRoles = $UserRole->where('user_id', $user['uid'])->select();
             $t = array();
             for($i = 0; $i < sizeof($userRoles); $i++) {
@@ -89,7 +87,6 @@ class User extends Controller
         $Log = new LogModel();
         $Log->save(["uid" => session('uid'), "action" => $User->getlastsql(), "time" => date("Y-m-d H:i:s")]);
         $this->success("添加成功", null, null, 1);
-
     }
 
     //修改用户姓名
@@ -126,7 +123,7 @@ class User extends Controller
         $rbacObj = new Rbac();
         $Log = new LogModel();
         if(!$rbacObj->can($request->path())) {
-            $this->error("没有权限");
+            $this->error("没有权限", "user/index", null, 1);
             exit();
         }
         $rbacObj = new Rbac();
@@ -147,5 +144,4 @@ class User extends Controller
         }
         $this->success("操作成功", null, null, 1);
     }
-
 }

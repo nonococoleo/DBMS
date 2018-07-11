@@ -42,10 +42,8 @@ class Invoice extends Controller
         }
         if ($invoice->count() > 0) {
             $page = $invoice->render();
-
             $data = array_merge(["invoice" => $invoice, "page" => $page], $query);
             $this->assign($data);
-
             $htmls = $this->fetch("index");
             return $htmls;
         } else {
@@ -63,7 +61,12 @@ class Invoice extends Controller
             exit();
         }
         $Invoice = new InvoiceModel();
-        echo json_encode(array('inv'=>$Invoice->where('iid', $_POST['iid'])->find(),'success'=>true));
+        try {
+            $invoice = $Invoice->where('iid', $_POST['iid'])->find();
+        } catch (\Exception $e) {
+            echo json_encode(array("success" => false, 'msg' => "服务器繁忙，请稍后重试"));
+        }
+        echo json_encode(array('inv' => $invoice, 'success' => true));
     }
 
     //添加发票信息接口
@@ -80,9 +83,13 @@ class Invoice extends Controller
         foreach ($_POST as $key => $value)
             if ($value == "")
                 $_POST[$key] = null;
-        $Invoice->save($_POST);
-        $Pay->save(["iid" => $Invoice->getLastInsID()], ['pid' => $request->param("pid")]);
-        $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        try {
+            $Invoice->save($_POST);
+            $Pay->save(["iid" => $Invoice->getLastInsID()], ['pid' => $request->param("pid")]);
+            $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        } catch (\Exception $e) {
+            $this->error("添加失败", null, null, 1);
+        }
         $this->success("添加成功", null, null, 1);
         return null;
     }
@@ -95,10 +102,14 @@ class Invoice extends Controller
             $this->error("没有权限", "Invoice/index", null, 1);
             exit();
         }
-        $Invoice = new InvoiceModel();
-        $Log = new LogModel();
-        $Invoice->save(["delflag" => 1], ['iid' => $request->param("iid")]);
-        $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        try {
+            $Invoice = new InvoiceModel();
+            $Log = new LogModel();
+            $Invoice->save(["delflag" => 1], ['iid' => $request->param("iid")]);
+            $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        } catch (\Exception $e) {
+            $this->error("删除失败", null, null, 1);
+        }
         $this->success("删除成功", null, null, 1);
         return null;
     }
@@ -116,8 +127,12 @@ class Invoice extends Controller
         foreach ($_POST as $key => $value)
             if ($value == "")
                 $_POST[$key] = null;
-        $Invoice->allowField(['pid', 'fee', 'title', 'number', 'date', 'state', 'memo'])->save($_POST, ['iid' => $request->param("iid")]);
-        $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        try {
+            $Invoice->allowField(['pid', 'fee', 'title', 'number', 'date', 'state', 'memo'])->save($_POST, ['iid' => $request->param("iid")]);
+            $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+        } catch (\Exception $e) {
+            $this->error("修改失败", null, null, 1);
+        }
         $this->success("修改成功", null, null, 1);
         return null;
     }

@@ -18,7 +18,7 @@ class System extends Controller
     {
         $rbacObj = new Rbac();
         if (!$rbacObj->can($request->path())) {
-            $this->error("没有权限", "index/index", null, 1);
+            $this->error("没有权限", "index/index", null, 3);
             exit();
         }
         $seme = $request->param("seme");
@@ -61,20 +61,24 @@ class System extends Controller
     {
         $rbacObj = new Rbac();
         if (!$rbacObj->can($request->path())) {
-            $this->error("没有权限", null, null, 3);
+            $this->error("没有权限", "system/semester", null, 1);
             exit();
         }
         $seme = $request->param("seme");
         if ($seme) {
             $Semester = new SemesterModel();
-            $Semester->where("id", "=", $seme)->setField("current", 1);
             $Log = new LogModel();
-            $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-            $Semester->where("id", "<>", $seme)->setField("current", 0);
-            session("cur_semester", $seme);
+            try {
+                $Semester->where("id", "=", $seme)->setField("current", 1);
+                $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+                $Semester->where("id", "<>", $seme)->setField("current", 0);
+                session("cur_semester", $seme);
+            } catch (\Exception $e) {
+                $this->error("修改失败", null, null, 1);
+            }
             $this->success("更改成功", null, null, 1);
         } else {
-            $this->error("确定学期", 'system/index', null, 2);
+            $this->error("确定学期", 'system/semester', null, 1);
         }
     }
 
@@ -83,24 +87,34 @@ class System extends Controller
     {
         $rbacObj = new Rbac();
         if (!$rbacObj->can($request->path())) {
-            $this->error("没有权限", null, null, 3);
+            $this->error("没有权限", "system/semester", null, 1);
             exit();
         }
         $seme = $request->param("name");
         if ($seme) {
             $Semester = new SemesterModel();
-            $Semester->save(["name" => $seme]);
             $Log = new LogModel();
-            $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+            try {
+                $Semester->save(["name" => $seme]);
+                $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+            } catch (\Exception $e) {
+                $this->error("修改失败", null, null, 1);
+            }
             $this->success("添加成功", null, null, 1);
         } else {
-            $this->error("确定学期", 'system/index', null, 2);
+            $this->error("确定学期", 'system/semester', null, 1);
         }
     }
 
 //导出缴费csv
     public function csv_pay(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "system/semester", null, 1);
+            exit();
+        }
+
         $seme = $request->param("seme");
         $Pay = new PayModel();
         $data = $Pay->where("semester", $seme)->select();
@@ -135,6 +149,12 @@ class System extends Controller
 //    导出退费csv
     public function csv_refund(Request $request)
     {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "system/semester", null, 1);
+            exit();
+        }
+
         $seme = $request->param("seme");
         $Refund = new RefundModel();
         $data = $Refund->where("semester", $seme)->select();
@@ -164,5 +184,4 @@ class System extends Controller
         fclose($file);
         exit();
     }
-
 }
