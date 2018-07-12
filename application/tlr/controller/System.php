@@ -242,4 +242,128 @@ class System extends Controller
         $this->success("添加成功", null, null, 1);
     }
 
+
+    public function test(Request $request)
+    {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "System/semester", null, 1);
+            exit();
+        }
+        $upload = request()->file('file');
+        if (empty($upload)) {
+            $this->error('请选择上传文件');
+        }
+        $replacename = session('uid') . '_' . time() . '_' . $_FILES["file"]['name'];
+        $file = $upload->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
+
+        $filename = $file->getPath() . "/" . $replacename;
+        $file = fopen($filename, 'r');
+
+        //读取内容
+        $count = 0;
+        while (!feof($file)) {
+            $line = fgetcsv($file);
+
+            if ($count == 0) {
+                $seq = array();
+                $seq['cid'] = 0;
+                $seq['delflag'] = 0;
+                $seq['cname'] = 0;
+                $seq['time'] = 0;
+                $seq['date'] = 0;
+                $seq['semester'] = 0;
+                $seq['campus'] = 0;
+                $seq['room'] = 0;
+                $seq['price'] = 0;
+                $seq['unit'] = 0;
+                $seq['tid'] = 0;
+                $seq['fee'] = 0;
+                $seq['memo'] = 0;
+            }
+            for ($i = 0; $i < count($line); $i++) {
+                if ($line[$i] == 'cname') {
+                    $seq['cname'] = $i;
+//                    echo $seq['cname'];
+                }
+                if ($line[$i] == 'time') {
+                    $seq['time'] = $i;
+//                    echo $seq['time'];
+                }
+                if ($line[$i] == 'date') {
+                    $seq['date'] = $i;
+//                    echo $seq['date'];
+                }
+                if ($line[$i] == 'semester') {
+                    $seq['semester'] = $i;
+                }
+                if ($line[$i] == 'campus') {
+                    $seq['campus'] = $i;
+                }
+                if ($line[$i] == 'room') {
+                    $seq['room'] = $i;
+                }
+                if ($line[$i] == 'price') {
+                    $seq['price'] = $i;
+                }
+                if ($line[$i] == 'unit') {
+                    $seq['unit'] = $i;
+                }
+                if ($line[$i] == 'tid') {
+                    $seq['tid'] = $i;
+                }
+                if ($line[$i] == 'fee') {
+                    $seq['fee'] = $i;
+                }
+                if ($line[$i] == 'memo') {
+                    $seq['memo'] = $i;
+                }
+
+//                echo '<br>';
+//                print_r($line[$i]);
+//                if ($line[$i] == "delflag") {
+//                    echo 'yes';
+//                    print_r('yes');
+//                }
+//
+////                $data[$i] = $line[$i];
+//            }
+//            echo '<br><br>';
+
+            }
+
+            $data['cid'] = null;
+            $data['delflag'] = 0;
+            $data['cname'] = $line[$seq['cname']];
+            $data['time'] = $line[$seq['time']];
+            $data['date'] = $line[$seq['date']];
+            $data['semester'] = $line[$seq['semester']];
+            $data['campus'] = $line[$seq['campus']];
+            $data['room'] = $line[$seq['room']];
+            $data['price'] = $line[$seq['price']];
+            $data['unit'] = $line[$seq['unit']];
+            $data['tid'] = $line[$seq['tid']];
+            $data['fee'] = $line[$seq['fee']];
+            $data['memo'] = $line[$seq['memo']];
+
+            $count++;
+            if ($count == 1) {
+                continue;//去掉首行记录
+            }
+            $courses[$count - 2] = $data;
+        }
+        fclose($file);
+        unset($courses[$count - 2]);//去掉尾行记录
+
+//批量添加
+        $Course = new CourseModel();
+        $Log = new LogModel();
+        $Course->saveAll($courses);
+        $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
+        $this->success("添加成功", null, null, 1);
+
+    }
+
+
+
 }
