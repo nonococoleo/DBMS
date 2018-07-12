@@ -209,61 +209,6 @@ class System extends Controller
         $count = 0;
         while (!feof($file)) {
             $line = fgetcsv($file);
-            $cname = 2;
-
-            $data['cid'] = null;
-            $data['delflag'] = 0;
-            $data['cname'] = $line[$cname++];
-            $data['time'] = $line[$cname++];
-            $data['date'] = $line[$cname++];
-            $data['semester'] = (int)$line[$cname++];
-            $data['campus'] = (int)$line[$cname++];
-            $data['room'] = $line[$cname++];
-            $data['price'] = (float)$line[$cname++];
-            $data['unit'] = (int)$line[$cname++];
-            $data['tid'] = (int)$line[$cname++];
-            $data['fee'] = (float)$line[$cname++];
-            $data['memo'] = $line[$cname];
-
-            $count++;
-            if ($count == 1) {
-                continue;//去掉首行记录
-            }
-            $courses[$count - 2] = $data;
-        }
-        fclose($file);
-        unset($courses[$count - 2]);//去掉尾行记录
-
-//批量添加
-        $Course = new CourseModel();
-        $Log = new LogModel();
-        $Course->saveAll($courses);
-        $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
-        $this->success("添加成功", null, null, 1);
-    }
-
-
-    public function test(Request $request)
-    {
-        $rbacObj = new Rbac();
-        if (!$rbacObj->can($request->path())) {
-            $this->error("没有权限", "System/semester", null, 1);
-            exit();
-        }
-        $upload = request()->file('file');
-        if (empty($upload)) {
-            $this->error('请选择上传文件');
-        }
-        $replacename = session('uid') . '_' . time() . '_' . $_FILES["file"]['name'];
-        $file = $upload->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
-
-        $filename = $file->getPath() . "/" . $replacename;
-        $file = fopen($filename, 'r');
-
-        //读取内容
-        $count = 0;
-        while (!feof($file)) {
-            $line = fgetcsv($file);
 
             if ($count == 0) {
                 $seq = array();
