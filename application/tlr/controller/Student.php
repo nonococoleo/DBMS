@@ -61,9 +61,31 @@ class Student extends Controller
             echo json_encode(array("success" => false, 'msg' => "手机号码不能为空"));
             exit();
         }
-
         $student = new StudentModel;
         if ($student->allowField(['sname', 'sex', 'grade', 'school', 'home', 'tel', 'phone', 'memo'])->save($_POST, ['sid' => $_POST['sid']])) {
+            echo json_encode(array("success" => true));
+            exit();
+        } else {
+            echo json_encode(array("success" => false, 'msg' => "服务器繁忙，请稍后重试"));
+            exit();
+        }
+    }
+
+    // 修改学生余额
+    public function updateBalance(Request $request)
+    {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Student/index", null, 1);
+            exit();
+        }
+        if (!request()->isPost() || empty($_POST)) {
+            $this->error("404 not found", "Student/index", null, 1);
+            exit();
+        }
+
+        $student = new StudentModel;
+        if ($student->allowField(['balance'])->save($_POST, ['sid' => $_POST['sid']])) {
             echo json_encode(array("success" => true));
             exit();
         } else {
