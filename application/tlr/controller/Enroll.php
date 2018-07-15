@@ -29,7 +29,7 @@ class Enroll extends Controller
         $Semester = new SemesterModel();
         $semester = $Semester->where("id", ">", 0)->select();
         $Course = new CourseModel();
-        $course = $Course->where("semester", "=", $seme)->select();
+        $course = $Course->where("semester", "=", $seme)->field("cid,cname")->select();
 
         $Enroll = new EnrollModel();
         $enroll = $Enroll->alias("e")->where("e.delflag", "=", 0)->join("course c", "c.cid=e.cid")->join("student s", "s.sid=e.sid")->where("c.semester", "=", $seme);
@@ -57,11 +57,11 @@ class Enroll extends Controller
             $this->error("确定学期", "Enroll/index", null, 1);
             return null;
         } else {
-            $Class = new CourseModel();
+            $Course = new CourseModel();
             $Semester = new SemesterModel();
             $semester = $Semester->where("id", "=", $seme)->select();
-            $class = $Class->where("semester", "=", $seme)->distinct("true")->column("memo");
-            $data = ["seme" => $semester[0]->name, "classes" => $class, "semester" => $seme];
+            $course = $Course->where("semester", "=", $seme)->distinct("true")->column("memo");
+            $data = ["seme" => $semester[0]->name, "classes" => $course, "semester" => $seme];
             $this->assign($data);
             $htmls = $this->fetch('choose');
             return $htmls;

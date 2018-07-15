@@ -84,7 +84,7 @@ class Refund extends Controller
         $Refund->save($_POST);
         $Pay->save(["rid" => $Refund->getLastInsID()], ['pid' => $pid]);
         $Log->save(["uid" => session('uid'), "action" => $Refund->getlastsql(), "time" => date("Y-m-d H:i:s")]);
-        $Enroll->save(["delflag" => 1], ['pid' => $pid]);
+//        $Enroll->save(["delflag" => 1], ['pid' => $pid]);
         $this->success("添加成功", null, null, 1);
         return null;
     }

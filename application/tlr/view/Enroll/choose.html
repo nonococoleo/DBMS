@@ -150,8 +150,8 @@
                     <td class="text-center">教室</td>
                     <td class="text-center">单价</td>
                     <td class="text-center">课时</td>
-                    <td class="text-center">教师</td>
-                    <td class="text-center">费用</td>
+                    <!--<td class="text-center">教师</td>-->
+                    <!--<td class="text-center">费用</td>-->
                     <td class="text-center">操作</td>
                 </tr>
                 </thead>
@@ -166,8 +166,8 @@
                     <td class="text-center">{{course.room}}</td>
                     <td class="text-center">{{course.price}}</td>
                     <td class="text-center">{{course.unit}}</td>
-                    <td class="text-center">{{course.tid}}</td>
-                    <td class="text-center">{{course.fee}}</td>
+                    <!--<td class="text-center">{{course.tid}}</td>-->
+                    <!--<td class="text-center">{{course.fee}}</td>-->
                     <td class="text-center">
                         <input type="checkbox" v-model="course.checked"/>
                     </td>
@@ -303,13 +303,13 @@
                                 <td class="text-center">课程</td>
                                 <td class="text-center">时间</td>
                                 <!--<td class="text-center">日期</td>-->
-                                <td class="text-center">学期</td>
+                                <!--<td class="text-center">学期</td>-->
                                 <td class="text-center">校区</td>
                                 <td class="text-center">教室</td>
                                 <td class="text-center">单价</td>
                                 <td class="text-center">课时</td>
-                                <td class="text-center">教师</td>
-                                <td class="text-center">费用</td>
+                                <!--<td class="text-center">教师</td>-->
+                                <!--<td class="text-center">费用</td>-->
                                 <td class="text-center">操作</td>
                             </tr>
                             </thead>
@@ -319,13 +319,13 @@
                                 <td class="text-center">{{course.cname}}</td>
                                 <td class="text-center">{{course.time}}</td>
                                 <!--<td class="text-center">{{course.date}}</td>-->
-                                <td class="text-center">{{course.semester}}</td>
-                                <td class="text-center">{{course.campus}}</td>
+                                <!--<td class="text-center">{{course.semester}}</td>-->
+                                <td class="text-center">{{(course.campus==1)?'杨浦':(course.campus==2)?'徐汇':''}}</td>
                                 <td class="text-center">{{course.room}}</td>
                                 <td class="text-center">{{course.price}}</td>
                                 <td class="text-center">{{course.unit}}</td>
-                                <td class="text-center">{{course.tid}}</td>
-                                <td class="text-center">{{course.fee}}</td>
+                                <!--<td class="text-center">{{course.tid}}</td>-->
+                                <!--<td class="text-center">{{course.fee}}</td>-->
                                 <td class="text-center">
                                     <input type="checkbox" v-model="course.checked"/>
                                 </td>

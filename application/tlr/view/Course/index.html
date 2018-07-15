@@ -26,8 +26,12 @@
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
             roles = JSON.parse(roles);
-            if (roles.indexOf(1) == -1)
+            if (roles.indexOf(1) == -1) {
                 $('#sys').hide();
+                if (roles.indexOf(12) == -1) {
+                    $('.jiaowu').hide();
+                }
+            }
         } else
             $('#logout').hide();
         $('#sel_semester').val("{$seme}");
@@ -105,7 +109,7 @@
                 </div>
             </div>
         </form>
-        <div class="col-sm-2 col-md-2 col-lg-2" style="margin-top: 17px" align="right">
+        <div class="col-sm-2 col-md-2 col-lg-2" style="margin-top: 24px" align="right">
             <button class="btn btn-success" onclick="add()">添加课程</button>
         </div>
     </div>
@@ -126,7 +130,7 @@
                 <td class="text-center">课时</td>
                 <td class="text-center">教师</td>
                 <!--<td class="text-center">费用</td>-->
-                <td class="text-center">操作</td>
+                <td class="text-center jiaowu">操作</td>
             </tr>
             </thead>
             <tbody>
@@ -149,13 +153,13 @@
                 <td class="text-center">{$course->unit}</td>
                 <td class="text-center">{$course->tname}</td>
                 <!--<td class="text-center">{$course->fee}</td>-->
-                <td class="text-center">
+                <td class="text-center jiaowu">
                     <button class="btn btn-xs btn-success"
-                            onclick="mod('{:url(\'course/mod\',[\'cid\'=>$course.cid])}','{$course.cname}','{$course.time}','{$course.date}','{$course.semester}','{$course.campus}','{$course.room}','{$course.price}','{$course.unit}','{$course.tid}','{$course.fee}','{$course.memo}')">
+                            onclick="mod('{:url(\'course/mod\')}','{$course.cid}','{$course.cname}','{$course.time}','{$course.date}','{$course.semester}','{$course.campus}','{$course.room}','{$course.price}','{$course.unit}','{$course.tid}','{$course.fee}','{$course.memo}')">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button class="btn btn-xs btn-danger"
-                            onclick="del('{:url(\'course/del\',[\'cid\'=>$course.cid])}','{$course.cname}')">
+                            onclick="del('{:url(\'course/del\')}','{$course.cid}','{$course.cname}')">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </td>
@@ -263,7 +267,7 @@
 </body>
 <!--业务逻辑-->
 <script>
-    function mod(url, cname, time, date, semester, campus, room, price, unit, tid, fee, memo) {
+    function mod(url, cid, cname, time, date, semester, campus, room, price, unit, tid, fee, memo) {
         $('#name_check').removeClass("has-error");
         $('#time_check').removeClass("has-error");
         $('#date_check').removeClass("has-error");
@@ -285,7 +289,7 @@
         $('#memo').text(memo);
 
         $('#modal-title').text('修改课程信息');
-        $('#modal-form').attr("action", url);
+        $('#modal-form').attr("action", url + "?cid=" + cid);
         $('#add').hide();
         $('#mod').show();
         $('#myModal').modal();
@@ -320,10 +324,10 @@
 
     }
 
-    function del(url, cname) {
+    function del(url, cname, cid) {
         let flag = confirm("确定要删除课程" + cname + "吗");
         if (flag) {
-            window.location.href = url;
+            window.location.href = url + "?cid=" + cid;
         }
 
     }
