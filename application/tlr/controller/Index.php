@@ -55,4 +55,9 @@ class Index extends Controller
             $this->error('操作无效', "Index/index", null, 1);
         }
     }
+
+    public function easterEgg(Request $request)
+    {
+        $this->success('Designed by Leo, Diamond, cx, qdw, and xy!');
+    }
 }
