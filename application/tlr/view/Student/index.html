@@ -27,6 +27,7 @@
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
             roles = JSON.parse(roles);
+            Vue.set(app, 'roles', roles);
             if (roles.indexOf(1) == -1) {
                 $('#sys').hide();
             }
@@ -87,6 +88,7 @@
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>学生信息</h3>
+            {{roles}}
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4">
             <div class="input-group" style="margin-top: 17px">
@@ -120,10 +122,10 @@
                 <td class="text-center">{{(student.grade>0)?student.grade:''}}</td>
                 <td class="text-center">{{student.school}}</td>
                 <td class="text-center">
-                    <button class="btn btn-xs btn-success" @click="open(index)" title="编辑">
+                    <button v-if="roles.indexOf(12) != -1" class="btn btn-xs btn-success" @click="open(index)" title="编辑">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
-                    <button class="btn btn-xs btn-danger" @click="deleteStudent(index)" title="删除">
+                    <button v-if="roles.indexOf(12) != -1" class="btn btn-xs btn-danger" @click="deleteStudent(index)" title="删除">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </td>
@@ -228,6 +230,7 @@
             totalPage: 1,
             add: false,
             searchSname: '',
+            roles: [],
         },
         mounted() {
             this.getStudents(1)
@@ -387,6 +390,7 @@
                 });
             }
         }
-    })
+    });
+    
 </script>
 </html>
