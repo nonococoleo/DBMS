@@ -129,14 +129,13 @@
             </thead>
             <tbody>
             <tr v-for="(pay,index) in pays">
-                <td class="text-center" @click="enroll(pay.pid)">
-                    <div style="cursor: pointer;" @click="enroll(pay.pid)">{{pay.pid}}</div>
-                </td>
+                <td class="text-center">{{pay.pid}}</td>
                 <td class="text-center">{{pay.sname}}</td>
                 <td class="text-center">{{getsemname(pay.semester)}}</td>
                 <td class="text-center">{{pay.fee}}</td>
                 <td class="text-center">{{pay.date}}</td>
                 <td class="text-center">
+                    <button class="btn btn-xs btn-success" @click="enroll(pay.pid)">报名详情</button>
                     <button class="btn btn-xs" :class="(pay.iid)?'btn-info':'btn-primary'"
                             @click="invoice(index,pay.iid)">
                         {{(pay.iid)?'查看':'申请'}}发票
