@@ -84,7 +84,7 @@
         </table>
     </div>
     <div>
-        <button class="btn btn-success" id="enroll" onclick='nextone("{$pay.semester}")'>继续报名</button>
+        <button class="btn btn-success" id="enroll" onclick='window.history.back()'>返回</button>
         <button class="btn btn-success" id="print" onclick="toprint()">打印</button>
     </div>
 </div>
@@ -95,10 +95,6 @@
         $('#print').hide();
         window.print();
         $('#enroll').show();
-    }
-
-    function nextone(seme) {
-        window.location.href = "{:url('enroll/choose')}?seme=" + seme;
     }
 </script>
 </html>

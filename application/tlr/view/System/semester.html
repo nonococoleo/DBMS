@@ -121,17 +121,21 @@
         </form>
     </div>
 
+
+    <div>
+        <h3>导入课程列表</h3>
+    </div>
     <!--上传文件-->
-    <div class="row">
-        <form method="post" enctype="multipart/form-data" class="form" action="{:url('course/upload')}">
-            <div class="col-sm-6 col-md-6 col-lg-6">
+    <form method="post" enctype="multipart/form-data" class="form" action="{:url('course/upload')}">
+        <div class="row">
+            <div class="col-sm-10 col-md-10 col-lg-10">
                 <input type="file" class="file form-control" name="file">
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="col-sm-2 col-md-2 col-lg-2">
                 <input type="submit" class="btn btn-success" value="批量导入">
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 </body>
 <!--业务逻辑-->

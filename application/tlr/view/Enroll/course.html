@@ -119,13 +119,13 @@
                     <td class="text-center" width="5%">8</td>
                     <td class="text-center" width="5%">9</td>
                     <td class="text-center" width="5%">10</td>
-                    <td class="text-center hi">参加次数</td>
+                    <td class="text-center" width="20%" id="temp">参加次数</td>
                 </tr>
                 </thead>
                 <tbody>
                 {volist id="en" name="enroll"}
                 <tr>
-                    <td class="text-center">{$en->sid}</td>
+                    <td class="text-center" height="37px">{$en->sid}</td>
                     <td class="text-center">{$en->sname}</td>
                     <td class="text-center">{$en->tel}</td>
                     <td class="text-center"></td>
@@ -138,9 +138,8 @@
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
-                    <td class="text-center
- hi"><span class="attend">{$en->attend}</span><input value="{$en->attend}" type="hidden"
-                                                     name="eid[{$en->eid}]">
+                    <td class="text-center" id="hi"><span class="attend">{$en->attend}</span><input
+                            value="{$en->attend}" type="hidden" name="eid[{$en->eid}]">
                     </td>
                 </tr>
                 {/volist}
@@ -151,7 +150,7 @@
     <div>
         <button class="btn btn-success" id="mod" onclick="mod()">修改</button>
         <button class="btn btn-success" id="send" onclick="$('form').submit();">提交</button>
-        <button class="btn btn-warning" id="ret" onclick="ret()">返回</button>
+        <button class="btn btn-warning" id="ret" onclick="window.location.reload();">返回</button>
         <button class="btn btn-primary" id="print" onclick="toprint()">打印</button>
     </div>
 </div>
@@ -171,14 +170,11 @@
         $('#send').hide();
         $('#print').hide();
         $('#ret').hide();
-        $('.hi').hide();
+        $('#temp').text("备注");
+        $('#hi').text(null);
         window.print();
         $('#mod').show();
         $('#print').show();
-        $('.hi').show();
-    }
-
-    function ret() {
         window.location.reload();
     }
 </script>

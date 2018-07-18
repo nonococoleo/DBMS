@@ -457,6 +457,8 @@
                     toastr.error("请选择课程");
                 else {
                     $('#fee').val(this.price);
+                    $('#method').val(0);
+                    $('#detail').val(null);
                     $('#fee_check').removeClass("has-error");
                     $('#method_check').removeClass("has-error");
                     $('#myModal4').modal('show');
