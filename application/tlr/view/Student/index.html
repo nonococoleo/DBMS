@@ -85,7 +85,7 @@
 <!--页面主体-->
 <div id="app" class="container">
     <!--页眉-->
-    <div class="row">
+    <div class="row page-header">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>学生信息</h3>
         </div>
@@ -121,7 +121,8 @@
                 <td class="text-center">{{(student.grade>0)?student.grade:''}}</td>
                 <td class="text-center">{{student.school}}</td>
                 <td class="text-center">
-                    <button v-if="roles.indexOf(13) != -1" class="btn btn-xs btn-success" @click="open2(index)" title="编辑">
+                    <button v-if="roles.indexOf(13) != -1" class="btn btn-xs btn-primary" @click="open2(index)"
+                            title="编辑">
                         修改余额
                     </button>
                     <button v-if="roles.indexOf(12) != -1" class="btn btn-xs btn-success" @click="open(index)" title="编辑">
@@ -218,33 +219,33 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-    </div>
-    <!-- 修改余额的modal -->
-    <div>
-        <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" style="display: inline;">修改余额</h4>
-                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
-                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-body">
-                        姓名:
-                        <input type="text" v-model="studentDetailInShow.sname" class="form-control" readonly>
-                        余额:
-                        <input type="number" value="0" step="0.01"
-                                v-model="studentDetailInShow.balance" class="form-control">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary"
-                                @click="updateBalance(studentDetailInShow)">保存修改
-                        </button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+        <!-- 修改余额的modal -->
+        <div>
+            <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" style="display: inline;">修改余额</h4>
+                            <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            姓名:
+                            <input type="text" v-model="studentDetailInShow.sname" class="form-control" readonly>
+                            余额:
+                            <input type="number" value="0" step="0.01"
+                                   v-model="studentDetailInShow.balance" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary"
+                                    @click="updateBalance(studentDetailInShow)">保存修改
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div>
     </div>
 </div>
 </body>

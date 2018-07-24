@@ -2,7 +2,6 @@
 
 namespace app\tlr\controller;
 
-use app\tlr\model\EnrollModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
@@ -27,7 +26,7 @@ class Refund extends Controller
         $seme = $request->param('seme');
         $Semester = new SemesterModel();
         $semester = $Semester->where("id", ">", 0)->select();
-        $refund = $Refund->where("delflag", "=", 0)->join("semester s", "s.id=refund.semester");
+        $refund = $Refund->alias("r")->where("r.delflag", "=", 0)->join("semester s", "s.id=r.semester")->join("pay p", "p.rid=r.rid");
         if (!$state)
             $state = 0;
         else
@@ -37,7 +36,7 @@ class Refund extends Controller
         else
             $refund = $refund->where("semester", "=", $seme);
         $query = ["seme" => $seme, "state" => $state];
-        $refund = $refund->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        $refund = $refund->field("r.rid,r.semester,r.fee,r.method,r.card,r.bank,r.person,r.date,r.state,r.uid,r.memo,p.pid,name")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
 
         if ($refund->count() > 0) {
             $page = $refund->render();
@@ -76,14 +75,15 @@ class Refund extends Controller
         $Refund = new RefundModel();
         $Log = new LogModel();
         $Pay = new PayModel();
-        $Enroll = new EnrollModel();
+        $pid = $request->param("pid");
+        unset($_POST["pid"]);
         foreach ($_POST as $key => $value)
             if ($value == "")
                 $_POST[$key] = null;
-        $pid = $request->param("pid");
         $Refund->save($_POST);
         $Pay->save(["rid" => $Refund->getLastInsID()], ['pid' => $pid]);
         $Log->save(["uid" => session('uid'), "action" => $Refund->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+//        $Enroll = new EnrollModel();
 //        $Enroll->save(["delflag" => 1], ['pid' => $pid]);
         $this->success("添加成功", null, null, 1);
         return null;

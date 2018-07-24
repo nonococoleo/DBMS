@@ -84,7 +84,7 @@
 <!--页面主体-->
 <div id="app" class="container">
     <!--页眉-->
-    <div class="row">
+    <div class="row page-header">
         <div class="col-sm-8 col-md-8 col-lg-8">
             <h3>发票信息</h3>
         </div>
@@ -194,7 +194,7 @@
                             <button type="button" class="btn btn-primary" id="mod" onclick="check()">保存修改</button>
                             <button type="button" class="btn btn-primary" id="add" onclick="check()">开发票</button>
                         </div>
-                        <input type="hidden" name="pid" id="pid">
+                        <!--<input type="hidden" name="pid" id="pid">-->
                         <input type="hidden" name="date" value="{:date('Y-m-d')}">
                         <input type="hidden" name="uid" value="{:session('uid')}">
                     </form>
@@ -272,7 +272,6 @@
         $('#fee_check').removeClass("has-error");
         $('#state_check').removeClass("has-error");
         $('#title_check').removeClass("has-error");
-        $('#pid').val(pid);
         $('#fee').val(fee);
         $('#title').val(title);
         $('#number').val(number);
@@ -296,7 +295,6 @@
             month = "0" + month;
         if (day >= 0 && day <= 9)
             day = "0" + day;
-        $('#pid').val(null);
         $('#fee').val(null);
         $('#title').val(null);
         $('#number').val(null);

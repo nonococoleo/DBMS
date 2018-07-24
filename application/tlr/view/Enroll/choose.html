@@ -125,59 +125,60 @@
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6">
             <select id="classes" class="form-control">
-            {volist id="c" name="classes"}
-            <option value="{$c}">{$c}</option>
-            {/volist}
-        </select>
+                {volist id="c" name="classes"}
+                <option value="{$c}">{$c}</option>
+                {/volist}
+            </select>
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4">
             <button class="btn btn-primary form-control" onclick="ser()">查询</button>
         </div>
     </div>
     <br>
+    <!--最终选课确认-->
     <div class="col-sm-12 col-md-12 col-lg-12">
-    <div id="selectedTable">
-        <div v-if="courses.length>0">
-            <table class="table table-striped table-hover table-condensed">
-                <thead>
-                <tr>
-                    <td class="text-center">编号</td>
-                    <td class="text-center">课程</td>
-                    <td class="text-center">时间</td>
-                    <!--<td class="text-center">日期</td>-->
-                    <!--<td class="text-center">学期</td>-->
-                    <td class="text-center">校区</td>
-                    <td class="text-center">教室</td>
-                    <td class="text-center">单价</td>
-                    <td class="text-center">课时</td>
-                    <!--<td class="text-center">教师</td>-->
-                    <!--<td class="text-center">费用</td>-->
-                    <td class="text-center">操作</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(course,index) in courses">
-                    <td class="text-center">{{course.cid}}</td>
-                    <td class="text-center">{{course.cname}}</td>
-                    <td class="text-center">{{course.time}}</td>
-                    <!--<td class="text-center">{{course.date}}</td>-->
-                    <!--<td class="text-center">{{course.semester}}</td>-->
-                    <td class="text-center">{{(course.campus==1)?'杨浦':(course.campus==2)?'徐汇':''}}</td>
-                    <td class="text-center">{{course.room}}</td>
-                    <td class="text-center">{{course.price}}</td>
-                    <td class="text-center">{{course.unit}}</td>
-                    <!--<td class="text-center">{{course.tid}}</td>-->
-                    <!--<td class="text-center">{{course.fee}}</td>-->
-                    <td class="text-center">
-                        <input type="checkbox" v-model="course.checked"/>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <button class="btn btn-success form-control" type="button" @click="baoming()">报名</button>
+        <div id="selectedTable">
+            <div v-if="courses.length>0">
+                <table class="table table-striped table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <td class="text-center">编号</td>
+                        <td class="text-center">课程</td>
+                        <td class="text-center">时间</td>
+                        <!--<td class="text-center">日期</td>-->
+                        <!--<td class="text-center">学期</td>-->
+                        <td class="text-center">校区</td>
+                        <td class="text-center">教室</td>
+                        <td class="text-center">单价</td>
+                        <td class="text-center">课时</td>
+                        <!--<td class="text-center">教师</td>-->
+                        <!--<td class="text-center">费用</td>-->
+                        <td class="text-center">操作</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(course,index) in courses">
+                        <td class="text-center">{{course.cid}}</td>
+                        <td class="text-center">{{course.cname}}</td>
+                        <td class="text-center">{{course.time}}</td>
+                        <!--<td class="text-center">{{course.date}}</td>-->
+                        <!--<td class="text-center">{{course.semester}}</td>-->
+                        <td class="text-center">{{(course.campus==1)?'杨浦':(course.campus==2)?'徐汇':''}}</td>
+                        <td class="text-center">{{course.room}}</td>
+                        <td class="text-center">{{course.price}}</td>
+                        <td class="text-center">{{course.unit}}</td>
+                        <!--<td class="text-center">{{course.tid}}</td>-->
+                        <!--<td class="text-center">{{course.fee}}</td>-->
+                        <td class="text-center">
+                            <input type="checkbox" v-model="course.checked"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-success form-control" type="button" @click="baoming()">报名</button>
 
+            </div>
         </div>
-    </div>
     </div>
     <!-- 用户信息的modal -->
     <div>

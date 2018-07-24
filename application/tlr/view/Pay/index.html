@@ -83,7 +83,7 @@
 <!--页面主体-->
 <div id="app" class="container">
     <!--页眉-->
-    <div class="row">
+    <div class="row page-header">
         <div class="col-sm-4 col-md-4 col-lg-4">
             <h3>缴费信息</h3>
         </div>
@@ -107,10 +107,6 @@
                       @click="search2(searchSname)">搜索</span>
             </div>
         </div>
-        <!-- <div style="margin-top: 6px">
-        &nbsp;
-        <button class="btn btn-success" @click="newSearch()">添加账单</button>
-        </div> -->
     </div>
     <!--列表-->
     <div>
@@ -829,6 +825,5 @@
         else
             toastr.error('表单红色字段有误请确认后再提交');
     }
-
 </script>
 </html>

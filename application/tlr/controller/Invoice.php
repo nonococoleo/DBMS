@@ -35,10 +35,10 @@ class Invoice extends Controller
         $state = $request->param('state');
         if ($state) {
             $query = ["state" => $state];
-            $invoice = $Invoice->where("delflag", "=", 0)->where("state", "=", "$state")->paginate(10, false, ['type' => 'bootstrap']);
+            $invoice = $Invoice->alias("i")->join("pay p", "p.iid=i.iid")->where("i.delflag", "=", 0)->where("state", "=", "$state")->field("i.iid,i.fee,title,number,i.date,state,p.pid,i.memo,i.uid")->paginate(10, false, ['type' => 'bootstrap']);
         } else {
             $query = ["state" => 0];
-            $invoice = $Invoice->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
+            $invoice = $Invoice->alias("i")->join("pay p", "p.iid=i.iid")->where("i.delflag", "=", 0)->field("i.iid,i.fee,title,number,i.date,state,p.pid,i.memo,i.uid")->paginate(10, false, ['type' => 'bootstrap']);
         }
         if ($invoice->count() > 0) {
             $page = $invoice->render();
@@ -84,7 +84,7 @@ class Invoice extends Controller
             if ($value == "")
                 $_POST[$key] = null;
         try {
-            $Invoice->save($_POST);
+            $Invoice->allowField("fee,title,number,date,state,uid,memo")->save($_POST);
             $Pay->save(["iid" => $Invoice->getLastInsID()], ['pid' => $request->param("pid")]);
             $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
         } catch (\Exception $e) {
@@ -128,7 +128,7 @@ class Invoice extends Controller
             if ($value == "")
                 $_POST[$key] = null;
         try {
-            $Invoice->allowField(['pid', 'fee', 'title', 'number', 'date', 'state', 'memo'])->save($_POST, ['iid' => $request->param("iid")]);
+            $Invoice->allowField(['fee', 'title', 'number', 'date', 'state', 'memo'])->save($_POST, ['iid' => $request->param("iid")]);
             $Log->save(["uid" => session('uid'), "action" => $Invoice->getlastsql(), "time" => date("Y-m-d H:i:s")]);
         } catch (\Exception $e) {
             $this->error("修改失败", null, null, 1);

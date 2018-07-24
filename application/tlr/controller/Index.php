@@ -3,6 +3,7 @@
 namespace app\tlr\controller;
 
 use app\tlr\model\SemesterModel;
+use app\tlr\model\TodoModel;
 use app\tlr\model\UserModel;
 use gmars\rbac\Rbac;
 use think\Controller;
@@ -13,10 +14,19 @@ class Index extends Controller
 {
     public function index(Request $request)
     {
-        if (!session("uid"))
-            return $this->fetch('login');
-        else
+        if (session("uid")) {
+            $Semester = new SemesterModel();
+            $semester = $Semester->where("current", 1)->field('announce')->select();
+            if ($semester[0]["announce"])
+                $announce = $semester[0]["announce"];
+            else
+                $announce = "暂无";
+
+            $data = ["announce" => $announce];
+            $this->assign($data);
             return $this->fetch('index');
+        } else
+            return $this->fetch('login');
     }
 
     public function login(Request $request)
@@ -59,5 +69,36 @@ class Index extends Controller
     public function easterEgg(Request $request)
     {
         $this->success('Designed by Leo, Diamond, cx, qdw, and xy!');
+    }
+
+    public function todos(Request $request)
+    {
+        $Todo = new TodoModel;
+        $id = $request->param("uid");
+        $temp = $Todo->where("user_id", $id)->select();
+        return $temp;
+        return json_encode(array("data" => $temp));
+    }
+
+    public function mod(Request $request)
+    {
+        $Todo = new TodoModel();
+        $id = $request->param("id");
+        unset($_POST["id"]);
+        if ($id)
+            $Todo->save($_POST, ["id" => $id]);
+        else
+            $Todo->save($_POST);
+        return $_POST;
+    }
+
+    public function del(Request $request)
+    {
+        $Todo = new TodoModel();
+        $id = $request->param("id");
+        $Todo->where("id", $id)->delete();
+        $id = $request->param("uid");
+        $temp = $Todo->where("user_id", $id)->select();
+        return json_encode(array("data" => $temp));
     }
 }

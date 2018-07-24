@@ -79,6 +79,7 @@
     </div><!-- /.container-fluid -->
 </nav>
 <div class="container">
+    <!--页眉-->
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>权限列表</h3>
@@ -89,76 +90,80 @@
             </h3>
         </div>
     </div>
-
+    <!--列表-->
     <div>
         <div class="panel-group" id="accordion">
             {volist id="controller" name="controllers"}
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <div class="row" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne{$controller->cid}" aria-expanded="true" aria-controls="collapseOne{$controller->cid}">
+                    <div class="row" role="button" data-toggle="collapse" data-parent="#accordion"
+                         href="#collapseOne{$controller->cid}" aria-expanded="true"
+                         aria-controls="collapseOne{$controller->cid}">
                         <div class="col-md-11 col-sm-11 col-lg-11">
-                          <h4 class="panel-title">
-                            <a>
-                              {$controller->name}
-                            </a>
-                          </h4>
-                      </div>
-                      <div class="col-md-1 col-sm-1 col-lg-1">
-                          <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-                      </div>
-                  </div>
+                            <h4 class="panel-title">
+                                <a>
+                                    {$controller->name}
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="col-md-1 col-sm-1 col-lg-1">
+                            <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                        </div>
+                    </div>
                 </div>
                 <div id="collapseOne{$controller->cid}" class="panel-collapse collapse">
-                  <div class="panel-body">
-                    <table class="table table-striped table-hover table-condensed">
-                        <thead>
-                        <tr>
-                            <td class="text-center">编号</td>
-                            <td class="text-center">名称</td>
-                            <td class="text-center">路径</td>
-                            <td class="text-center">描述</td>
-                            <!-- <td class="text-center">状态</td> -->
-                            <td class="text-center">创建时间</td>
-                            <td class="text-center">权限</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {volist id="item" name="controller.permissions"}
-                        <tr>
-                            <td class="text-center">{$item->id}</td>
-                            <td class="text-center">{$item->name}</td>
-                            <td class="text-center">{$item->path}</td>
-                            <td class="text-center">{$item->description}</td>
-                            <td class="text-center">{$item->create_time}</td>
-                            <td class="text-center">
-                                <a href="{:url('permission/deletePermission'),'?id='.$item->id}">
-                                    <button type="button" class="btn btn-xs btn-danger" title="删除">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>
-                                </a>
-                            </td>
-                        </tr>
-                        {/volist}
-                        </tbody>
-                    </table>
-                  </div>
-                  <div align="center">
-                        <button class="btn btn-success" style="width: 49%"  onclick="addPermission('{$controller->path}','{$controller->cid}')">添加权限</button>
+                    <div class="panel-body">
+                        <table class="table table-striped table-hover table-condensed">
+                            <thead>
+                            <tr>
+                                <td class="text-center">编号</td>
+                                <td class="text-center">名称</td>
+                                <td class="text-center">路径</td>
+                                <td class="text-center">描述</td>
+                                <!-- <td class="text-center">状态</td> -->
+                                <td class="text-center">创建时间</td>
+                                <td class="text-center">权限</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist id="item" name="controller.permissions"}
+                            <tr>
+                                <td class="text-center">{$item->id}</td>
+                                <td class="text-center">{$item->name}</td>
+                                <td class="text-center">{$item->path}</td>
+                                <td class="text-center">{$item->description}</td>
+                                <td class="text-center">{$item->create_time}</td>
+                                <td class="text-center">
+                                    <a href="{:url('permission/deletePermission'),'?id='.$item->id}">
+                                        <button type="button" class="btn btn-xs btn-danger" title="删除">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div align="center">
+                        <button class="btn btn-success" style="width: 49%"
+                                onclick="addPermission('{$controller->path}','{$controller->cid}')">添加权限
+                        </button>
                         <a href="{:url('permission/deleteController'),'?cid='.$controller->cid}">
-                            <button class="btn btn-danger" style="width: 49%" >删除控制器</button>
+                            <button class="btn btn-danger" style="width: 49%">删除控制器</button>
                         </a>
-                  </div>
+                    </div>
                 </div>
-          </div>
-          {/volist}
+            </div>
+            {/volist}
         </div>
-        
+
     </div>
-    <button style="width: 100%" class="btn btn-success" onclick="$('#myModal1').modal()"><span class="glyphicon glyphicon-plus"></span></button>
+    <!--添加-->
+    <button style="width: 100%" class="btn btn-success" onclick="$('#myModal1').modal()"><span
+            class="glyphicon glyphicon-plus"></span></button>
 </div>
-
-
-
+<!-- 用户信息的modal -->
 <div>
     <!-- 添加控制器的modal -->
     <div class="modal fade" tabindex="-1" id="myModal1" role="dialog">
@@ -167,7 +172,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" style="display: inline;">添加控制器</h4>
-                        <button type="button" class="close" style="display: inline;" data-dismiss="modal" aria-label="Close"><span
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
@@ -184,7 +190,6 @@
             </div><!-- /.modal-dialog -->
         </form>
     </div><!-- /.modal -->
-
     <!-- 添加权限的modal -->
     <div class="modal fade" tabindex="-1" id="myModal2" role="dialog">
         <form action="{:url('permission/addPermission')}" method="post">
@@ -192,20 +197,21 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" style="display: inline;">添加权限结点</h4>
-                        <button type="button" class="close" style="display: inline;" data-dismiss="modal" aria-label="Close"><span
+                        <button type="button" class="close" style="display: inline;" data-dismiss="modal"
+                                aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
                         权限名称:
-                        <input type="text" class="form-control"  name="name" placeholder="权限名称">
+                        <input type="text" class="form-control" name="name" placeholder="权限名称">
                         状态:
-                        <input type="text" class="form-control"  name="status" value="1" placeholder="状态">
+                        <input type="text" class="form-control" name="status" value="1" placeholder="状态">
                         描述:
-                        <input type="text" class="form-control"  name="description" placeholder="描述">
+                        <input type="text" class="form-control" name="description" placeholder="描述">
                         <!-- <input type="text" name="sort_num" value="10"> -->
                         路径:
-                        <input type="text" class="form-control" id="permissionPath"  name="path" placeholder="路径">
-                        <input type="hidden" id="cid"  name="cid">
+                        <input type="text" class="form-control" id="permissionPath" name="path" placeholder="路径">
+                        <input type="hidden" id="cid" name="cid">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -216,11 +222,9 @@
         </form>
     </div><!-- /.modal -->
 </div>
-
-
 </body>
 <script type="text/javascript">
-    function addPermission(controllerPath,cid) {
+    function addPermission(controllerPath, cid) {
         $('#myModal2').modal();
         $("#permissionPath").val(controllerPath);
         $("#cid").val(cid);

@@ -2,12 +2,12 @@
 
 namespace app\tlr\controller;
 
+use app\tlr\model\CourseModel;
 use app\tlr\model\EnrollModel;
 use app\tlr\model\LogModel;
 use app\tlr\model\PayModel;
 use app\tlr\model\RefundModel;
 use app\tlr\model\SemesterModel;
-use app\tlr\model\CourseModel;
 use gmars\rbac\Rbac;
 use think\Controller;
 use think\Request;
@@ -104,6 +104,30 @@ class System extends Controller
             $this->success("添加成功", null, null, 1);
         } else {
             $this->error("确定学期", 'system/semester', null, 1);
+        }
+    }
+
+    //发布公告
+    public function announce(Request $request)
+    {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "system/semester", null, 1);
+            exit();
+        }
+        $content = $request->param("name");
+        if ($content) {
+            $Semester = new SemesterModel();
+            $Log = new LogModel();
+            try {
+                $Semester->save(["announce" => $content], ["current" => 1]);
+                $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+            } catch (\Exception $e) {
+                $this->error("修改失败", null, null, 1);
+            }
+            $this->success("添加成功", null, null, 1);
+        } else {
+            $this->error("确定内容", 'system/semester', null, 1);
         }
     }
 
@@ -227,54 +251,28 @@ class System extends Controller
                 $seq['memo'] = 0;
             }
             for ($i = 0; $i < count($line); $i++) {
-                if ($line[$i] == 'cname') {
+                if ($line[$i] == 'cname')
                     $seq['cname'] = $i;
-//                    echo $seq['cname'];
-                }
-                if ($line[$i] == 'time') {
+                if ($line[$i] == 'time')
                     $seq['time'] = $i;
-//                    echo $seq['time'];
-                }
-                if ($line[$i] == 'date') {
+                if ($line[$i] == 'date')
                     $seq['date'] = $i;
-//                    echo $seq['date'];
-                }
-                if ($line[$i] == 'semester') {
+                if ($line[$i] == 'semester')
                     $seq['semester'] = $i;
-                }
-                if ($line[$i] == 'campus') {
+                if ($line[$i] == 'campus')
                     $seq['campus'] = $i;
-                }
-                if ($line[$i] == 'room') {
+                if ($line[$i] == 'room')
                     $seq['room'] = $i;
-                }
-                if ($line[$i] == 'price') {
+                if ($line[$i] == 'price')
                     $seq['price'] = $i;
-                }
-                if ($line[$i] == 'unit') {
+                if ($line[$i] == 'unit')
                     $seq['unit'] = $i;
-                }
-                if ($line[$i] == 'tid') {
+                if ($line[$i] == 'tid')
                     $seq['tid'] = $i;
-                }
-                if ($line[$i] == 'fee') {
+                if ($line[$i] == 'fee')
                     $seq['fee'] = $i;
-                }
-                if ($line[$i] == 'memo') {
+                if ($line[$i] == 'memo')
                     $seq['memo'] = $i;
-                }
-
-//                echo '<br>';
-//                print_r($line[$i]);
-//                if ($line[$i] == "delflag") {
-//                    echo 'yes';
-//                    print_r('yes');
-//                }
-//
-////                $data[$i] = $line[$i];
-//            }
-//            echo '<br><br>';
-
             }
 
             $data['cid'] = null;
@@ -306,9 +304,5 @@ class System extends Controller
         $Course->saveAll($courses);
         $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
         $this->success("添加成功", null, null, 1);
-
     }
-
-
-
 }
