@@ -2,6 +2,7 @@
 
 namespace app\tlr\controller;
 
+use app\tlr\model\LogModel;
 use app\tlr\model\SemesterModel;
 use app\tlr\model\TodoModel;
 use app\tlr\model\UserModel;
@@ -56,6 +57,8 @@ class Index extends Controller
             $local = json_decode($local, true)["data"];
             $temp = $local["country"] . $local["region"] . $local["city"] . " " . $local["isp"];
             $User->save(["logintime" => $time, "loginip" => $ip, "loginaddr" => $temp], ['uname' => $_POST['uname']]);
+            $Log = new LogModel();
+            $Log->save(["uid" => session('uid'), "action" => $User->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             $this->success("登陆成功", "Index/index", null, 1);
         } else{
             $this->error("用户名或密码错误", "Index/login", null, 1);
@@ -94,14 +97,17 @@ class Index extends Controller
             $Todo->save($_POST, ["id" => $id]);
         else
             $Todo->save($_POST);
-        return $_POST;
+        return json_encode(array("msg" => "succ"));
     }
 
     public function del(Request $request)
     {
         $Todo = new TodoModel();
         $id = $request->param("id");
-        $Todo->where("id", $id)->delete();
-        return json_encode(array("msg" => "succ"));
+        if ($id) {
+            $Todo->where("id", $id)->delete();
+            return json_encode(array("msg" => "succ"));
+        } else
+            return json_encode(array("msg" => "fail"));
     }
 }
