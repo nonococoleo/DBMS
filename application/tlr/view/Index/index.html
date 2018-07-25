@@ -93,7 +93,7 @@
     <div>
         <section id="todoapp">
             <header id="header">
-                <input id="new-todo" placeholder="待办事项" autofocus>
+                <input id="new-todo" placeholder="待办事项 回车增加 点击编辑" autofocus>
             </header>
             <section id="main">
                 <input id="toggle-all" type="checkbox">
@@ -107,7 +107,7 @@
             <li {{#if status}} class="status" {{/if}} data-id="{{id}}">
             <div class="view">
                 <input class="toggle" type="checkbox" {{#if status}}checked{{/if}}>
-                <label>{{content}}</label>
+                <label data-tooltip="Refresh" data-tooltip-stickto="right" data-tooltip-color="gulf">{{content}}</label>
                 <button class="destroy"></button>
             </div>
             <input class="edit" value="{{content}}">
@@ -219,7 +219,7 @@
                 $('#footer').on('click', '#clear-completed', this.destroyCompleted.bind(this));
                 $('#todo-list')
                     .on('change', '.toggle', this.toggle.bind(this))
-                    .on('dblclick', 'label', this.editingMode.bind(this))
+                    .on('click', 'label', this.editingMode.bind(this))
                     .on('keyup', '.edit', this.editKeyup.bind(this))
                     .on('focusout', '.edit', this.update.bind(this))
                     .on('click', '.destroy', this.destroy.bind(this));
@@ -286,16 +286,13 @@
 
             // 过滤
             getFilteredTodos: function () {
-
                 // 进行中事项
-                if (this.filter === 'active') {
+                if (this.filter === 'active')
                     return this.getActiveTodos();
-                }
 
                 // 已完成事项
-                if (this.filter === 'completed') {
+                if (this.filter === 'completed')
                     return this.getCompletedTodos();
-                }
 
                 // 全部事项
                 return this.todos;
@@ -318,16 +315,13 @@
                 var id = $(el).closest('li').data('id');
                 var todos = this.todos;
                 var i = todos.length;
-                while (i--) {
-                    if (todos[i].id === id) {
+                while (i--)
+                    if (todos[i].id === id)
                         return i;
-                    }
-                }
             },
 
             // 添加新的待办事项
             create: function (e) {
-                var that = this;
                 var $input = $(e.target);
                 var val = $input.val().trim();
                 var data = {
@@ -370,7 +364,7 @@
                 this.render();
             },
 
-            // 双击编辑
+            // 单击编辑
             editingMode: function (e) {
                 var $input = $(e.target).closest('li').addClass('editing').find('.edit');
                 var val = $input.val();

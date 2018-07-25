@@ -87,7 +87,7 @@ label[for="toggle-all"] {
 #toggle-all {
     position: absolute;
     top: -55px;
-    left: -12px;
+    left: -10px;
     width: 60px;
     height: 34px;
     text-align: center;
@@ -129,7 +129,7 @@ label[for="toggle-all"] {
 #todo-list li.editing .edit {
     display: block;
     width: 1050px;
-    padding: 13px 17px 22px 17px;
+    padding: 17px 17px 22px 17px;
     margin: 0 0 0 43px;
 }
 
@@ -281,7 +281,7 @@ html #clear-completed:active {
 }
 
 #clear-completed:hover {
-    text-decoration: underline;
+    text-decoration: line-through;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
