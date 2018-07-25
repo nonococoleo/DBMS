@@ -81,9 +81,8 @@ class Index extends Controller
     {
         $Todo = new TodoModel;
         $id = $request->param("uid");
-        $temp = $Todo->where("user_id", $id)->select();
+        $temp = $Todo->where("user_id", $id)->order("id")->select();
         return $temp;
-        return json_encode(array("data" => $temp));
     }
 
     public function mod(Request $request)
@@ -91,7 +90,7 @@ class Index extends Controller
         $Todo = new TodoModel();
         $id = $request->param("id");
         unset($_POST["id"]);
-        if ($id)
+        if (strlen($id) > 0)
             $Todo->save($_POST, ["id" => $id]);
         else
             $Todo->save($_POST);
@@ -103,8 +102,6 @@ class Index extends Controller
         $Todo = new TodoModel();
         $id = $request->param("id");
         $Todo->where("id", $id)->delete();
-        $id = $request->param("uid");
-        $temp = $Todo->where("user_id", $id)->select();
-        return json_encode(array("data" => $temp));
+        return json_encode(array("msg" => "succ"));
     }
 }
