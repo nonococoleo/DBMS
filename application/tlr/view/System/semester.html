@@ -82,7 +82,7 @@
 <!--页面主体-->
 <div id="app" class="container">
     <!--页眉-->
-    <div class="row">
+    <div class="row page-header">
         <div class="col-sm-7 col-md-7 col-lg-7">
             <h3>学期信息</h3>
         </div>
@@ -114,7 +114,7 @@
                 <td class="text-center">{$semester->name}</td>
                 <td class="text-center">
                     {if condition="!$semester->current"}
-                    <button class="btn btn-primary btn-xs" onclick="set('{$semester->id}')">设置学期</button>
+                    <button class="btn btn-primary btn-xs" onclick="set('{$semester->id}')">设为当前</button>
                     {else /}
                     <button class="btn btn-success btn-xs">当前学期</button>
                     {/if}
@@ -131,7 +131,7 @@
     <br>
     <!--系统公告-->
     <div>
-        <h3>发布系统公告</h3>
+        <h3>系统公告</h3>
     </div>
     <form method="post" class="form" action="{:url('system/announce')}">
         <div class="row">
@@ -139,14 +139,14 @@
                 <input type="text" name="name" class="form-control" placeholder="公告内容"/>
             </div>
             <div class="col-sm-4 col-md-4 col-lg-4">
-                <input class="form-control btn btn-info btn-xs" type="submit" value="发布公告"/>
+                <input class="form-control btn btn-info" type="submit" value="发布"/>
             </div>
         </div>
     </form>
     <br>
     <!--导入课程-->
     <div>
-        <h3>导入课程列表</h3>
+        <h3>课程列表</h3>
     </div>
     <form method="post" enctype="multipart/form-data" class="form" action="{:url('course/upload')}">
         <div class="row">
@@ -154,7 +154,7 @@
                 <input type="file" class="file form-control" name="file">
             </div>
             <div class="col-sm-4 col-md-4 col-lg-4">
-                <input type="submit" class="form-control btn btn-success" value="批量导入">
+                <input type="submit" class="form-control btn btn-success" value="导入">
             </div>
         </div>
     </form>

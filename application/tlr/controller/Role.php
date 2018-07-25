@@ -95,7 +95,7 @@ class Role extends Controller
 
 		$data = ["controllers" => $controllers, "role" => $_GET];
         $this->assign($data);
-        return $this->fetch('role');
+        return $this->fetch('setPermission');
 	}
 
 	// 为角色分配权限
@@ -115,6 +115,6 @@ class Role extends Controller
 //	        $Log = new LogModel();
 //	        $Log->save(["uid" => session('uid'), "action" => $RolePermission->getlastsql(), "time" => date("Y-m-d H:i:s")]);
         }
-        $this->success("操作成功", null, null, 1);
+        $this->success("操作成功", "role/index", null, 1);
 	}
 }

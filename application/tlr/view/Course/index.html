@@ -91,8 +91,13 @@
         <div class="col-sm-2 col-md-2 col-lg-2">
             <h3>课程信息</h3>
         </div>
+        <!--设置学期、导入课程-->
+        <div class="col-sm-2 col-md-2 col-lg-2" style="margin-top: 24px">
+            &nbsp;
+            <button class="jiaowu btn btn-primary" onclick="set()">学期/课程</button>
+        </div>
         <form method="get" id="ser" action="{:url('course/index')}">
-            <div class="col-sm-4 col-md-4 col-lg-4">
+            <div class="col-sm-3 col-md-3 col-lg-3">
                 <label for="sel_semester">选择学期</label>
                 <select class="form-control" name="seme" id="sel_semester" onchange="ser()">
                     {volist id="sem" name="semester"}
@@ -109,7 +114,7 @@
                 </div>
             </div>
         </form>
-        <div class="col-sm-2 col-md-2 col-lg-2" style="margin-top: 24px" align="right">
+        <div class="col-sm-1 col-md-1 col-lg-1" style="margin-top: 24px" align="right">
             <button class="btn btn-success" onclick="add()">添加课程</button>
         </div>
     </div>
@@ -170,11 +175,6 @@
     <!--分页-->
     <div style="text-align:center;">
         {$page}
-    </div>
-    <!--批量导入-->
-    <div class="jiaowu">
-        &nbsp;
-        <button class="btn btn-success" onclick="set()">学期/课程</button>
     </div>
     <!-- 用户信息的modal -->
     <div>

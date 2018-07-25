@@ -101,15 +101,16 @@
         <li>教师：{$course->tname}</li>
         <li>电话：{$course->phone}</li>
     </div>
+    <br>
     <!--列表-->
     <div>
         <form action="{:url('enroll/attend')}" method="POST" id="form">
             <table class="table table-bordered table-hover table-condensed">
                 <thead>
                 <tr>
-                    <td class="text-center" width="5%">学号</td>
+                    <td class="text-center" width="10%">学号</td>
                     <td class="text-center" width="10%">姓名</td>
-                    <td class="text-center" width="15%">电话</td>
+                    <td class="text-center" width="10%">电话</td>
                     <td class="text-center" width="5%">1</td>
                     <td class="text-center" width="5%">2</td>
                     <td class="text-center" width="5%">3</td>
@@ -139,7 +140,7 @@
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
-                    <td class="text-center" id="hi"><span class="attend">{$en->attend}</span><input
+                    <td class="text-center hi"><span class="attend">{$en->attend}</span><input
                             value="{$en->attend}" type="hidden" name="eid[{$en->eid}]">
                     </td>
                 </tr>
@@ -173,7 +174,7 @@
         $('#print').hide();
         $('#ret').hide();
         $('#temp').text("备注");
-        $('#hi').text(null);
+        $('.hi').text(null);
         window.print();
         $('#mod').show();
         $('#print').show();
