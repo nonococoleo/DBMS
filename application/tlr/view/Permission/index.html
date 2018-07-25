@@ -80,7 +80,7 @@
 </nav>
 <div class="container">
     <!--页眉-->
-    <div class="row">
+    <div class="row page-header">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>权限列表</h3>
         </div>
@@ -101,9 +101,7 @@
                          aria-controls="collapseOne{$controller->cid}">
                         <div class="col-md-11 col-sm-11 col-lg-11">
                             <h4 class="panel-title">
-                                <a>
                                     {$controller->name}
-                                </a>
                             </h4>
                         </div>
                         <div class="col-md-1 col-sm-1 col-lg-1">
@@ -149,9 +147,10 @@
                         <button class="btn btn-success" style="width: 49%"
                                 onclick="addPermission('{$controller->path}','{$controller->cid}')">添加权限
                         </button>
-                        <a href="{:url('permission/deleteController'),'?cid='.$controller->cid}">
-                            <button class="btn btn-danger" style="width: 49%">删除控制器</button>
-                        </a>
+                        <button class="btn btn-danger" style="width: 49%"
+                                onclick="del('{:url(\'permission/deleteController\')}','{$controller->cid}','{$controller->name}')">
+                            删除控制器
+                        </button>
                     </div>
                 </div>
             </div>
@@ -178,9 +177,9 @@
                     </div>
                     <div class="modal-body">
                         控制器名称:
-                        <input type="text" class="form-control" name="name" placeholder="控制器名称">
+                        <input type="text" class="form-control" name="name">
                         控制器路径（形如: tlr/student/）:
-                        <input type="text" class="form-control" name="path" placeholder="控制器路径（形如: tlr/student/）">
+                        <input type="text" class="form-control" name="path" value="tlr/">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -228,6 +227,12 @@
         $('#myModal2').modal();
         $("#permissionPath").val(controllerPath);
         $("#cid").val(cid);
+    }
+
+    function del(url, cid, cname) {
+        let flag = confirm("确定要删除控制器 " + cname + " 吗？");
+        if (flag)
+            window.location.href = url + "?cid=" + cid;
     }
 </script>
 </html>

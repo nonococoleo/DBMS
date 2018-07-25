@@ -95,7 +95,7 @@ class Role extends Controller
 
 		$data = ["controllers" => $controllers, "role" => $_GET];
         $this->assign($data);
-        return $this->fetch('setPermission');
+        return $this->fetch('role');
 	}
 
 	// 为角色分配权限

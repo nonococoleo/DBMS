@@ -125,20 +125,28 @@
                     </td>
                     <td class="text-center">
                         {volist id="role" name="roles"}
-                        <input type="checkbox" name="roles[]" value="{$item->uid}_{$role->id}" <?php if(in_array($role->
-                        id,$item->userRoles)) echo 'checked';?> />{$role->name}
+                        <input type="checkbox" name="roles[]" value="{$item->uid}_{$role->id}" {php} if(in_array($role->id,$item->userRoles))
+                        echo 'checked';{/php} />{$role->name}
                         {/volist}
                     </td>
                     <td class="text-center">
-                        <?php if($item->delflag==0) echo '正常'; else echo '被锁定'; ?>
+                        {switch name="$item->delflag"}
+                        {case value="0"}正常{/case}
+                        {default}锁定
+                        {/switch}
                     </td>
                     <td class="text-center">
+                        {if condition="$item->uid!=session('uid')"}
                         <a href="{:url('user/lockOne')}?uid={$item->uid}" method="post">
                             <input type="hidden" name="uid" value="{$item->uid}">
                             <button type="button" class="btn btn-xs btn-default">
-                                <?php if($item->delflag==0) echo '锁定'; else echo '解锁'; ?>
+                                {switch name="$item->delflag"}
+                                {case value="0"}锁定{/case}
+                                {default}解锁
+                                {/switch}
                             </button>
                         </a>
+                        {/if}
                     </td>
                 </tr>
                 {/volist}

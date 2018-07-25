@@ -34,7 +34,7 @@ class System extends Controller
         $Refund = new RefundModel();
         $refund = $Refund->where("delflag", "=", 0)->where("semester", "=", $seme)->field("sum(fee) price")->select();
         $Semester = new SemesterModel();
-        $semester = $Semester->where("id", ">", 0)->select();
+        $semester = $Semester->where("id", ">", 0)->where("current", ">=", 0)->select();
         $data = ["enroll" => $enroll, "semester" => $semester, "seme" => $seme, "pay" => $pay[0], "refund" => $refund[0], "page" => $page];
         $this->assign($data);
         $htmls = $this->fetch('index');
@@ -50,7 +50,7 @@ class System extends Controller
             exit();
         }
         $Semester = new SemesterModel();
-        $semester = $Semester->where("id", ">", 0)->select();
+        $semester = $Semester->where("id", ">", 0)->where("current", ">=", 0)->select();
         $data = ["semester" => $semester];
         $this->assign($data);
         $htmls = $this->fetch('semester');
@@ -99,9 +99,33 @@ class System extends Controller
                 $Semester->save(["name" => $seme]);
                 $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
             } catch (\Exception $e) {
-                $this->error("修改失败", null, null, 1);
+                $this->error("添加失败", null, null, 1);
             }
             $this->success("添加成功", null, null, 1);
+        } else {
+            $this->error("确定学期", 'system/semester', null, 1);
+        }
+    }
+
+    //删除学期
+    public function delseme(Request $request)
+    {
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "system/semester", null, 1);
+            exit();
+        }
+        $seme = $request->param("id");
+        if ($seme) {
+            $Semester = new SemesterModel();
+            $Log = new LogModel();
+            try {
+                $Semester->save(["current" => -1], ["id" => $seme]);
+                $Log->save(["uid" => session('uid'), "action" => $Semester->getlastsql(), "time" => date("Y-m-d H:i:s")]);
+            } catch (\Exception $e) {
+                $this->error("删除失败", null, null, 1);
+            }
+            $this->success("删除成功", null, null, 1);
         } else {
             $this->error("确定学期", 'system/semester', null, 1);
         }

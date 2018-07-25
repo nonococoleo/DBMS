@@ -11,19 +11,7 @@ use think\Request;
 
 class Invoice extends Controller
 {
-//    public function index(Request $request)
-//    {
-//        $Invoice = new InvoiceModel();
-//        $invoice=$Invoice->where("delflag", "=", 0)->paginate(10, false, ['type' => 'bootstrap']);
-//        $page = $invoice->render();
-//
-//        $data = ["invoice" => $invoice, "page" => $page, "state" => 0];
-//        $this->assign($data);
-//        $htmls = $this->fetch('index');
-//        return $htmls;
-//    }
-
-    //首页显示所有发票情况
+//首页显示所有发票情况
     public function index(Request $request)
     {
         $rbacObj = new Rbac();
@@ -136,5 +124,4 @@ class Invoice extends Controller
         $this->success("修改成功", null, null, 1);
         return null;
     }
-
 }

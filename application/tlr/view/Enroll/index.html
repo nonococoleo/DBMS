@@ -141,12 +141,7 @@
                 <td class="text-center">{$en->cname}</td>
                 <td class="text-center jiaowu">{$en->attend}</td>
                 <td class="text-center">
-                    <!--<button class="btn btn-xs btn-success"-->
-                    <!--onclick="mod('{:url(\'enroll/mod\',[\'eid\'=>$en.eid])}','{$en.sid}','{$en.cid}','{$en.attend}','{$en.pid}','{$en.memo}')">-->
-                    <!--<span class="glyphicon glyphicon-edit"></span>-->
-                    <!--</button>-->
-                    <button class="btn btn-xs btn-success qiantai" onclick="payInfo('{$en->pid}')">
-                        缴费情况
+                    <button class="btn btn-xs btn-success qiantai" onclick="payInfo('{$en->pid}')">缴费情况
                     </button>
                     <button class="btn btn-xs btn-danger jiaowu"
                             onclick="del('{:url(\'enroll/del\',[\'eid\'=>$en.eid])}','{$en.cid}')">

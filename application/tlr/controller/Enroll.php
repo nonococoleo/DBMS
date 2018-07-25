@@ -27,7 +27,7 @@ class Enroll extends Controller
             $seme = session('cur_semester');
         $query = ["seme" => $seme, "sid" => $sid];
         $Semester = new SemesterModel();
-        $semester = $Semester->where("id", ">", 0)->select();
+        $semester = $Semester->where("id", ">", 0)->where("current", ">=", 0)->select();
         $Course = new CourseModel();
         $course = $Course->where("semester", "=", $seme)->field("cid,cname")->select();
 
@@ -59,7 +59,7 @@ class Enroll extends Controller
         } else {
             $Course = new CourseModel();
             $Semester = new SemesterModel();
-            $semester = $Semester->where("id", "=", $seme)->select();
+            $semester = $Semester->where("id", ">", 0)->where("current", ">=", 0)->select();
             $course = $Course->where("semester", "=", $seme)->distinct("true")->column("memo");
             $data = ["seme" => $semester[0]->name, "classes" => $course, "semester" => $seme];
             $this->assign($data);

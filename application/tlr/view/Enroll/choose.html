@@ -501,6 +501,8 @@
     }
 
     function addStudent() {
+        $('#sname_check').removeClass("has-error");
+        $('#phone_check').removeClass("has-error");
         let studentDetailInShow = {
             sname: $('#sname').val(),
             sex: $('#sex').val(),

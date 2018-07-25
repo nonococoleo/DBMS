@@ -20,7 +20,7 @@ class Pay extends Controller
             exit();
         }
         $Semester = new SemesterModel();
-        $semester = $Semester->where("id", ">", 0)->select();
+        $semester = $Semester->where("id", ">", 0)->where("current", ">=", 0)->select();
         $data = ["semester" => $semester];
         $this->assign($data);
         return $this->fetch('index');
@@ -49,7 +49,7 @@ class Pay extends Controller
             $totalPage = ceil(db('pay')->where(array('delflag'=>'0','semester'=>$semester))->count() / 10);
         }
         $Semester = new SemesterModel();
-        $semester = $Semester->where("id", ">", 0)->select();
+        $semester = $Semester->where("id", ">", 0)->where("current", ">=", 0)->select();
         echo json_encode(array("pays" => $pays, 
             "semester" => $semester,
             "totalPage" => $totalPage, 

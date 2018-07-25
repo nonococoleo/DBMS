@@ -35,7 +35,7 @@ class Course extends Controller
         $course = $course->where('semester', '=', $semester)->join("teacher t", "c.tid=t.tid")->join("semester s", "c.semester=s.id")->field('cid,cname,time,date,semester,campus,room,c.price,unit,t.tid,fee,c.memo,tname,s.name')->order("campus")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
         if ($course->count() > 0) {
             $Semester = new SemesterModel();
-            $semester = $Semester->where("id", ">", 0)->select();
+            $semester = $Semester->where("id", ">", 0)->where("current", ">=", 0)->select();
             $Teacher = new TeacherModel();
             $teacher = $Teacher->where("delflag", "=", "0")->select();
             $page = $course->render();
@@ -182,11 +182,7 @@ class Course extends Controller
         $this->success("添加成功", null, null, 1);
     }
 
-
-
-
-
-//    //    导出csv
+    //    导出csv
 //    public function csv()
 //    {
 //        $Course = new CourseModel();

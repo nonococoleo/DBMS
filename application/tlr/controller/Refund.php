@@ -25,7 +25,7 @@ class Refund extends Controller
         $state = $request->param('state');
         $seme = $request->param('seme');
         $Semester = new SemesterModel();
-        $semester = $Semester->where("id", ">", 0)->select();
+        $semester = $Semester->where("id", ">", 0)->where("current", ">=", 0)->select();
         $refund = $Refund->alias("r")->where("r.delflag", "=", 0)->join("semester s", "s.id=r.semester")->join("pay p", "p.rid=r.rid");
         if (!$state)
             $state = 0;
