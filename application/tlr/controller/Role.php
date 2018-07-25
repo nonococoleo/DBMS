@@ -22,7 +22,7 @@ class Role extends Controller
             exit();
         }
 		$Role = new RoleModel;
-		$roles = $Role->select();
+        $roles = $Role->where("id", ">", 1)->select();
 		$data = ["roles" => $roles];
         $this->assign($data);
         return $this->fetch('index');

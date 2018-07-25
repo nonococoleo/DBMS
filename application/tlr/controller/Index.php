@@ -50,7 +50,13 @@ class Index extends Controller
             Session::set('cur_semester', $semester[0]->id);
             Session::set('uid', $user['uid']);
             Session::set('name', $user['name']);
-            $this->success("登录成功", "Index/index", null, 1);
+            $time = date("Y-m-d H:i:s", time());
+            $ip = $request->ip();
+            $local = @file_get_contents("http://ip.taobao.com/service/getIpInfo.php?ip=" . $ip);
+            $local = json_decode($local, true)["data"];
+            $temp = $local["country"] . $local["region"] . $local["city"] . " " . $local["isp"];
+            $User->save(["logintime" => $time, "loginip" => $ip, "loginaddr" => $temp], ['uname' => $_POST['uname']]);
+            $this->success("登陆成功", "Index/index", null, 1);
         } else{
             $this->error("用户名或密码错误", "Index/login", null, 1);
         }

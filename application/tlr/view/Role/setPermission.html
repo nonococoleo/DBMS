@@ -82,7 +82,7 @@
     <form action="{:url('role/setPermissionHandle')}" method="post">
         <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-6">
-                <h3>为{$role['name']}分配权限</h3>
+                <h3>为 {$role['name']} 分配权限</h3>
             </div>
         </div>
 
@@ -132,7 +132,7 @@
                                 <td class="text-center">{$item->create_time}</td>
                                 <td class="text-center">
                                     <input type="checkbox" level="checkbox{$controller->cid}" name="permissions[]" value="{$item->id}" <?php if($item->have==1) echo 'checked';?> />分配权限
-                                    
+
                                 </td>
                             </tr>
                             {/volist}
@@ -143,7 +143,7 @@
 
                 </div>
                 {/volist}
-              
+
             </div>
             <input type="hidden" name="role_id" value="{$role['id']}">
             <input type="submit" name="" value="保存修改" class="btn btn-success" style="width:100%; margin-top: 10px;">
@@ -158,7 +158,7 @@
             $("input[level='checkbox"+id+"']").removeAttr("checked");
         } else {
             $("#selectAllBtn"+id).attr('checked','checked');
-            $("input[level='checkbox"+id+"']").attr("checked","true"); 
+            $("input[level='checkbox" + id + "']").attr("checked", "true");
         }
         // body...
     }
@@ -167,7 +167,7 @@
     //         var inputs = $(this).parents('table').find('input[type=\'checkbox\']');
     //         console.log(inputs.length);
     //         alert($(this).attr("checked"));
-    //         // $(this).attr('checked')? inputs.attr('checked', 'checked') : 
+    //         // $(this).attr('checked')? inputs.attr('checked', 'checked') :
     //         // inputs.removeAttr('checked');
     //     });
     // });
