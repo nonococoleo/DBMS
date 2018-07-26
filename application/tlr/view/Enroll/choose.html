@@ -431,10 +431,10 @@
                 let status = $('#all').is(':checked');
                 if (status)
                     for (let i = 0; i < this.courses.length; i++)
-                        this.courses[i].checked = true;
+                        Vue.set(modal3.courses[i], 'checked', true)
                 else
                     for (let i = 0; i < this.courses.length; i++)
-                        this.courses[i].checked = false;
+                    Vue.set(modal3.courses[i], 'checked', false)
             }
         }
     });
