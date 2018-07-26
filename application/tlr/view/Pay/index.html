@@ -615,7 +615,7 @@
             },
             deletePay(index) {
                 let tvm = this;
-                var msg = '您确定要删除' + tvm.pays[index].sid + '的信息吗？ 删除后不可恢复！';
+                var msg = '确定要删除 ' + tvm.pays[index].sname + ' 的这条缴费信息吗？';
                 if (confirm(msg) == true) {
                     $.ajax({
                         type: "POST",

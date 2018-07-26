@@ -322,12 +322,10 @@
 
     }
 
-    function del(url, cname, cid) {
-        let flag = confirm("确定要删除课程" + cname + "吗");
-        if (flag) {
+    function del(url, cid, cname) {
+        let flag = confirm("确定要删除课程 " + cname + " 吗");
+        if (flag)
             window.location.href = url + "?cid=" + cid;
-        }
-
     }
 
     function ser() {
