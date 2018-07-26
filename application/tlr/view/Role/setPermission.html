@@ -80,7 +80,7 @@
 </nav>
 <div class="container">
     <form action="{:url('role/setPermissionHandle')}" method="post">
-        <div class="row">
+        <div class="row  page-header">
             <div class="col-sm-6 col-md-6 col-lg-6">
                 <h3>为 {$role['name']} 分配权限</h3>
             </div>
@@ -142,10 +142,10 @@
 
                 </div>
                 {/volist}
-
             </div>
             <input type="hidden" name="role_id" value="{$role['id']}">
-            <input type="submit" name="" value="保存修改" class="btn btn-success" style="width:100%; margin-top: 10px;">
+            <input type="submit" name="" value="保存修改" class="btn btn-success"
+                   style="width:100%; margin-top: 10px; margin-bottom: 25px;">
         </div>
     </form>
 </div>

@@ -144,7 +144,7 @@
                     <button class="btn btn-xs btn-success qiantai" onclick="payInfo('{$en->pid}')">缴费情况
                     </button>
                     <button class="btn btn-xs btn-danger jiaowu"
-                            onclick="del('{:url(\'enroll/del\',[\'eid\'=>$en.eid])}','{$en.cid}')">
+                            onclick="del('{:url(\'enroll/del\')}','{$en->eid}','{$en->sname}','{$en->cname}')">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </td>
@@ -342,10 +342,10 @@
         $('#myModal').modal();
     }
 
-    function del(url, tname) {
-        let flag = confirm("确定要删除选课 " + tname + " 吗？");
+    function del(url, eid, name, course) {
+        let flag = confirm("确定要删除选课 " + name + " " + course + " 吗？");
         if (flag)
-            window.location.href = url;
+            window.location.href = url + "?eid=" + eid;
     }
 
     function ser() {

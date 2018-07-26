@@ -206,7 +206,6 @@
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="seme_check">
                                     学期:
                                     <select class="form-control" name="semester" id="semester">
-                                        <option value="0">请选择...</option>
                                         {volist id="sem" name="semester"}
                                         <option value="{$sem->id}">{$sem->name}</option>
                                         {/volist}
@@ -216,7 +215,6 @@
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="campus_check">
                                     校区:
                                     <select class="form-control" name="campus" id="campus">
-                                        <option value="0">请选择...</option>
                                         <option value="1">杨浦</option>
                                         <option value="2">徐汇</option>
                                     </select>

@@ -418,14 +418,12 @@
                     if (!tvm.courses[x].checked) {
                         if (inArray(tvm.courses[x].cid, tvm.checked))
                             tvm.checked.splice(inArray(tvm.courses[x].cid, tvm.checked) - 1, 1);
-                        if (haveSelected(tvm.courses[x].cid, selectedTable.courses)) {
-                            for (var i = 0; i < selectedTable.courses.length; i++) {
+                        if (haveSelected(tvm.courses[x].cid, selectedTable.courses))
+                            for (var i = 0; i < selectedTable.courses.length; i++)
                                 if (selectedTable.courses[i].cid == tvm.courses[x].cid) {
                                     selectedTable.courses.splice(i, 1);
                                     break;
                                 }
-                            }
-                        }
                     }
                 }
             }
@@ -453,35 +451,51 @@
         },
         methods: {
             baoming() {
+                let id = $('#sid').val();
                 course = this.realCourses;
-                if (course.length == 0)
-                    toastr.error("请选择课程");
-                else {
-                    $('#fee').val(this.price);
-                    $('#method').val(0);
-                    $('#detail').val(null);
-                    $('#fee_check').removeClass("has-error");
-                    $('#method_check').removeClass("has-error");
-                    $('#myModal4').modal('show');
-                }
+                $.ajax({
+                    type: "POST",
+                    url: "{:URL('tlr/enroll/ser')}",
+                    data: {sid: id},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            for (let i = 0; i < course.length; i++) {
+                                if (inArray(course[i], data.course)) {
+                                    toastr.error("请检查重复报班 " + course[i]);
+                                    return false;
+                                }
+                            }
+                            if (course.length == 0)
+                                toastr.error("请选择课程");
+                            else {
+                                $('#fee').val(this.price);
+                                $('#method').val(0);
+                                $('#detail').val(null);
+                                $('#fee_check').removeClass("has-error");
+                                $('#method_check').removeClass("has-error");
+                                $('#myModal4').modal('show');
+                            }
+                        } else {
+                            console.log("some troubles")
+                        }
+                    }
+                });
             },
         }
     });
 
     function inArray(x, arr) {
-        for (let i = 0; i < arr.length; i++) {
+        for (let i = 0; i < arr.length; i++)
             if (x == arr[i])
                 return i + 1; //因为返回0,会判断为bool的false
-        }
         return false;
     }
 
     function haveSelected(cid, courses) {
-        for (let i = 0; i < courses.length; i++) {
-            if (courses[i].cid == cid) {
+        for (let i = 0; i < courses.length; i++)
+            if (courses[i].cid == cid)
                 return true;
-            }
-        }
         return false;
     }
 
@@ -535,7 +549,7 @@
                     $('#myModal').modal('hide');
                     choose_class(data.id, studentDetailInShow.sname, 0.0);
                 } else {
-                    alert(data.msg)
+                    alert(data.msg);
                 }
             }
         });
@@ -543,20 +557,23 @@
 
     function search() {
         let name = $('#name').val();
-        $.ajax({
-            type: "POST",
-            url: "{:URL('tlr/student/search','','')}",
-            data: {sname: name},
-            dataType: "json",
-            success: function (data) {
-                if (data.success) {
-                    $('#myModal2').modal();
-                    Vue.set(app, "students", data.students);
-                } else {
-                    alert(data.msg)
+        if (name)
+            $.ajax({
+                type: "POST",
+                url: "{:URL('tlr/student/search','','')}",
+                data: {sname: name},
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        $('#myModal2').modal();
+                        Vue.set(app, "students", data.students);
+                    } else {
+                        alert(data.msg)
+                    }
                 }
-            }
-        });
+            });
+        else
+            toastr.error("请输入姓名");
     }
 
     function choose_class(id, name, money) {

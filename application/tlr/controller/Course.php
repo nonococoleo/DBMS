@@ -117,7 +117,7 @@ class Course extends Controller
         }
         $Course = new CourseModel();
         if (request()->isGet()) {
-            $this->error("404 not found", "Student/index", null, 1);
+            $this->error("404 not found", "Course/index", null, 1);
             exit();
         }
         if ($course = $Course->where('semester', '=', "$_POST[seme]")->where('memo', '=', "$_POST[memo]")->select()) {
