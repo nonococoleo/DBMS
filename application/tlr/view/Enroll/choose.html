@@ -311,7 +311,7 @@
                                 <td class="text-center">课时</td>
                                 <!--<td class="text-center">教师</td>-->
                                 <!--<td class="text-center">费用</td>-->
-                                <td class="text-center">操作</td>
+                                <td class="text-center"><input id="all" type="checkbox" @change="all()">选择</td>
                             </tr>
                             </thead>
                             <tbody>
@@ -426,6 +426,15 @@
                                 }
                     }
                 }
+            },
+            all() {
+                let status = $('#all').is(':checked');
+                if (status)
+                    for (let i = 0; i < this.courses.length; i++)
+                        this.courses[i].checked = true;
+                else
+                    for (let i = 0; i < this.courses.length; i++)
+                        this.courses[i].checked = false;
             }
         }
     });
