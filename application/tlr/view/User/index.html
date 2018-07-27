@@ -94,7 +94,7 @@
         </form>
         <div style="margin-top: 17px">
             &nbsp;
-            <button class="btn btn-success" onclick="$('#myModal1').modal()">添加员工</button>
+            <button class="btn btn-success" onclick="add()">添加员工</button>
         </div>
     </div>
     <!--列表-->
@@ -168,7 +168,7 @@
 <div>
     <!-- 添加用户的modal -->
     <div class="modal fade" tabindex="-1" id="myModal1" role="dialog">
-        <form id="add-user-form" class="form-group" action="{:url('user/registerHandle')}" method="post" required>
+        <form id="add-user-form" class="form-group" action="{:url('user/registerHandle')}" method="post">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -179,20 +179,22 @@
                     </div>
                     <div class="modal-body">
                         <div id="uname_check">
-                            用户名:
-                            <input type="text" class="form-control" name="uname" id="uname" placeholder="用户名">
+                            用户名 * :
+                            <input type="text" class="form-control" name="uname" id="uname" placeholder="用户名" required>
                         </div>
                         <div id="name_check">
-                            姓名:
+                            姓名 * :
                             <input type="text" class="form-control" name="name" id="name2" placeholder="姓名">
                         </div>
                         <div id="passwd_check">
-                            密码:
-                            <input type="password" class="form-control" name="passwd" id="passwd" placeholder="密码">
+                            密码 * :
+                            <input type="password" class="form-control" name="passwd" id="passwd" placeholder="密码"
+                                   required>
                         </div>
                         <div id="passwd2_check">
-                            确认密码:
-                            <input type="password" class="form-control" name="passwd2" id="passwd2" placeholder="确认密码">
+                            确认密码 * :
+                            <input type="password" class="form-control" name="passwd2" id="passwd2" placeholder="确认密码"
+                                   required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -251,9 +253,13 @@
                 $('#uname_check').addClass("has-error");
             if (!name)
                 $('#name_check').addClass("has-error");
-            if (!(passwd && (passwd == passwd2))) {
+            if (!passwd)
                 $('#passwd_check').addClass("has-error");
+            if (passwd != passwd2) {
                 $('#passwd2_check').addClass("has-error");
+                toastr.error('两次输入密码不一致');
+                $('#passwd').attr('type', "text");
+                $('#passwd2').attr('type', "text");
             }
             toastr.error('表单红色字段有误请确认后再提交');
             return false;
@@ -288,6 +294,16 @@
                 }
             }
         });
+    }
+
+    function add() {
+        $('#uname_check').removeClass("has-error");
+        $('#name_check').removeClass("has-error");
+        $('#passwd_check').removeClass("has-error");
+        $('#passwd2_check').removeClass("has-error");
+        $('#passwd').attr('type', "password");
+        $('#passwd2').attr('type', "password");
+        $('#myModal1').modal();
     }
 </script>
 </html>

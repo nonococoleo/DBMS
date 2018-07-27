@@ -90,7 +90,7 @@
         <form>
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <label for="sel_semester">选择学期</label>
-                <select class="form-control" name="seme" id="sel_semester" @change="search3()">
+                <select class="form-control" name="seme" id="sel_semester" @change="searchBySeme()">
                     <option value="0">全部</option>
                     {volist id="sem" name="semester"}
                     <option value="{$sem->id}">{$sem->name}</option>
@@ -104,7 +104,7 @@
                 <input id="name" type="text" class="form-control" placeholder="请输入学生姓名" aria-describedby="basic-addon2"
                        v-model="searchSname">
                 <span class="input-group-addon" style="cursor:pointer" id="basic-addon2"
-                      @click="search2(searchSname)">搜索</span>
+                      @click="search_student(searchSname)">搜索</span>
             </div>
         </div>
     </div>
@@ -117,8 +117,6 @@
                 <td class="text-center">姓名</td>
                 <td class="text-center">学期</td>
                 <td class="text-center">费用</td>
-                <!--<td class="text-center">发票</td>-->
-                <!--<td class="text-center">退费</td>-->
                 <td class="text-center">日期</td>
                 <td class="text-center">操作</td>
             </tr>
@@ -169,7 +167,7 @@
     </div>
     <!-- 用户信息的modal -->
     <div>
-        <!--缴费-->
+        <!--编辑缴费-->
         <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -198,7 +196,7 @@
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                 日期:
-                                <input type="date" v-model="payDetailInShow.date" class="form-control">
+                                <input type="date" v-model="payDetailInShow.date" class="form-control" readonly>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-12">
                                 备注:
@@ -252,7 +250,7 @@
                                     <td class="text-center">{{student.school}}</td>
                                     <td class="text-center">{{student.balance}}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-xs btn-success" @click="search1(student.sid)">缴费记录
+                                        <button class="btn btn-xs btn-success" @click="search_pay(student.sid)">查询
                                         </button>
                                     </td>
                                 </tr>
@@ -277,20 +275,20 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="re_fee_check">
-                                    费用:
+                                    费用 * :
                                     <input type="text" name="fee" id="re-fee" class="form-control" readonly>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="method_check">
-                                    退费方式:
-                                    <select class="form-control" name="method" id="re-method">
+                                    退费方式 * :
+                                    <select class="form-control" name="method" id="re-method" required>
                                         <option value="0">请选择...</option>
                                         <option value="1">银行卡</option>
                                         <option value="2">其他</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="card_check">
-                                    银行卡号:
-                                    <input type="text" name="card" id="re-card" class="form-control">
+                                    银行卡号 * :
+                                    <input type="text" name="card" id="re-card" class="form-control" required>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="bank_check">
                                     开户行:
@@ -301,8 +299,8 @@
                                     <input type="text" name="person" id="re-person" class="form-control">
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="re_state_check">
-                                    状态:
-                                    <select class="form-control" name="state" id="re-state">
+                                    状态 * :
+                                    <select class="form-control" name="state" id="re-state" required>
                                         <option value="1">申请</option>
                                         <option value="2">处理</option>
                                         <option value="3">成功</option>
@@ -340,7 +338,7 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="in_state_check">
-                                    状态:
+                                    状态 * :
                                     <select class="form-control" name="state" id="in-state">
                                         <option value="1">申请</option>
                                         <option value="2">处理</option>
@@ -348,11 +346,11 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="in_fee_check">
-                                    金额:
+                                    金额 * :
                                     <input type="number" step="0.01" name="fee" id="in-fee" class="form-control" readonly>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="title_check">
-                                    抬头:
+                                    抬头 * :
                                     <input type="text" name="title" id="in-title" class="form-control">
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
@@ -571,7 +569,7 @@
                     }
                 });
             },
-            search3(){
+            searchBySeme() {
                 let id = $('#sel_semester').val();
                 this.sem = id;
                 this.getPays(1, id)
@@ -690,7 +688,7 @@
                     }
                 });
             },
-            search1(searchSid) {
+            search_pay(searchSid) {
                 let tvm = this;
                 $('#myModal4').modal('hide');
                 $.ajax({
@@ -703,17 +701,15 @@
                             tvm.totalPage = 1;
                             tvm.pays = data.pays;
                         } else {
-                            // tvm.pays = [];
                             alert(data.msg);
                         }
                     }
                 });
                 
             },
-            search2(searchSname) {
+            search_student(searchSname) {
                 if(!searchSname)
                     window.location.reload();
-                let tvm = this;
                 $.ajax({
                     type: "POST",
                     url: "{:URL('tlr/student/search','','')}",
@@ -807,11 +803,11 @@
             flag = false;
             $('#card_check').addClass("has-error");
         }
-        if(!bank){
+        if (method == 1 && !bank) {
             flag = false;
             $('#bank_check').addClass("has-error");
         }
-        if(!person){
+        if (method == 1 && !person) {
             flag = false;
             $('#person_check').addClass("has-error");
         }

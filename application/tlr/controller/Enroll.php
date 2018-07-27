@@ -227,15 +227,15 @@ class Enroll extends Controller
     //    查找报名接口
     public function ser(Request $request)
     {
-//        $rbacObj = new Rbac();
-//        if(!$rbacObj->can($request->path())) {
-//            $this->error("没有权限", "Enroll/index", null, 1);
-//            exit();
-//        }
-//        if (request()->isGet()) {
-//            $this->error("404 not found", "Enroll/index", null, 1);
-//            exit();
-//        }
+        $rbacObj = new Rbac();
+        if (!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "Enroll/index", null, 1);
+            exit();
+        }
+        if (request()->isGet()) {
+            $this->error("404 not found", "Enroll/index", null, 1);
+            exit();
+        }
         $Enroll = new EnrollModel();
         $sid = $request->param("sid");
         if ($sid) {

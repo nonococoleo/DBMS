@@ -231,7 +231,8 @@
     function del(url, cid, cname) {
         let flag = confirm("确定要删除控制器 " + cname + " 吗？");
         if (flag)
-            window.location.href = url + "?cid=" + cid;
+            if (confirm("这将会删除该控制器的全部功能和与之关联的权限"))
+                window.location.href = url + "?cid=" + cid;
     }
 </script>
 </html>

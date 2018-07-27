@@ -164,20 +164,20 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="state_check">
-                                    状态:
-                                    <select class="form-control" name="state" id="state">
+                                    状态 * :
+                                    <select class="form-control" name="state" id="state" required>
                                         <option value="1">申请</option>
                                         <option value="2">处理</option>
                                         <option value="3">成功</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="fee_check">
-                                    金额:
-                                    <input type="number" step="0.01" name="fee" id="fee" class="form-control">
+                                    金额 * :
+                                    <input type="number" step="0.01" name="fee" id="fee" class="form-control" required>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="title_check">
-                                    抬头:
-                                    <input type="text" name="title" id="title" class="form-control">
+                                    抬头 * :
+                                    <input type="text" name="title" id="title" class="form-control" required>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     税号:
@@ -249,6 +249,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="enroll(payDetailInShow.pid)">详情</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                     </div>
                 </div><!-- /.modal-content -->
@@ -265,6 +266,9 @@
             payDetailInShow: {}
         },
         methods: {
+            enroll(pid) {
+                window.location.href = "{:url('enroll/succ')}?pid=" + pid;
+            }
         }
     });
 

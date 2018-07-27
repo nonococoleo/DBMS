@@ -40,7 +40,6 @@ class Teacher extends Controller
         }
     }
 
-
     //修改教师信息接口
     public function mod(Request $request)
     {

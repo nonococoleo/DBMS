@@ -91,54 +91,60 @@
                 {volist id="controller" name="controllers"}
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <div class="row" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne{$controller->cid}" aria-expanded="true" aria-controls="collapseOne{$controller->cid}">
+                        <div class="row" role="button" data-toggle="collapse" data-parent="#accordion"
+                             href="#collapseOne{$controller->cid}" aria-expanded="true"
+                             aria-controls="collapseOne{$controller->cid}">
                             <div class="col-md-11 col-sm-11 col-lg-11">
-                              <h4 class="panel-title">
-                                <a>
-                                  {$controller->name}
-                                </a>
-                              </h4>
-                          </div>
-                          <div class="col-md-1 col-sm-1 col-lg-1">
-                              <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-                          </div>
-                      </div>
+                                <h4 class="panel-title">
+                                    <a>
+                                        {$controller->name}
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-lg-1">
+                                <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                            </div>
+                        </div>
                     </div>
                     <div id="collapseOne{$controller->cid}" class="panel-collapse collapse">
-                      <div class="panel-body">
-                        <table class="table table-striped table-hover table-condensed">
-                            <thead>
-                            <tr>
-                                <td class="text-center">编号</td>
-                                <td class="text-center">名称</td>
-                                <td class="text-center">路径</td>
-                                <td class="text-center">描述</td>
-                                <td class="text-center">状态</td>
-                                <td class="text-center">创建时间</td>
-                                <td class="text-center">
-                                    <?php $flag=1; foreach($controller['permissions'] as $key => $value) $flag*=$value['have'];?>
-                                    <input type="checkbox" id="selectAllBtn{$controller->cid}" onclick="selectAll('{$controller->cid}')" <?php if($flag==1) echo 'checked';?> />全选
-                                </td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {volist id="item" name="controller.permissions"}
-                            <tr>
-                                <td class="text-center">{$item->id}</td>
-                                <td class="text-center">{$item->name}</td>
-                                <td class="text-center">{$item->path}</td>
-                                <td class="text-center">{$item->description}</td>
-                                <td class="text-center">{$item->status}</td>
-                                <td class="text-center">{$item->create_time}</td>
-                                <td class="text-center">
-                                    <input type="checkbox" level="checkbox{$controller->cid}" name="permissions[]" value="{$item->id}" <?php if($item->have==1) echo 'checked';?> />分配权限
-                                </td>
-                            </tr>
-                            {/volist}
-                            </tbody>
-                        </table>
-                      </div>
-                </div>
+                        <div class="panel-body">
+                            <table class="table table-striped table-hover table-condensed">
+                                <thead>
+                                <tr>
+                                    <td class="text-center">编号</td>
+                                    <td class="text-center">名称</td>
+                                    <td class="text-center">路径</td>
+                                    <td class="text-center">描述</td>
+                                    <!--<td class="text-center">状态</td>-->
+                                    <td class="text-center">创建时间</td>
+                                    <td class="text-center">
+                                        <?php $flag=1; foreach($controller['permissions'] as $key => $value)
+                                        $flag*=$value['have'];?>
+                                        <input type="checkbox" id="selectAllBtn{$controller->cid}"
+                                               onclick="selectAll('{$controller->cid}')" <?php if($flag==1) echo 'checked';?>
+                                        />全选
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist id="item" name="controller.permissions"}
+                                <tr>
+                                    <td class="text-center">{$item->id}</td>
+                                    <td class="text-center">{$item->name}</td>
+                                    <td class="text-center">{$item->path}</td>
+                                    <td class="text-center">{$item->description}</td>
+                                    <!--<td class="text-center">{$item->status}</td>-->
+                                    <td class="text-center">{$item->create_time}</td>
+                                    <td class="text-center">
+                                        <input type="checkbox" level="checkbox{$controller->cid}" name="permissions[]"
+                                               value="{$item->id}" <?php if($item->have==1) echo 'checked';?> />分配权限
+                                    </td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                 </div>
                 {/volist}
@@ -152,23 +158,13 @@
 </body>
 <script type="text/javascript">
     function selectAll(id) {
-        if($("#selectAllBtn"+id).attr('checked')){
-            $("#selectAllBtn"+id).removeAttr("checked");
-            $("input[level='checkbox"+id+"']").removeAttr("checked");
+        if ($("#selectAllBtn" + id).attr('checked')) {
+            $("#selectAllBtn" + id).removeAttr("checked");
+            $("input[level='checkbox" + id + "']").removeAttr("checked");
         } else {
-            $("#selectAllBtn"+id).attr('checked','checked');
+            $("#selectAllBtn" + id).attr('checked', 'checked');
             $("input[level='checkbox" + id + "']").attr("checked", "true");
         }
-        // body...
     }
-    // $(function () {
-    //     $('input[level=1]').click(function() {
-    //         var inputs = $(this).parents('table').find('input[type=\'checkbox\']');
-    //         console.log(inputs.length);
-    //         alert($(this).attr("checked"));
-    //         // $(this).attr('checked')? inputs.attr('checked', 'checked') :
-    //         // inputs.removeAttr('checked');
-    //     });
-    // });
 </script>
 </html>

@@ -191,30 +191,28 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="name_check">
-                                    课名:
-                                    <input type="text" name="cname" id="cname" class="form-control">
+                                    课名 * :
+                                    <input type="text" name="cname" id="cname" class="form-control" required>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="time_check">
-                                    时间:
-                                    <input type="text" name="time" id="time" class="form-control">
+                                    时间 * :
+                                    <input type="text" name="time" id="time" class="form-control" required>
                                 </div>
-
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="date_check">
-                                    日期:
-                                    <input type="text" name="date" id="date" class="form-control">
+                                    日期 * :
+                                    <input type="text" name="date" id="date" class="form-control" required>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="seme_check">
-                                    学期:
-                                    <select class="form-control" name="semester" id="semester">
+                                    学期 * :
+                                    <select class="form-control" name="semester" id="semester" required>
                                         {volist id="sem" name="semester"}
                                         <option value="{$sem->id}">{$sem->name}</option>
                                         {/volist}
                                     </select>
                                 </div>
-
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="campus_check">
-                                    校区:
-                                    <select class="form-control" name="campus" id="campus">
+                                    校区 * :
+                                    <select class="form-control" name="campus" id="campus" required>
                                         <option value="1">杨浦</option>
                                         <option value="2">徐汇</option>
                                     </select>
@@ -224,16 +222,16 @@
                                     <input type="text" name="room" id="room" class="form-control">
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="price_check">
-                                    单价:
-                                    <input type="number" name="price" id="price" class="form-control">
+                                    单价 * :
+                                    <input type="number" name="price" id="price" class="form-control" required>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="unit_check">
-                                    课时:
-                                    <input type="number" name="unit" id="unit" class="form-control">
+                                    课时 * :
+                                    <input type="number" name="unit" id="unit" class="form-control" required>
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="tid_check">
-                                    教师:
-                                    <select class="form-control" name="tid" id="tid">
+                                    教师 * :
+                                    <select class="form-control" name="tid" id="tid" required>
                                         <option value="0">请选择...</option>
                                         {volist id="tea" name="teacher"}
                                         <option value="{$tea->tid}">{$tea->tname}</option>

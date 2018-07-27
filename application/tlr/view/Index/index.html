@@ -309,8 +309,7 @@
                 this.render();
             },
 
-            // 接受 `.item`  的div元素
-            // 返回  'todos' 数组中相应索引
+            // 接受 `.item`  的div元素，返回  'todos' 数组中相应索引
             getIndexFromEl: function (el) {
                 var id = $(el).closest('li').data('id');
                 var todos = this.todos;
@@ -349,11 +348,11 @@
                 var i = this.getIndexFromEl(e.target);
                 var status = this.todos[i].status;
 
-                if (status == 0) {
+                if (status == 0)
                     this.todos[i].status = 1;
-                } else if (status == 1) {
+                else if (status == 1)
                     this.todos[i].status = 0;
-                }
+
                 var data = {
                     id: this.todos[i].id,
                     status: this.todos[i].status
@@ -373,13 +372,11 @@
 
             // 保存编辑或退出编辑
             editKeyup: function (e) {
-                if (e.which === ENTER_KEY) {
+                if (e.which === ENTER_KEY)
                     e.target.blur();
-                }
 
-                if (e.which === ESCAPE_KEY) {
+                if (e.which === ESCAPE_KEY)
                     $(e.target).data('abort', true).blur();
-                }
             },
 
             // 更新数据
@@ -392,11 +389,15 @@
                     return;
                 }
 
-                if ($el.data('abort')) {
+                if ($el.data('abort'))
                     $el.data('abort', false);
-                } else {
+                else if (this.todos[i].content != val)
                     this.todos[i].content = val;
+                else {
+                    this.render();
+                    return;
                 }
+
                 var data = {
                     id: this.todos[i].id,
                     user_id: "{:session('uid')}",
@@ -412,7 +413,6 @@
                     id = this.todos[i].id;
                 this.del(id);
                 this.getTodos();
-
                 this.render();
             }
         };
