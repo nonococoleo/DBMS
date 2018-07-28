@@ -26,8 +26,10 @@
             $('#username').text("{:session('name')}");
             let roles = "{:json_encode(session('user_roles'))}";
             roles = JSON.parse(roles);
-            if (roles.indexOf(1) == -1)
+            if (roles.indexOf(1) == -1) {
                 $('#sys').hide();
+                $('.sys').hide();
+            }
         } else
             $('#logout').hide();
     };
@@ -130,11 +132,11 @@
     </div>
     <br>
     <!--系统公告-->
-    <div>
+    <div class="sys">
         <h3>系统公告</h3>
     </div>
     <form method="post" class="form" action="{:url('system/announce')}">
-        <div class="row">
+        <div class="row sys">
             <div class="col-sm-8 col-md-8 col-lg-8">
                 <input type="text" name="name" class="form-control" placeholder="公告内容"/>
             </div>

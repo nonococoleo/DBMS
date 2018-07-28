@@ -194,9 +194,11 @@ class Pay extends Controller
             $this->error("404 not found", "Pay/index", null, 1);
             exit();
         }
+        $Semester = new SemesterModel();
+        $semester = $Semester->where("id", ">", 0)->where("current", ">=", 0)->select();
         $pay = new PayModel;
         if ($pays = $pay->alias("p")->join("student s", "s.sid=p.sid")->where('p.delflag', '0')->where('p.sid','=',"$_POST[sid]")->select()) {
-            echo json_encode(array("pays" => $pays, "success" => true));
+            echo json_encode(array("pays" => $pays, "success" => true, "semester" => $semester));
         } else {
             echo json_encode(array("msg" => "没有查询到相关记录", "success" => false));
         }

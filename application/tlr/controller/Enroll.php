@@ -164,7 +164,7 @@ class Enroll extends Controller
             $Pay = new PayModel();
             $Class = new CourseModel();
             $Enroll = new EnrollModel();
-            $course = $Enroll->where("delflag", "=", 0)->where("pid", "=", $pid)->column("cid");
+            $course = $Enroll->where("pid", "=", $pid)->column("cid");
             $pay = $Pay->join("student s", "pay.sid=s.sid")->join("semester se", "se.id=pay.semester")->where("pid", "=", $pid)->select();
             $class = $Class->wherein("cid", $course)->select();
             $data = ["course" => $class, "name" => $name, "pay" => $pay[0]];
