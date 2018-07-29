@@ -36,7 +36,7 @@ class Refund extends Controller
         else
             $refund = $refund->where("semester", "=", $seme);
         $query = ["seme" => $seme, "state" => $state];
-        $refund = $refund->field("r.rid,r.semester,r.fee,r.method,r.card,r.bank,r.person,r.date,r.state,r.uid,r.memo,p.pid,name")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
+        $refund = $refund->field("r.rid,r.semester,r.fee,r.method,r.card,r.bank,r.person,r.date,r.state,r.uid,r.detail,p.pid,name")->paginate(10, false, ['type' => 'bootstrap', 'query' => $query]);
 
         if ($refund->count() > 0) {
             $page = $refund->render();

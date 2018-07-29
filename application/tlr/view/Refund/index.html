@@ -149,7 +149,7 @@
                 <td class="text-center">
                     <button class="btn btn-xs btn-info" onclick="payInfo('{$ref->pid}')">缴费信息</button>
                     <button class="btn btn-xs btn-success"
-                            onclick="mod('{:url(\'refund/mod\')}','{$ref.rid}','{$ref.semester}','{$ref.fee}','{$ref.method}','{$ref.card}','{$ref.bank}','{$ref.person}','{$ref.date}','{$ref.state}','{$ref.uid}','{$ref.memo}')">
+                            onclick="mod('{:url(\'refund/mod\')}','{$ref.rid}','{$ref.semester}','{$ref.fee}','{$ref.method}','{$ref.card}','{$ref.bank}','{$ref.person}','{$ref.date}','{$ref.state}','{$ref.uid}','{$ref.detail}')">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button class="btn btn-xs btn-danger"
@@ -214,8 +214,8 @@
                                 </div>
                             </div>
                             <div>
-                                备注:
-                                <textarea name="memo" id="memo" class="form-control"></textarea>
+                                明细:
+                                <textarea name="detail" id="detail" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -299,7 +299,7 @@
         }
     });
 
-    function mod(url, rid, semester, fee, method, card, bank, person, date, state, uid, memo) {
+    function mod(url, rid, semester, fee, method, card, bank, person, date, state, uid, detail) {
         $('#fee_check').removeClass("has-error");
         $('#method_check').removeClass("has-error");
         $('#card_check').removeClass("has-error");
@@ -313,7 +313,7 @@
         $('#person').val(person);
         $('#state').val(state);
         $('#uid').val(uid);
-        $('#memo').text(memo);
+        $('#detail').text(detail);
         $('#modal-title').text("修改信息");
         $('#modal-form').attr("action", url + "?rid=" + rid);
         $('#add').hide();
@@ -331,7 +331,7 @@
         $('#date').val(null);
         $('#state').val(null);
         $('#uid').val(null);
-        $('#memo').text(null);
+        $('#detail').text(null);
         $('#modal-title').text("添加退费业务");
         $('#modal-form').attr("action", "{:url('refund/add')}");
         $('#mod').hide();

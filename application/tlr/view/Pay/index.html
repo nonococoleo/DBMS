@@ -281,6 +281,14 @@
                                     费用 * :
                                     <input type="text" name="fee" id="re-fee" class="form-control" readonly>
                                 </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6" id="re_state_check">
+                                    状态 * :
+                                    <select class="form-control" name="state" id="re-state" disabled>
+                                        <option value="1">申请</option>
+                                        <option value="2">处理</option>
+                                        <option value="3">成功</option>
+                                    </select>
+                                </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="method_check">
                                     退费方式 * :
                                     <select class="form-control" name="method" id="re-method" required>
@@ -301,18 +309,10 @@
                                     持卡人:
                                     <input type="text" name="person" id="re-person" class="form-control">
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6" id="re_state_check">
-                                    状态 * :
-                                    <select class="form-control" name="state" id="re-state" required>
-                                        <option value="1">申请</option>
-                                        <option value="2">处理</option>
-                                        <option value="3">成功</option>
-                                    </select>
-                                </div>
                             </div>
                             <div>
-                                备注:
-                                <textarea name="memo" id="re-memo" class="form-control"></textarea>
+                                明细:
+                                <textarea name="detail" id="re-detail" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -327,7 +327,7 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-        <!--增开发票-->
+        <!--申请发票-->
         <div class="modal fade" tabindex="-1" id="myModal3" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -342,7 +342,7 @@
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-6" id="in_state_check">
                                     状态 * :
-                                    <select class="form-control" name="state" id="in-state">
+                                    <select class="form-control" name="state" id="in-state" disabled>
                                         <option value="1">申请</option>
                                         <option value="2">处理</option>
                                         <option value="3">成功</option>
@@ -471,8 +471,9 @@
                                 </div>
                             </div>
                             <div>
-                                备注:
-                                <textarea disabled name="memo" id="memo" class="form-control"></textarea>
+                                明细:
+                                <textarea disabled name="detail" id="detail" class="form-control"
+                                          v-model="refDetailInShow.detail"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -772,12 +773,14 @@
             flag = false;
             $('#title_check').addClass("has-error");
         }
-        if(state == 0){
+        if (state != 1) {
             flag = false;
             $('#in_state_check').addClass("has-error");
         }
-        if(flag)
+        if (flag) {
+            $("#in-state").removeAttr("disabled");
             $('#modal3-form').submit();
+        }
         else
             toastr.error('表单红色字段有误请确认后再提交');
     }
@@ -816,12 +819,14 @@
             flag = false;
             $('#person_check').addClass("has-error");
         }
-        if(state == 0){
+        if (state != 1) {
             flag = false;
             $('#re_state_check').addClass("has-error");
         }
-        if(flag)
+        if (flag) {
+            $("#re-state").removeAttr("disabled");
             $('#modal-form').submit();
+        }
         else
             toastr.error('表单红色字段有误请确认后再提交');
     }
