@@ -21,7 +21,7 @@ class User extends Controller
             exit();
         }
         $User = new UserModel;
-        $users = $User->paginate(10, false, ['type' => 'bootstrap']);
+        $users = $User->where('uid', '<>', "4")->paginate(10, false, ['type' => 'bootstrap']);
         $page = $users->render();
         $Role = new RoleModel;
         $roles = $Role->select();

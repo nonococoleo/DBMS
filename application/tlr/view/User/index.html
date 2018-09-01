@@ -19,6 +19,7 @@
 <script>
     toastr.options.positionClass = 'toast-top-center';
     toastr.options.timeOut = 2000;
+    let flag = false;
     window.onload = function () {
         if ("{:session('uid')}") {
             $('#login').hide();
@@ -29,6 +30,12 @@
         } else
             $('#logout').hide();
     };
+    window.onbeforeunload = function (e) {
+        if (flag) {
+            var event = window.event || e;
+            event.returnValue = ("确定离开当前页面吗？");
+        }
+    }
 </script>
 <body>
 <!--导航条-->
@@ -119,7 +126,8 @@
                     <td id="name{$item->uid}" class="text-center">{$item->name}</td>
                     <td class="text-center">
                         {volist id="role" name="roles"}
-                        <input type="checkbox" name="roles[]" value="{$item->uid}_{$role->id}" {php} if(in_array($role->id,$item->userRoles))
+                        <input type="checkbox" onchange="flag=true;" name="roles[]" value="{$item->uid}_{$role->id}" {php}
+                               if(in_array($role->id,$item->userRoles))
                         echo 'checked';{/php} />{$role->name}
                         {/volist}
                     </td>
@@ -140,18 +148,23 @@
                                 {/switch}
                             </button>
                         </a>
+                        {else}
+                        <button type="button" class="btn btn-xs btn-default" disabled>
+                            {switch name="$item->delflag"}
+                            {case value="0"}锁定{/case}
+                            {default}解锁
+                            {/switch}
+                        </button>
                         {/if}
-                        {if condition="$item->uname!='webmaster'"}
                         <button type="button" onclick="changeName('{$item->uid}')" class="btn btn-xs btn-success" title="编辑">
                             <span class="glyphicon glyphicon-edit" style="cursor:pointer"></span>
                         </button>
-                        {/if}
                     </td>
                 </tr>
                 {/volist}
                 <tr>
                     <td colspan="6">
-                        <button type="submit" style="width: 100%" class="btn btn-success">保存修改</button>
+                        <button type="submit" style="width: 100%" class="btn btn-primary" onclick="flag=false;">保存修改</button>
                     </td>
                 </tr>
             </form>
@@ -283,7 +296,6 @@
         $('#olduid').val(uid);
         $('#setNewPwd').hide();
         $('#btn1').show();
-        $('#newpasswd').val('');
     }
 
     function submit() {
