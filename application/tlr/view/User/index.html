@@ -86,7 +86,7 @@
         <form method="get" id="ser" action="{:url('user/search')}">
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="input-group" style="margin-top: 17px">
-                    <input type="text" id="name1" name="name" class="form-control" placeholder="请输入员工姓名"
+                    <input type="text" id="serName1" name="name" class="form-control" placeholder="请输入员工姓名"
                            aria-describedby="basic-addon2" value="{$name}">
                     <span class="input-group-addon" style="cursor:pointer" id="basic-addon2" onclick="ser()">搜索</span>
                 </div>
@@ -115,14 +115,8 @@
                 {volist id="item" name="users"}
                 <tr>
                     <td class="text-center">{$item->uid}</td>
-                    <td class="text-center">{$item->uname}
-                    </td>
-                    <td class="text-center">
-                        <div id="name{$item->uid}" style="display: inline;">{$item->name}
-                        </div>&nbsp;&nbsp;
-                        <span class="glyphicon glyphicon-pencil" style="cursor:pointer"
-                              onclick="changeName('{$item->uid}','{$item->name}')"></span>
-                    </td>
+                    <td id="uname{$item->uid}" class="text-center">{$item->uname}</td>
+                    <td id="name{$item->uid}" class="text-center">{$item->name}</td>
                     <td class="text-center">
                         {volist id="role" name="roles"}
                         <input type="checkbox" name="roles[]" value="{$item->uid}_{$role->id}" {php} if(in_array($role->id,$item->userRoles))
@@ -146,6 +140,11 @@
                                 {/switch}
                             </button>
                         </a>
+                        {/if}
+                        {if condition="$item->uname!='webmaster'"}
+                        <button type="button" onclick="changeName('{$item->uid}')" class="btn btn-xs btn-success" title="编辑">
+                            <span class="glyphicon glyphicon-edit" style="cursor:pointer"></span>
+                        </button>
                         {/if}
                     </td>
                 </tr>
@@ -184,7 +183,7 @@
                         </div>
                         <div id="name_check">
                             姓名 * :
-                            <input type="text" class="form-control" name="name" id="name2" placeholder="姓名">
+                            <input type="text" class="form-control" name="name" id="add_name2" placeholder="姓名">
                         </div>
                         <div id="passwd_check">
                             密码 * :
@@ -216,9 +215,17 @@
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    姓名:
+                    用户名:
+                    <input type="text" class="form-control" name="uname" id="newuname" placeholder="用户名">
+                    姓名：
                     <input type="text" class="form-control" name="name" id="newname" placeholder="姓名">
-                    <input type="hidden" class="form-control" name="uid" id="olduid" placeholder="姓名">
+                    <br>
+                    <div align="right" id="btn1" onclick="$('#setNewPwd').show();$('#btn1').hide();$('#newpasswd').val('');" style="cursor:pointer" >设置新密码</div>
+                    <div id="setNewPwd" style="display: none;">
+                        <input type="password" class="form-control" name="passwd" id="newpasswd" placeholder="请输入新密码">
+                        <input type="hidden" class="form-control" name="uid" id="olduid"><br>
+                        <div align="right" onclick="$('#setNewPwd').hide();$('#btn1').show();$('#newpasswd').val('');" style="cursor:pointer">取消设置新密码</div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -231,7 +238,7 @@
 </body>
 <script type="text/javascript">
     function ser() {
-        if ($('#name1').val())
+        if ($('#serName1').val())
             $('#ser').submit();
         else
             window.location.href = "{:url('user/index')}";
@@ -243,10 +250,10 @@
         $('#passwd_check').removeClass("has-error");
         $('#passwd2_check').removeClass("has-error");
         var uname = $('#uname').val();
-        var name = $('#name2').val();
+        var name = $('#add_name2').val();
         var passwd = $('#passwd').val();
         var passwd2 = $('#passwd2').val();
-        if (name & uname && passwd && (passwd == passwd2))
+        if (name.length>0 & uname.length>0 && passwd.length>0 && (passwd == passwd2))
             $('#add-user-form').submit();
         else {
             if (!uname)
@@ -266,18 +273,29 @@
         }
     }
 
-    function changeName(uid, name) {
+    function changeName(uid) {
         $('#myModal2').modal();
+        let uname = $('#uname' + uid).html();
+        let name = $('#name' + uid).html();
+        $('#newuname').val(uname);
         $('#newname').val(name);
+        $('#newpasswd').val('');
         $('#olduid').val(uid);
+        $('#setNewPwd').hide();
+        $('#btn1').show();
+        $('#newpasswd').val('');
     }
 
     function submit() {
         $('#myModal2').modal('hide');
+        let uname = $('#newuname').val();
         let name = $('#newname').val();
+        let passwd = $('#newpasswd').val();
         let uid = $('#olduid').val();
         let data = {
+            uname: uname,
             name: name,
+            passwd: passwd,
             uid: uid
         };
         $.ajax({
@@ -288,6 +306,7 @@
             success: function (data) {
                 if (data.success) {
                     toastr.success("操作成功");
+                    $('#uname' + uid).html(uname);
                     $('#name' + uid).html(name);
                 } else {
                     alert(data.msg)

@@ -70,6 +70,11 @@ class User extends Controller
     //添加用户
     public function registerHandle(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "user/index", null, 1);
+            exit();
+        }
         $User = new UserModel();
         foreach ($_POST as $key => $value)
             if ($value == "")
@@ -89,14 +94,22 @@ class User extends Controller
         $this->success("添加成功", null, null, 1);
     }
 
-    //修改用户姓名
+    //修改用户名、姓名和密码
     public function changeName(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "user/index", null, 1);
+            exit();
+        }
         $User = new UserModel();
         foreach ($_POST as $key => $value)
             if ($value == "")
                 $_POST[$key] = null;
-        $User->save(['name'  => $_POST['name']],['uid' => $_POST['uid']]);
+        if($_POST['passwd'])
+            $User->save(['uname'=>$_POST['uname'], 'name'  => $_POST['name'], 'passwd'=>md5($_POST['passwd'])],['uid' => $_POST['uid']]);
+        else 
+            $User->save(['uname'=>$_POST['uname'], 'name'  => $_POST['name']],['uid' => $_POST['uid']]);
         $Log = new LogModel();
         $Log->save(["uid" => session('uid'), "action" => $User->getlastsql(), "time" => date("Y-m-d H:i:s")]);
         echo json_encode(array('success'=>true));
@@ -105,6 +118,11 @@ class User extends Controller
     //锁定和解锁用户
     public function lockOne(Request $request)
     {
+        $rbacObj = new Rbac();
+        if(!$rbacObj->can($request->path())) {
+            $this->error("没有权限", "user/index", null, 1);
+            exit();
+        }
         // 假删除
         $User = new UserModel();
         $user = $User->where('uid',$_GET['uid'])->find();
