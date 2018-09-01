@@ -41,9 +41,9 @@ class Index extends Controller
         $Semester = new SemesterModel();
         $semester = $Semester->where("current", '=', 1)->order("id", "desc")->limit(1)->select();
         $user = $User->where('uname', $_POST['uname'])->find();
-        if($user->delflag != 0) {
-            $this->error("帐号被锁定，请联系管理员", null, null, 1);
-        }
+        if (!$user || $user->delflag != 0)
+            $this->error("帐号或密码错误，请联系管理员", null, null, 3);
+
         if ($user['passwd'] == md5($_POST['passwd'])) {
             $rbacObj = new Rbac();
             $rbacObj->cachePermission($user['uid']);
@@ -73,11 +73,6 @@ class Index extends Controller
         }else{
             $this->error('操作无效', "Index/index", null, 1);
         }
-    }
-
-    public function easterEgg(Request $request)
-    {
-        $this->success('Designed by Leo, Diamond, cx, qdw, and xy!');
     }
 
     public function todos(Request $request)
