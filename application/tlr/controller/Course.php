@@ -16,7 +16,7 @@ class Course extends Controller
     public function index(Request $request)
     {
         $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
+        if (!$rbacObj->can($request->path())) {
             $this->error("没有权限", "index/index", null, 3);
             exit();
         }
@@ -54,7 +54,7 @@ class Course extends Controller
     public function mod(Request $request)
     {
         $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
+        if (!$rbacObj->can($request->path())) {
             $this->error("没有权限", "Course/index", null, 1);
             exit();
         }
@@ -76,7 +76,7 @@ class Course extends Controller
     public function del(Request $request)
     {
         $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
+        if (!$rbacObj->can($request->path())) {
             $this->error("没有权限", "Course/index", null, 1);
             exit();
         }
@@ -92,7 +92,7 @@ class Course extends Controller
     public function add(Request $request)
     {
         $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
+        if (!$rbacObj->can($request->path())) {
             $this->error("没有权限", "Course/index", null, 1);
             exit();
         }
@@ -111,7 +111,7 @@ class Course extends Controller
     public function ser(Request $request)
     {
         $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
+        if (!$rbacObj->can($request->path())) {
             $this->error("没有权限", "Course/index", null, 1);
             exit();
         }
@@ -131,14 +131,14 @@ class Course extends Controller
     public function upload(Request $request)
     {
         $rbacObj = new Rbac();
-        if(!$rbacObj->can($request->path())) {
+        if (!$rbacObj->can($request->path())) {
             $this->error("没有权限", "System/semester", null, 1);
             exit();
         }
         $upload = request()->file('file');
-        if (empty($upload)) {
-            $this->error('请选择上传文件');
-        }
+        if (empty($upload))
+            $this->error('请选择上传文件', "system/semester");
+
         $replacename = session('uid') . '_' . time() . '_' . $_FILES["file"]['name'];
         $file = $upload->move(ROOT_PATH . 'public' . DS . 'uploads', $replacename, false);
 
@@ -147,12 +147,10 @@ class Course extends Controller
 
         //读取内容
         $count = 0;
+        $courses = array();
         while (!feof($file)) {
             $line = fgetcsv($file);
-            $cname = 2;
-
-            $data['cid'] = null;
-            $data['delflag'] = 0;
+            $cname = 0;
             $data['cname'] = $line[$cname++];
             $data['time'] = $line[$cname++];
             $data['date'] = $line[$cname++];
@@ -166,20 +164,21 @@ class Course extends Controller
             $data['memo'] = $line[$cname];
 
             $count++;
-            if ($count == 1) {
-                continue;//去掉首行记录
-            }
-            $courses[$count - 2] = $data;
+            $courses[] = $data;
+
         }
         fclose($file);
-        unset($courses[$count - 2]);//去掉尾行记录
+        unset($courses[0]);//去掉表头
 
-//批量添加
         $Course = new CourseModel();
         $Log = new LogModel();
-        $Course->saveAll($courses);
-        $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
-        $this->success("添加成功", null, null, 1);
+        try {
+            $Course->saveAll($courses);
+            $Log->save(['uid' => session('uid'), "action" => $Course->getLastSql(), "time" => date("Y-m-d H:i:s")]);
+        } catch (\Exception $e) {
+            $this->error($e, null, null, 1);
+        }
+        $this->success("添加成功", "course/index", null, 1);
     }
 
     //    导出csv

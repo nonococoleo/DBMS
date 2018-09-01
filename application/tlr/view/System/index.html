@@ -30,6 +30,7 @@
                 $('#sys').hide();
         } else
             $('#logout').hide();
+        $('#sel_semester').val("{$seme}");
     };
 </script>
 <body>
@@ -93,7 +94,6 @@
                     <option value="{$sem->id}">{$sem->name}</option>
                     {/volist}
                 </select>
-
             </div>
         </div>
         <div style="margin-top: 17px">
